@@ -233,10 +233,12 @@ local papi1 = {
 		["Title"] = "UNDERBARREL",
 		["Subtitle"] = "Attach a variety of foregrips and underslung weapons.",
 		["Subtitle2"] = "None",
-		["SortOrder"] = 0,
+		["SortOrder"] = 8,
 		["Icon"] = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth")
 	},
 }
+local puss = {}
+pusx, pusy = 0, 0
 local chingas = 720
 local selected1 = 1
 local lastcurtime1 = 0
@@ -253,10 +255,13 @@ moves.test1.func = function( data ) --------------------------------------------
 
 	local total = Angle()
 	total:Set( moves.test1.ang )
+	--	total:Add( Angle( 0, 0, math.sin(CurTime()*2)*5 ) )
 	data.ang:RotateAroundAxis( data.ang:Up(), total.y )
 	data.ang:RotateAroundAxis( data.ang:Right(), total.r )
 	data.ang:RotateAroundAxis( data.ang:Forward(), total.p )
 
+	local weedx = ( data.ang:Right() * 1 )
+	local weedy = ( data.ang:Forward() * 1 )
 	local weed1 = ( data.ang:Up() * globalweed2 )
 	local weed2 = ( data.ang:Up() * globalweed3 )
 
@@ -279,13 +284,12 @@ moves.test1.func = function( data ) --------------------------------------------
 		table.insert( ifuckinghateyou, v )
 	end
 
-	if game.SinglePlayer() or (!game.SinglePlayer() and IsFirstTimePredicted()) then
+	--[[if game.SinglePlayer() or (!game.SinglePlayer() and IsFirstTimePredicted()) then
 		if data.p:KeyPressed( IN_FORWARD ) then
 			selected1 = selected1 - 1
 			if selected1 <= 0 then
 				selected1 = #ifuckinghateyou
 			end
-		print(CurTime() .. "hey")
 		elseif data.p:KeyPressed( IN_BACK ) then
 			selected1 = selected1 + 1
 			if selected1 > #ifuckinghateyou then
@@ -301,20 +305,59 @@ moves.test1.func = function( data ) --------------------------------------------
 			data.p:EmitSound("common/weapon_select.wav", nil, 70, 0.5)
 		end
 		lastcurtime1 = CurTime()
-	end
+	end]]
 
+	table.Empty(puss)
 	for i, v in ipairs( ifuckinghateyou ) do
 		local guts = i
 		local ami = selected1 == i
 		v.iRaise = math.Approach(v.iRaise or 0, ami and 1 or 0, FrameTime()/0.2)
-		cam.Start3D2D( data.pos + (weed1*0.5) + ( weed2 * math.ease.InOutCubic(v.iRaise) ), data.ang, 0.1 )
+		cam.Start3D2D( data.pos + (weed1), data.ang, 0.1 )
 			local crack1 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 127, 255 ) )
+			local crack2 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 0, 255 ) )
+			local crack3 = Color( 0, 0, 255, Lerp( v.iRaise, 31, 127 ) )
+			surface.SetDrawColor( crack3 )
+			--surface.DrawRect( 0, 8+((guts)*gaap), 800, 64 )
+		cam.End3D2D()
+
+		local wheeler = {}
+		-- top left
+		do
+			local tada = data.pos + (weed1) + (weedx*8*0.1)+(weedx*0.1*guts*gaap)
+			tada = tada:ToScreen()
+			wheeler["tl"] = {x = tada.x, y = tada.y}
+		end
+
+		-- bottom left
+		do
+			local tada = data.pos + (weed1) + (weedx*(8+64)*0.1)+(weedx*0.1*guts*gaap)
+			tada = tada:ToScreen()
+			wheeler["bl"] = {x = tada.x, y = tada.y}
+		end
+
+		-- top right
+		do
+			local tada = data.pos + (weed1) + ((weedx*(8)*0.1)+(weedx*0.1*guts*gaap))+ ((weedy*(800)*0.1))
+			tada = tada:ToScreen()
+			wheeler["tr"] = {x = tada.x, y = tada.y}
+		end
+
+		-- bottom right
+		do
+			local tada = data.pos + (weed1) + ((weedx*(8+64)*0.1)+(weedx*0.1*guts*gaap))+ ((weedy*(800)*0.1))
+			tada = tada:ToScreen()
+			wheeler["br"] = {x = tada.x, y = tada.y}
+		end
+		puss[guts] = wheeler
+
+		cam.Start3D2D( data.pos + (weed1*0.5) + ( weed2 * math.ease.InOutCubic(v.iRaise) ), data.ang, 0.1 )
+			local crack1 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 63, 255 ) )
 			local crack2 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 0, 255 ) )
 			draw.DrawText(
 				v["Title"],
 				"Solar_A_2",
 				159,
-				89+((guts-1)*gaap),
+				0+8+((guts)*gaap),
 				crack1,
 				TEXT_ALIGN_LEFT,
 				TEXT_ALIGN_TOP
@@ -323,23 +366,23 @@ moves.test1.func = function( data ) --------------------------------------------
 				--[[ami and v["Subtitle2"] or ]]v["Subtitle"],
 				"Solar_A_3",
 				160,
-				128+((guts-1)*gaap),
+				38+8+((guts)*gaap),
 				crack2,
 				TEXT_ALIGN_LEFT,
 				TEXT_ALIGN_TOP
 			)
 			surface.SetMaterial( v["Icon"] )
 			surface.SetDrawColor( crack1 )
-			surface.DrawTexturedRect( 80, 90+((guts-1)*gaap), 54, 54 )
+			surface.DrawTexturedRect( 80, 8+((guts)*gaap), 54, 54 )
 		cam.End3D2D()
 		cam.Start3D2D( data.pos + (weed1) + ( weed2 * math.ease.InOutCubic(v.iRaise) ), data.ang, 0.1 )
-			local crack1 = Color( cw.r, cw.g, cw.b, Lerp( v.iRaise, 127, 255 ) )
+			local crack1 = Color( cw.r, cw.g, cw.b, Lerp( v.iRaise, 63, 255 ) )
 			local crack2 = Color( cw.r, cw.g, cw.b, Lerp( v.iRaise, 0, 255 ) )
 			draw.DrawText(
 				v["Title"],
 				"Solar_A_2",
 				159,
-				89+((guts-1)*gaap),
+				0+8+((guts)*gaap),
 				crack1,
 				TEXT_ALIGN_LEFT,
 				TEXT_ALIGN_TOP
@@ -348,14 +391,14 @@ moves.test1.func = function( data ) --------------------------------------------
 				--[[ami and v["Subtitle2"] or ]]v["Subtitle"],
 				"Solar_A_3",
 				160,
-				128+((guts-1)*gaap),
+				38+8+((guts)*gaap),
 				crack2,
 				TEXT_ALIGN_LEFT,
 				TEXT_ALIGN_TOP
 			)
 			surface.SetMaterial( v["Icon"] )
 			surface.SetDrawColor( crack1 )
-			surface.DrawTexturedRect( 80, 90+((guts-1)*gaap), 54, 54 )
+			surface.DrawTexturedRect( 80, 8+((guts)*gaap), 54, 54 )
 		cam.End3D2D()
 	end
 end ------------------------------------------------
@@ -530,9 +573,63 @@ hook.Add("HUDPaint", "Solar", function()
 end)
 
 hook.Add("HUDPaint", "blah", function()
-	--surface.SetDrawColor( color_white )
-	--surface.DrawLine(0, 0, 8, 8)
+	--surface.SetDrawColor(0,0,0,250)
+	--surface.DrawRect(0, 0, ScrW(), ScrH())
 end)
+
+if CLIENT then
+	concommand.Add("newurb_menu", function( ply, cmd, args)
+		newurb_menu( ply, cmd, args )
+	end)
+	function newurb_menu( ply, cmd, args )
+		local menu = vgui.Create("DFrame")
+		menu:SetSize(ScrW(), ScrH())
+		menu:Center()
+		menu:SetTitle("Derma Frame")
+		menu:MakePopup()
+
+		local buttons = {}
+		for i, v in pairs(puss) do
+			local button = vgui.Create("DButton", menu)
+			button:SetText("")
+			button:SetPos(v["tl"].x, v["tl"].y)
+			button:SetSize(v["tr"].x-v["tl"].x, v["br"].y-v["tl"].y)
+			button.Index = i
+			buttons[i] = button
+			lastselect1 = 0
+			function button:Paint( w, h )
+				--surface.SetDrawColor( self:IsHovered() and Color(0, 0, 0, 2) or Color(0, 0, 0, 1) )
+				--surface.DrawRect(0, 0, w, h)
+			end
+			function button:Think()
+				if self.Index != lastselect1 then
+					if self:IsHovered() then
+						selected1 = self.Index
+						LocalPlayer():EmitSound("common/weapon_select.wav", nil, 70, 0.5)
+					end
+					lastselect1 = selected1
+				end
+			end
+			function button:DoClick()
+				LocalPlayer():EmitSound("garrysmod/ui_hover.wav", nil, 100, 0.5)
+			end
+			function button:DoRightClick()
+				LocalPlayer():EmitSound("garrysmod/content_downloaded.wav", nil, 95, 0.5)
+			end
+		end
+
+		function menu:Paint( w, h )
+		end
+
+		function menu:Think()
+			for i, button in ipairs(buttons) do
+				v = puss[button.Index]
+				button:SetPos(v["tl"].x, v["tl"].y)
+				button:SetSize(v["tr"].x-v["tl"].x, v["br"].y-v["tl"].y)
+			end
+		end
+	end
+end
 
 
 
