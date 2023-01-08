@@ -605,16 +605,17 @@ if CLIENT then
 				if self.Index != lastselect1 then
 					if self:IsHovered() then
 						selected1 = self.Index
-						LocalPlayer():EmitSound("common/weapon_select.wav", nil, 70, 0.5)
+						LocalPlayer():EmitSound("arc9/newui/uimouse_hover.ogg", nil, 100, 0.5, CHAN_STATIC)
+						LocalPlayer():EmitSound("arc9/newui/uisweep_bass.ogg", nil, 100, 0.2, CHAN_STATIC)
 					end
 					lastselect1 = selected1
 				end
 			end
 			function button:DoClick()
-				LocalPlayer():EmitSound("garrysmod/ui_hover.wav", nil, 100, 0.5)
+				LocalPlayer():EmitSound("arc9/newui/uimouse_click_return.ogg", nil, 100, 0.5, CHAN_STATIC)
 			end
 			function button:DoRightClick()
-				LocalPlayer():EmitSound("garrysmod/content_downloaded.wav", nil, 95, 0.5)
+				LocalPlayer():EmitSound("arc9/newui/uimouse_click_tab.ogg", nil, 100, 0.5, CHAN_STATIC)
 			end
 		end
 
