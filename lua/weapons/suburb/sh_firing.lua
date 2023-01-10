@@ -22,12 +22,12 @@ function SWEP:GetFiremodeName(cust)
 	local ftn = self:GetFiremodeTable(cust or self:GetFiremode())
 	if ftn.Name then
 		ftn = ftn.Name
-	elseif ftn.Count == math.huge then
+	elseif ftn.Mode == math.huge then
 		ftn = "Automatic"
-	elseif ftn.Count == 1 then
+	elseif ftn.Mode == 1 then
 		ftn = "Semi-automatic"
 	else
-		ftn = ftn.Count .. "-round burst"
+		ftn = ftn.Mode .. "-round burst"
 	end
 
 	return ftn
@@ -63,6 +63,7 @@ function SWEP:PrimaryAttack()
 		return false
 	end
 	if self:Clip1() <= 0 then
+		self:Reload()
 		return false
 	end
 	if self:GetBurstCount() >= self:GetFiremodeTable().Mode then
@@ -77,25 +78,35 @@ function SWEP:PrimaryAttack()
 	self:Attack_Sound()
 	self:SendAnimChoose( "fire" )
 
-	local p = self:GetOwner()
-	self:FireBullets({
-		Attacker = IsValid(p) and p or self,
-		Damage = 0,
-		Force = self.Force,
-		Tracer = 0,
-		Dir = p:EyeAngles():Forward(),
-		Src = p:EyePos(),
-		Callback = function( atk, tr, dmg )
-			local ent = tr.Entity
+	local dispersion = self:GetDispersion()
+	for i=1, self.Pellets or 1 do
+		local p = self:GetOwner()
+		
+		local fsa = p:EyeAngles()
+		local dir = Angle( fsa.p, fsa.y, 0 )
+		local shared_rand = CurTime() + (i-1)
+		local x = util.SharedRandom(shared_rand, -0.5, 0.5) + util.SharedRandom(shared_rand + 1, -0.5, 0.5)
+		local y = util.SharedRandom(shared_rand + 2, -0.5, 0.5) + util.SharedRandom(shared_rand + 3, -0.5, 0.5)
+		dir = dir:Forward() + (x * math.rad(dispersion) * dir:Right()) + (y * math.rad(dispersion) * dir:Up())
+		self:FireBullets({
+			Attacker = IsValid(p) and p or self,
+			Damage = 0,
+			Force = self.Force,
+			Tracer = 0,
+			Dir = dir,
+			Src = p:EyePos(),
+			Callback = function( atk, tr, dmg )
+				local ent = tr.Entity
 
-			if self.CustomCallback then self:CustomCallback( atk, tr, dmg ) end
+				if self.CustomCallback then self:CustomCallback( atk, tr, dmg ) end
 
-			dmg:SetDamage( self.DamageNear )
-			dmg:SetDamageType( DMG_BULLET )
+				dmg:SetDamage( self.DamageNear )
+				dmg:SetDamageType( DMG_BULLET )
 
-			dmg:SetDamage( Suburb.getdamagefromrange( self.DamageNear, self.DamageFar, self.RangeNear / Suburb.HUToM, self.RangeFar / Suburb.HUToM, atk:GetPos():Distance(tr.HitPos) ) )
-		end
-	})
+				dmg:SetDamage( Suburb.getdamagefromrange( self.DamageNear, self.DamageFar, self.RangeNear / Suburb.HUToM, self.RangeFar / Suburb.HUToM, atk:GetPos():Distance(tr.HitPos) ) )
+			end
+		})
+	end
 
 	return true
 end
@@ -137,4 +148,16 @@ function SWEP:Attack_Sound()
 		local detail = self.Sound_TailINT[math.Round(util.SharedRandom("Suburb_SoundBlast4", 1, #self.Sound_TailINT))]
 		--starvingchildren( self, detail, shotthing4 )
 	end
+end
+
+function SWEP:GetDispersion()
+	local disp = self.Dispersion
+
+	disp = disp + ( self:GetDISP_Air() * self.Dispersion_Air )
+	disp = disp + ( self:GetDISP_Move() * self.Dispersion_Move )
+
+	disp = Lerp( self:GetDISP_Crouch(), disp, disp * self.Dispersion_Crouch )
+	disp = Lerp( self:GetAim(), disp, disp * self.Dispersion_Sights )
+
+	return disp
 end

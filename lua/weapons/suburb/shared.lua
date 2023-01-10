@@ -1,6 +1,6 @@
 
 SWEP.Base					= "weapon_base"
-SWEP.Spawnable				= true
+SWEP.Spawnable				= false
 SWEP.Suburb					= true
 
 --
@@ -40,6 +40,14 @@ SWEP.Firemodes				= {
 		Mode = math.huge,
 	}
 }
+
+SWEP.Accuracy				= 0
+
+SWEP.Dispersion				= 0
+SWEP.Dispersion_Air			= 0
+SWEP.Dispersion_Move		= 0
+SWEP.Dispersion_Crouch		= 0
+SWEP.Dispersion_Sights		= 0
 
 SWEP.SightTime				= 0.3
 SWEP.SprintTime				= 0.3
@@ -95,6 +103,9 @@ include("sh_holdtypes.lua")
 AddCSLuaFile("sh_firing.lua")
 include("sh_firing.lua")
 
+AddCSLuaFile("cl_hud.lua")
+if CLIENT then include("cl_hud.lua") end
+
 local yep = {
 	["Bool"] = {
 		"UserSight",
@@ -116,6 +127,9 @@ local yep = {
 		"Holster_Time",
 		"IdleIn",
 		"StopSightTime",
+		"DISP_Air",
+		"DISP_Move",
+		"DISP_Crouch",
 	},
 	["Entity"] = {
 		"Holster_Entity",
@@ -137,6 +151,9 @@ end
 
 function SWEP:Reload()
 	if CurTime() < self:GetNextFire() then
+		return false
+	end
+	if self:Ammo1() <= 0 then
 		return false
 	end
 	if CurTime() < self:GetReloadingTime() then
@@ -162,10 +179,7 @@ end
 function SWEP:ReloadLoad()
 end
 
-local doit = 1
-local doit2 = 1
-local poit = 1
-local poit2 = 1
+local superaimedin = 0
 function SWEP:Think()
 	local p = self:GetOwner()
 	if IsValid(p) then
@@ -198,6 +212,19 @@ function SWEP:Think()
 		if self:GetFiremodeDebounce() and !p:KeyDown(IN_RELOAD) then
 			self:SetFiremodeDebounce( false )
 		end
+		if p:GetViewModel() then
+			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
+		end
+		if CLIENT then
+			superaimedin = math.Approach( superaimedin, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.25 )
+		end
+
+		local movem = p:GetAbsVelocity():Length2D()
+		movem = math.TimeFraction( 100, 200, movem )
+		movem = math.Clamp( movem, 0, 1 )
+		self:SetDISP_Air( math.Approach( self:GetDISP_Air(), p:OnGround() and 0 or 1, FrameTime() / 0.15 ) )
+		self:SetDISP_Move( math.Approach( self:GetDISP_Move(), movem, FrameTime() / 0.15 ) )
+		self:SetDISP_Crouch( math.Approach( self:GetDISP_Crouch(), p:Crouching() and 1 or 0, FrameTime() / 0.4 ) )
 	end
 
 	local pomper = self:GetCurrentAnim()
@@ -206,8 +233,7 @@ function SWEP:Think()
 		if pomper.Events then
 			for i, v in pairs(pomper.Events) do
 				if !v.PLAYED and v.STARTTIME and v.STARTTIME <= CurTime() then
-					print("hey")
-					self:EmitSound( v.s )
+					self:EmitSound( Suburb.quickie(v.s), v.l or 60, v.p or 100, v.v or 1, v.c or CHAN_STATIC )
 					v.PLAYED = true
 				end
 			end
@@ -217,6 +243,8 @@ end
 
 function SWEP:Deploy()
 	self:SetHolster_Time(0)
+	self:SetAim(0)
+	self:SetSprintPer(0)
 	self:SetHolster_Entity(NULL)
 
 	self:SendAnimChoose( "draw", "draw" )
@@ -263,12 +291,6 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local si = self:GetAim()
 		local ss_si = math.ease.InOutSine( si )
-		
-		if self:GetUserSight() then
-			ss_si = math.ease.OutSine( si )
-		else
-			ss_si = math.ease.InOutSine( si )
-		end
 
 		b_pos:Add( self.IronsightPose.Pos )
 		b_ang:Add( self.IronsightPose.Ang )
@@ -280,12 +302,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local xi = si
 
-		if xi >= 0.5 then
-			xi = xi - 0.5
-			xi = 0.5 - xi
-		end
-		xi = xi * 2
-		local ss_xi = math.ease.InOutSine( xi )
+		xi = math.sin( math.rad( 90 * si * 2 ) )
+		local ss_xi = xi
 
 		b_pos:Add( self.IronsightPose.MidPos or vector_origin )
 		b_ang:Add( self.IronsightPose.MidAng or angle_zero )
@@ -357,7 +375,7 @@ function SWEP:SendAnim( act, hold )
 		self:SetIdleIn( CurTime() + seqdur )
 	end
 
-	local stopsight = hold
+	local stopsight = hold and hold != "reload"
 	local reloadtime = hold
 	local loadin = hold == "reload"
 	local suppresstime = false
@@ -409,13 +427,11 @@ function SWEP:SendAnim( act, hold )
 		self:SetHolster_Time( CurTime() + (anim.HolsterTime or seqdur) )
 	end
 
-	-- table.Empty(self.EventTable)
 	if anim.Events then
 		for i, v in pairs(anim.Events) do
 			v.PLAYED = false
 			v.STARTTIME = CurTime() + v.t
 		end
-		PrintTable(anim.Events)
 	end
 	self:SetCurrentAnim(act)
 
@@ -430,11 +446,10 @@ function SWEP:DrawHUD()
 
 	surface.DrawRect( 64, 64, ( self:GetReloadingTime() - CurTime() ) * 100, 8 )
 	surface.DrawRect( 64, 128, ( self:GetLoadIn() - CurTime() ) * 100, 8 )
-
 end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( self:GetAim(), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ))
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( self:GetAim() * (1-superaimedin*0.5), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 0.1, 100)
 	cam.IgnoreZ(true)
 end
 
@@ -447,7 +462,7 @@ function SWEP:TranslateFOV(fov)
 	if self.IronsightPose and self.IronsightPose.Magnification then
 		mag = self.IronsightPose.Magnification
 	end
-	return fov / Lerp( math.ease.InOutQuad( self:GetAim() ), 1, mag )
+	return fov / Lerp( math.ease.InOutQuad( self:GetAim() * (1-superaimedin*0.5) ), 1, mag )
 end
 
 function SWEP:AdjustMouseSensitivity()
@@ -455,5 +470,5 @@ function SWEP:AdjustMouseSensitivity()
 	if self.IronsightPose and self.IronsightPose.Magnification then
 		mag = self.IronsightPose.Magnification
 	end
-	return 1 / Lerp( math.ease.InOutQuad( self:GetAim() ), 1, mag )
+	return 1 / Lerp( math.ease.InOutQuad( self:GetAim() * (1-superaimedin*0.5) ), 1, mag )
 end

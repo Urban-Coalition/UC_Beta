@@ -5,38 +5,38 @@ SWEP.Spawnable				= true
 --
 -- Description
 --
-SWEP.PrintName				= "Glock 17"
+SWEP.PrintName				= "Uzi"
 SWEP.Category				= "Urban Coalition"
-SWEP.Description			= [[Iconic 9x19mm pistol.]]
-SWEP.Slot					= 1
+SWEP.Description			= [[Iconic 9x19mm sub-machine gun.]]
+SWEP.Slot					= 2
 
 --
 -- Appearance
 --
-SWEP.ViewModel				= "models/weapons/arccw/c_ud_glock.mdl"
-SWEP.WorldModel				= "models/weapons/arccw/c_ud_glock.mdl"
+SWEP.ViewModel				= "models/weapons/arccw/c_ud_uzi.mdl"
+SWEP.WorldModel				= "models/weapons/arccw/c_ud_uzi.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
 SWEP.ViewModelFOV			= 65
 
 SWEP.ActivePose = {
-	Pos = Vector( 0, -3, 1 ),
+	Pos = Vector( 0.4, -3, 0.7 ),
 	Ang = Angle( 0, 0, -3 )
 }
 SWEP.IronsightPose = {
-	Pos = Vector( -2.3, -4, 2.52 ),
-	Ang = Angle( 0.3, 0, 0 ),
-	MidPos = Vector( -0.3, 0, -0.5 ),
-	MidAng = Angle( 0, 0, 0 ),
+	Pos = Vector( -2.865, -7, 1.95 ),
+	Ang = Angle( 0, 0, 0 ),
+	MidPos = Vector( -0.1, 2, -0.1 ),
+	MidAng = Angle( -2, 1, -1 ),
 	ViewModelFOV = 65,
-	Magnification = 1.1,
+	Magnification = 1.2,
 }
 
-SWEP.HoldTypeHip			= "pistol"
-SWEP.HoldTypeSight			= "revolver"
-SWEP.HoldTypeSprint			= "normal"
+SWEP.HoldTypeHip			= "ar2"
+SWEP.HoldTypeSight			= "rpg"
+SWEP.HoldTypeSprint			= "passive"
 
 local p0 = ")arccw_uc/common/"
-local p1 = ")weapons/arccw_ud/glock/"
+local p1 = ")weapons/arccw_ud/uzi/"
 SWEP.Sound_Blast			= {
 	{ s = p1.."fire-01.ogg" },
 	{ s = p1.."fire-02.ogg" },
@@ -46,12 +46,8 @@ SWEP.Sound_Blast			= {
 	{ s = p1.."fire-06.ogg" },
 }
 SWEP.Sound_Mech				= {
-	{ s = p1.."mech-01.ogg" },
-	{ s = p1.."mech-02.ogg" },
-	{ s = p1.."mech-03.ogg" },
-	{ s = p1.."mech-04.ogg" },
-	{ s = p1.."mech-05.ogg" },
-	{ s = p1.."mech-06.ogg" },
+	{ s = p1.."mech-01.ogg", v = 0.25 },
+	{ s = p1.."mech-02.ogg", v = 0.25 },
 }
 SWEP.Sound_TailEXT				= {
 	{ s = p1.."fire-dist-01.ogg" },
@@ -74,34 +70,32 @@ SWEP.Sound_TailINT				= {
 -- Functionality
 --
 SWEP.Primary.Ammo			= "pistol"
-SWEP.Primary.ClipSize		= 17
-SWEP.Delay					= ( 60 / 450 )
+SWEP.Primary.ClipSize		= 32
+SWEP.Delay					= ( 60 / 700 )
 
 SWEP.Firemodes				= {
+	{
+		Mode = math.huge,
+	},
 	{
 		Mode = 1,
 	}
 }
 
-SWEP.SightTime				= 0.3
-SWEP.SprintTime				= 0.3
+SWEP.Accuracy				= 1
+
+SWEP.Dispersion				= 2
+SWEP.Dispersion_Air			= 1
+SWEP.Dispersion_Move		= 1
+SWEP.Dispersion_Crouch		= 0.75
+SWEP.Dispersion_Sights		= 0
+
+SWEP.SightTime				= 0.35
+SWEP.SprintTime				= 0.35
 
 --
 -- Sexyness
 --
-local rattel = {
-	p0.."pistol_rattle_1.ogg",
-	p0.."pistol_rattle_2.ogg",
-	p0.."pistol_rattle_3.ogg",
-}
-local rottle = {
-	p0.."cloth_2.ogg",
-	p0.."cloth_3.ogg",
-	p0.."cloth_4.ogg",
-	p0.."cloth_6.ogg",
-	p0.."rattle.ogg",
-}
-
 SWEP.Animations				= {
 	["draw"]	= {
 		Source = "draw",
@@ -123,34 +117,26 @@ SWEP.Animations				= {
 	},
 	["reload"]	= {
 		Source = "reload",
-		Time = 1.8,
+		Time = 2.1,
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_pull_small.ogg" },
-			{ t = 0.3,			s = p1.."magout_partial.ogg" },
-			{ t = 0.4,			s = p1.."magin_new.ogg" },
-
-			{ t = 0,			s = rottle },
-			{ t = 0.3,			s = rattel },
-			{ t = 0.35,			s = rattel },
-			{ t = 0.5,			s = rottle },
+			{ t = 0.3,			s = p1.."magout.ogg" },
+			{ t = 0.6,			s = p1.."magin.ogg" },
 		},
-		ReloadingTime = 1.6,
-		LoadIn = 1,
+		ReloadingTime = 1.8,
+		LoadIn = 1.1,
 	},
 	["reload_empty"] = {
 		Source = "reload_empty",
-		Time = 2.2,
+		Time = 3.1,
 		Events = {
-			{ t = 0.1,			s = p1.."magout_empty.ogg" },
-			{ t = 0.2,			s = p0.."magpouch_pull_small.ogg" },
-			{ t = 0.5,			s = p1.."magin_new.ogg" },
-			{ t = 1.37,			s = p1.."chamber.ogg" },
-
-			{ t = 0,			s = rattel },
-			{ t = 0.5,			s = rattel },
-			{ t = 1.15,			s = rottle },
+			{ t = 0.1,			s = p0.."magpouch_pull_small.ogg" },
+			{ t = 0.4,			s = p1.."magout.ogg" },
+			{ t = 1.1,			s = p1.."magin.ogg" },
+			{ t = 2.0,			s = p1.."chback.ogg" },
+			{ t = 2.25,			s = p1.."chforward.ogg" },
 		},
-		ReloadingTime = 1.7,
-		LoadIn = 1.45,
+		ReloadingTime = 2.8,
+		LoadIn = 2.4,
 	},
 }
