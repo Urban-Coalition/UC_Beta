@@ -449,7 +449,7 @@ function SWEP:DrawHUD()
 end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( self:GetAim() * (1-superaimedin*0.5), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 0.1, 100)
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( self:GetAim() * (1-superaimedin*0.5), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
 	cam.IgnoreZ(true)
 end
 
