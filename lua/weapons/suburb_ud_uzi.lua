@@ -46,8 +46,8 @@ SWEP.Sound_Blast			= {
 	{ s = p1.."fire-06.ogg" },
 }
 SWEP.Sound_Mech				= {
-	{ s = p1.."mech-01.ogg", v = 0.25 },
-	{ s = p1.."mech-02.ogg", v = 0.25 },
+	{ s = p1.."mech-01.ogg" },
+	{ s = p1.."mech-02.ogg" },
 }
 SWEP.Sound_TailEXT				= {
 	{ s = p1.."fire-dist-01.ogg" },

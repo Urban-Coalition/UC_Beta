@@ -134,8 +134,8 @@ function SWEP:SecondaryAttack()
 	return true
 end
 
-local function starvingchildren( self, detail, chan )
-	return self:EmitSound( detail.s, detail.l or 80, (detail.p and math.Rand( detail.p, detail.pm or detail.p )) or 100, detail.v or 1, chan )
+local function starvingchildren( self, detail, volumemult, level, chan )
+	return self:EmitSound( detail.s, level, (detail.p and math.Rand( detail.p, detail.pm or detail.p )) or 100, (detail.v or 1) * volumemult, chan )
 end
 
 function SWEP:Attack_Sound()
@@ -147,25 +147,37 @@ function SWEP:Attack_Sound()
 	if #self.Sound_Blast > 0 then
 		self.Sound_Blast["BaseClass"] = nil
 		local detail = self.Sound_Blast[math.Round(util.SharedRandom("Suburb_SoundBlast1", 1, #self.Sound_Blast))]
-		starvingchildren( self, detail, shotthing1 )
+		starvingchildren( self, detail, 1, 90, shotthing1 )
+		for i, v in pairs(self.Sound_Blast) do
+			self:StopSound( v.s )
+		end
 	end
 
 	if #self.Sound_Mech > 0 then
 		self.Sound_Mech["BaseClass"] = nil
 		local detail = self.Sound_Mech[math.Round(util.SharedRandom("Suburb_SoundBlast2", 1, #self.Sound_Mech))]
-		starvingchildren( self, detail, shotthing2 )
+		starvingchildren( self, detail, Lerp( self:GetAim(), 0.5, 1 ), 70, shotthing2 )
+		for i, v in pairs(self.Sound_Mech) do
+			self:StopSound( v.s )
+		end
 	end
 
 	if #self.Sound_TailEXT > 0 then
 		self.Sound_TailEXT["BaseClass"] = nil
 		local detail = self.Sound_TailEXT[math.Round(util.SharedRandom("Suburb_SoundBlast3", 1, #self.Sound_TailEXT))]
-		starvingchildren( self, detail, shotthing3 )
+		starvingchildren( self, detail, 1, 120, shotthing3 )
+		for i, v in pairs(self.Sound_TailEXT) do
+			self:StopSound( v.s )
+		end
 	end
 
 	if #self.Sound_TailINT > 0 then
 		self.Sound_TailINT["BaseClass"] = nil
 		local detail = self.Sound_TailINT[math.Round(util.SharedRandom("Suburb_SoundBlast4", 1, #self.Sound_TailINT))]
-		--starvingchildren( self, detail, shotthing4 )
+		for i, v in pairs(self.Sound_TailINT) do
+			self:StopSound( v.s )
+		end
+		--starvingchildren( self, detail, 1, 160, shotthing4 )
 	end
 end
 
