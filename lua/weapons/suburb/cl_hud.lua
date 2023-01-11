@@ -69,3 +69,39 @@ function SWEP:DoDrawCrosshair()
 	end
 	return true
 end
+
+
+
+local c1 = Color(255, 255, 255)
+function SWEP:DrawHUD()
+	if GetConVar("developer"):GetBool() then
+		surface.SetDrawColor( c1 )
+		surface.SetTextColor( c1 )
+		surface.SetFont("Trebuchet18")
+
+		surface.SetTextPos( 64 + 4, (64) - 18 - 2 )
+		surface.DrawText("ReloadingTime")
+		surface.DrawRect( 64, 64, ( self:GetReloadingTime() - CurTime() ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*1)) - 18 - 2 )
+		surface.DrawText("LoadIn")
+		surface.DrawRect( 64, (64+(48*1)), ( self:GetLoadIn() - CurTime() ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*2)) - 18 - 2 )
+		surface.DrawText("Fire")
+		surface.DrawRect( 64, (64+(48*2)), ( self:GetNextFire() - CurTime() ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*3)) - 18 - 2 )
+		surface.DrawText("IdleIn")
+		surface.DrawRect( 64, (64+(48*3)), ( self:GetIdleIn() - CurTime() ) * 100, 8 )
+
+		for i, v in pairs(self.Attachments) do
+			if i == "BaseClass" then continue end
+			local x, y = ScrW()/2, (64+(48*(i-1)))
+			surface.SetTextPos( x, y )
+			surface.DrawText( i .. ": " .. v.Name )
+			surface.SetTextPos( x + 16, y + 16 )
+			surface.DrawText( "- " .. (v.Installed or "none") )
+		end
+	end
+end

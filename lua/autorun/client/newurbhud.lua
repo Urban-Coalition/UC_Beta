@@ -27,7 +27,8 @@ local moves = {}
 moves.fix = Angle( 90, -90, 0 )
 moves.health = {}
 moves.health.func = function( data ) ------------------------------------------------
-	local extra = 75
+	if GetConVar("newurb_enabled"):GetBool() then
+	local extra = 20
 
 	local potal = Vector()
 	potal:Add( moves.health.pos )
@@ -44,40 +45,45 @@ moves.health.func = function( data ) -------------------------------------------
 	local weed = (data.ang:Up() * globalweed)
 
 	cam.Start3D2D( data.pos, data.ang, 0.1 )
-		surface.SetMaterial( test1 )
+		surface.SetMaterial( test2 )
 		surface.SetDrawColor( cs2 )
 		surface.DrawTexturedRect( 0, 0, 300, 180 )
 	cam.End3D2D()
 
-	cam.Start3D2D( data.pos + (weed), data.ang, 0.1 )
-		draw.DrawText(
-			"HP",
-			"Solar_A_1",
-			260,
-			80+extra,
-			cw,
-			TEXT_ALIGN_LEFT,
-			TEXT_ALIGN_TOP
-		)
-		draw.DrawText(
-			data.p:Health(),
-			"Solar_B_1",
-			260,
-			10+extra,
-			cw,
-			TEXT_ALIGN_RIGHT,
-			TEXT_ALIGN_TOP
-		)
-	cam.End3D2D()
+	for i=1, 2 do
+		cam.Start3D2D( data.pos + (weed * Lerp(i/2, 0.5, 1)), data.ang, 0.1 )
+			local col = i == 1 and cs or cw
+			draw.DrawText(
+				"HP",
+				"Solar_A_1",
+				260,
+				80+extra,
+				col,
+				TEXT_ALIGN_LEFT,
+				TEXT_ALIGN_TOP
+			)
+			draw.DrawText(
+				data.p:Health(),
+				"Solar_B_1",
+				260,
+				10+extra,
+				col,
+				TEXT_ALIGN_RIGHT,
+				TEXT_ALIGN_TOP
+			)
+		cam.End3D2D()
+	end
+	end
 end ------------------------------------------------
-moves.health.pos = Vector( -95, 300, 60 )
+moves.health.pos = Vector( -95, 300, -40 )
 moves.health.ang = Angle( -20, 0, 0 )
 
 moves.ammo = {}
 moves.ammo.func = function( data ) ------------------------------------------------
+	if GetConVar("newurb_enabled"):GetBool() then
 	local w_clip = false
 	local w_ammo = false
-	local extra = 75
+	local extra = 20
 
 	local w = data.p:GetActiveWeapon()
 	if IsValid(w) then
@@ -108,91 +114,70 @@ moves.ammo.func = function( data ) ---------------------------------------------
 
 	if w and w_clip then
 		cam.Start3D2D( data.pos, data.ang, 0.1 )
-			surface.SetMaterial( test1 )
+			surface.SetMaterial( test2 )
 			surface.SetDrawColor( cs2 )
 			surface.DrawTexturedRect( 0, 0, 450, 180 )
 		cam.End3D2D()
 
-		cam.Start3D2D( data.pos + (weed), data.ang, 0.1 )
-			draw.DrawText(
-				w_clip,
-				"Solar_B_1",
-				220,
-				10+extra,
-				cw,
-				TEXT_ALIGN_RIGHT,
-				TEXT_ALIGN_TOP
-			)
-			draw.DrawText(
-				string.upper( w.GetFiremodeName and w:GetFiremodeName() or "" ),
-				"Solar_A_1",
-				224,
-				80+extra,
-				cw,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_TOP
-			)
-			draw.DrawText(
-				w_ammo,
-				"Solar_B_2",
-				220,
-				18+extra,
-				cw,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_TOP
-			)
-		cam.End3D2D()
+		for i=1, 2 do
+		local col = i == 1 and cs or cw
+			cam.Start3D2D( data.pos + (weed * Lerp( i/2, 0.5, 1 )), data.ang, 0.1 )
+				draw.DrawText(
+					w_clip,
+					"Solar_B_1",
+					220,
+					10+extra,
+					col,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+				draw.DrawText(
+					string.upper( w.GetFiremodeName and w:GetFiremodeName() or "" ),
+					"Solar_A_1",
+					224,
+					80+extra,
+					col,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+				draw.DrawText(
+					w_ammo,
+					"Solar_B_2",
+					220,
+					18+extra,
+					col,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+			cam.End3D2D()
+		end
+	end
 	end
 end ------------------------------------------------
-moves.ammo.pos = Vector( 85 - (350*0.1), 300, 60 )
+moves.ammo.pos = Vector( 85 - (350*0.1), 300, -40 )
 moves.ammo.ang = Angle( -20, 0, 0 )
 
 local papi1 = {
-	--[[
-	[1] = {
-		["Title"] = "CUSTOMIZE",
-		["Subtitle"] = "Customize weapons",
-		["Icon"] = Material("vgui/resource/icon_vac_new", "smooth")
-	},
-	[2] = {
-		["Title"] = "DEVELOPMENT",
-		["Subtitle"] = "Develop weapons, items, etc.",
-		["Icon"] = Material("vgui/resource/icon_vac_new", "smooth")
-	},
-	[3] = {
-		["Title"] = "RESOURCES",
-		["Subtitle"] = "View/sell your stock of materials, medicinal plants, etc.",
-		["Icon"] = Material("vgui/resource/icon_vac_new", "smooth")
-	},
-	[4] = {
-		["Title"] = "STAFF MANAGEMENT",
-		["Subtitle"] = "Perform staff management.",
-		["Icon"] = Material("vgui/resource/icon_vac_new", "smooth")
-	},
-	[5] = {
-		["Title"] = "BASE MANAGEMENT",
-		["Subtitle"] = "Construct additional platforms for FOBs.",
-		["Icon"] = Material("vgui/resource/icon_vac_new", "smooth")
-	},
-	[6] = {
-		["Title"] = "DATABASE",
-		["Subtitle"] = "Encyclopedia, animal database and more.",
-		["Icon"] = Material("vgui/resource/icon_vac_new", "smooth")
-	},]]
-
 	{
 		["Title"] = "REAR SIGHT",
 		["Subtitle"] = "Optical device that draws the user's sight.",
 		["Subtitle2"] = "Integrated Carry Handle",
 		["SortOrder"] = 1,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_rs_ch.png", "mips smooth")
+		["Icon"] = Material("entities/att/acwatt_ud_m16_rs_kac.png", "mips smooth")
+	},
+	{
+		["Title"] = "OPTICAL SIGHT",
+		["Subtitle"] = "Optical device that draws the user's sight.",
+		["Subtitle2"] = "Integrated Carry Handle",
+		["SortOrder"] = 1.5,
+		["Icon"] = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth")
 	},
 	{
 		["Title"] = "FRONT SIGHT",
-		["Subtitle"] = "Bullets come out the front.",
+		["Subtitle"] = "Post used to create a line of aim and align the weapon.",
 		["Subtitle2"] = "Integrated Front Sight",
 		["SortOrder"] = 2,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_charm_fs.png", "mips smooth")
+		["Icon"] = Material("entities/att/acwatt_ud_m16_fs_kac.png", "mips smooth")
 	},
 	{
 		["Title"] = "BARREL",
@@ -455,6 +440,8 @@ local selected2 = 1
 local letsgo = 0
 moves.test2 = {}
 moves.test2.func = function( data ) ------------------------------------------------
+	local w = data.p:GetActiveWeapon()
+	if IsValid(w) and w.Suburb and w:GetCustomizing() then
 	local extra = 75
 
 	local potal = Vector()
@@ -529,12 +516,12 @@ moves.test2.func = function( data ) --------------------------------------------
 		cam.End3D2D()
 		gaap = gaap + v["Spacing"]
 	end
+	end
 end ------------------------------------------------
 moves.test2.pos = Vector( -72/2 + 36, 230, 72/2 )
 moves.test2.ang = Angle( -10, 0, 0 )
 
 hook.Add("HUDPaint", "Solar", function()
-	if GetConVar("newurb_enabled"):GetBool() then
 	local p = LocalPlayer()
 
 	local eang = EyeAngles()
@@ -572,7 +559,6 @@ hook.Add("HUDPaint", "Solar", function()
 		end
 	cam.End3D()
 	cam.IgnoreZ(false)
-	end
 end)
 
 hook.Add("HUDPaint", "blah", function()
@@ -585,11 +571,14 @@ if CLIENT then
 		newurb_menu( ply, cmd, args )
 	end)
 	function newurb_menu( ply, cmd, args )
-		local menu = vgui.Create("DFrame")
+		if SuburbCustDerma then SuburbCustDerma:Remove() end
+		menu = vgui.Create("DFrame")
+		SuburbCustDerma = menu
 		menu:SetSize(ScrW(), ScrH())
 		menu:Center()
 		menu:SetTitle("Derma Frame")
 		menu:MakePopup()
+		menu:SetKeyboardInputEnabled( false )
 
 		local buttons = {}
 		for i, v in pairs(puss) do

@@ -182,3 +182,17 @@ SWEP.Animations				= {
 		LoadIn = 1.8,
 	},
 }
+
+SWEP.Attachments = {
+	{
+		Name = "Rear Sight",
+	},
+	{
+		Name = "Optical Sight",
+	},
+	{
+		Name = "Front Sight",
+	},
+}
+
+SWEP.Elements = {}

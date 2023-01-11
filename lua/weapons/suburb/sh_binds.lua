@@ -13,7 +13,7 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 		end
 
 		if cmd:GetImpulse() == 151 then
-			wep:SetCustomizing( !wep:GetCustomizing() )
+			wep:ToggleCustomize()
 		end
 	end
 end)
@@ -22,3 +22,13 @@ hook.Add("OnContextMenuOpen", "Suburb_OnContextMenuOpen", function()
 	LocalPlayer():ConCommand("impulse 151")
 	return true
 end)
+
+function SWEP:ToggleCustomize()
+	if SuburbCustDerma then SuburbCustDerma:Remove() end
+	if self:GetCustomizing() then
+		self:SetCustomizing( false )
+	else
+		self:SetCustomizing( true )
+		self:GetOwner():ConCommand("newurb_menu")
+	end
+end

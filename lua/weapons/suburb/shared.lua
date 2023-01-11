@@ -162,6 +162,10 @@ local yep = {
 	},
 }
 
+SWEP.Animations = {}
+SWEP.Attachments = {}
+SWEP.Elements = {}
+
 function SWEP:SetupDataTables()
 	for i, v in pairs(yep) do
 		for k, p in pairs(v) do
@@ -230,6 +234,7 @@ end
 SWEP.BobScale = 0
 SWEP.SwayScale = 0
 local goddamn_p, goddamn_y = 0, 0
+local custtemp = 0
 function SWEP:GetViewModelPosition(pos, ang)
 	local opos, oang = Vector(), Angle()
 	local p = self:GetOwner()
@@ -261,6 +266,19 @@ function SWEP:GetViewModelPosition(pos, ang)
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
+	do -- temporary customize
+		local b_pos, b_ang = Vector(), Angle()
+		local si = math.ease.InOutSine( custtemp or 0 )
+		custtemp = math.Approach( custtemp, self:GetCustomizing() and 1 or 0, FrameTime() / 0.5 )
+
+		b_pos:Add( Vector( 3, 0, -1 ) )
+		b_ang:Add( Angle( 15, 15, 15 ) )
+		b_pos:Mul( si )
+		b_ang:Mul( si )
+
+		opos:Add( b_pos )
+		oang:Add( b_ang )
+	end
 	do -- thing
 		local b_ang = Angle()
 
@@ -286,7 +304,6 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local si = self:GetAim()
 		local ss_si = math.ease.InOutSine( si )
-		supersi = ss_si
 
 		b_pos:Add( self.IronsightPose.Pos )
 		b_ang:Add( self.IronsightPose.Ang )
@@ -300,7 +317,6 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 		xi = math.sin( math.rad( 90 * si * 2 ) )
 		local ss_xi = math.ease.InCirc( xi )
-		superxi = ss_xi
 
 		b_pos:Add( self.IronsightPose.MidPos or vector_origin )
 		b_ang:Add( self.IronsightPose.MidAng or angle_zero )
@@ -433,40 +449,6 @@ function SWEP:SendAnim( act, hold )
 	self:SetCurrentAnim(act)
 
 	return seqdur
-end
-
-local c1 = Color(255, 255, 255)
-local totaly = 0
-function SWEP:DrawHUD()
-	if GetConVar("developer"):GetBool() then
-		surface.SetDrawColor( c1 )
-		surface.SetTextColor( c1 )
-		surface.SetFont("Trebuchet18")
-
-		surface.SetTextPos( 64 + 4, (64) - 18 - 2 )
-		surface.DrawText("ReloadingTime")
-		surface.DrawRect( 64, 64, ( self:GetReloadingTime() - CurTime() ) * 100, 8 )
-
-		surface.SetTextPos( 64 + 4, (64+(48*1)) - 18 - 2 )
-		surface.DrawText("LoadIn")
-		surface.DrawRect( 64, (64+(48*1)), ( self:GetLoadIn() - CurTime() ) * 100, 8 )
-
-		surface.SetTextPos( 64 + 4, (64+(48*2)) - 18 - 2 )
-		surface.DrawText("Fire")
-		surface.DrawRect( 64, (64+(48*2)), ( self:GetNextFire() - CurTime() ) * 100, 8 )
-
-		surface.SetTextPos( 64 + 4, (64+(48*3)) - 18 - 2 )
-		surface.DrawText("IdleIn")
-		surface.DrawRect( 64, (64+(48*3)), ( self:GetIdleIn() - CurTime() ) * 100, 8 )
-
-		surface.SetTextPos( 64 + 4, (64+(48*4)) - 18 - 2 )
-		surface.DrawText("aimpose")
-		surface.DrawRect( 64, (64+(48*4)), ( supersi or 0 ) * 100, 8 )
-
-		surface.SetTextPos( 64 + 4, (64+(48*5)) - 18 - 2 )
-		surface.DrawText("midpose")
-		surface.DrawRect( 64, (64+(48*5)), ( superxi or 0 ) * 100, 8 )
-	end
 end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
