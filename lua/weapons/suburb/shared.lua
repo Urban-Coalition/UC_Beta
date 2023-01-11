@@ -28,6 +28,13 @@ SWEP.Sound_Mech				= {}
 SWEP.Sound_TailEXT			= {}
 SWEP.Sound_TailINT			= {}
 
+SWEP.MuzzleEffect						= "muzzleflash_4"
+SWEP.QCA_Muzzle							= 1
+SWEP.QCA_Case							= 2
+
+SWEP.ShellModel							= "models/shells/shell_556.mdl"
+SWEP.ShellScale							= 1
+
 --
 -- Functionality
 --

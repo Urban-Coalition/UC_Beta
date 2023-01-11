@@ -3,8 +3,11 @@ Suburb = {}
 
 Suburb.HUToM = 0.0254
 
+Suburb.sounds = {}
+Ssnd = Suburb.sounds
+
 local p0 = ")arccw_uc/common/"
-Suburb.snd_rottle = {
+Suburb.sounds.rottle = {
 	p0.."cloth_1.ogg",
 	p0.."cloth_2.ogg",
 	p0.."cloth_3.ogg",
@@ -12,12 +15,12 @@ Suburb.snd_rottle = {
 	p0.."cloth_6.ogg",
 	p0.."rattle.ogg",
 }
-Suburb.snd_rattle = {
+Suburb.sounds.rattle = {
 	p0.."rattle1.ogg",
 	p0.."rattle2.ogg",
 	p0.."rattle3.ogg",
 }
-Suburb.snd_rattlepistol = {
+Suburb.sounds.rattlepistol = {
 	p0.."pistol_rattle_1.ogg",
 	p0.."pistol_rattle_2.ogg",
 	p0.."pistol_rattle_3.ogg",

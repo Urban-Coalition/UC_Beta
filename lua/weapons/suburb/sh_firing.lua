@@ -77,6 +77,7 @@ function SWEP:PrimaryAttack()
 	self:SetTotalShotCount( self:GetTotalShotCount() + 1 )
 
 	self:Attack_Sound()
+	self:Attack_Effects()
 	self:SendAnimChoose( "fire" )
 
 	local spmp = (SERVER and game.SinglePlayer()) or (CLIENT and IsFirstTimePredicted())
@@ -148,36 +149,73 @@ function SWEP:Attack_Sound()
 		self.Sound_Blast["BaseClass"] = nil
 		local detail = self.Sound_Blast[math.Round(util.SharedRandom("Suburb_SoundBlast1", 1, #self.Sound_Blast))]
 		starvingchildren( self, detail, 1, 90, shotthing1 )
-		for i, v in pairs(self.Sound_Blast) do
-			self:StopSound( v.s )
-		end
 	end
 
 	if #self.Sound_Mech > 0 then
 		self.Sound_Mech["BaseClass"] = nil
 		local detail = self.Sound_Mech[math.Round(util.SharedRandom("Suburb_SoundBlast2", 1, #self.Sound_Mech))]
 		starvingchildren( self, detail, Lerp( self:GetAim(), 0.5, 1 ), 70, shotthing2 )
-		for i, v in pairs(self.Sound_Mech) do
-			self:StopSound( v.s )
-		end
 	end
 
 	if #self.Sound_TailEXT > 0 then
 		self.Sound_TailEXT["BaseClass"] = nil
 		local detail = self.Sound_TailEXT[math.Round(util.SharedRandom("Suburb_SoundBlast3", 1, #self.Sound_TailEXT))]
 		starvingchildren( self, detail, 1, 120, shotthing3 )
-		for i, v in pairs(self.Sound_TailEXT) do
-			self:StopSound( v.s )
-		end
 	end
 
 	if #self.Sound_TailINT > 0 then
 		self.Sound_TailINT["BaseClass"] = nil
 		local detail = self.Sound_TailINT[math.Round(util.SharedRandom("Suburb_SoundBlast4", 1, #self.Sound_TailINT))]
-		for i, v in pairs(self.Sound_TailINT) do
-			self:StopSound( v.s )
-		end
 		--starvingchildren( self, detail, 1, 160, shotthing4 )
+	end
+end
+
+function SWEP:Attack_Effects()
+	if !game.SinglePlayer() and !IsFirstTimePredicted() then return end
+
+	-- Flashes
+	do
+		local ed = EffectData()
+		ed:SetStart(self:GetOwner():GetAimVector())
+		ed:SetOrigin(self:GetOwner():GetAimVector())
+		ed:SetScale(1)
+		ed:SetEntity(self)
+		ed:SetAttachment(self.QCA_Muzzle or 1)
+
+		util.Effect("suburb_muzzleeffect", ed)
+	end
+
+	-- Shells
+	do
+		local eff = "suburb_shelleffect"
+
+		local owner = self:GetOwner()
+		if !IsValid(owner) then return end
+
+		local vm = self
+
+		if !owner:IsNPC() then owner:GetViewModel() end
+
+		local att = vm:GetAttachment(self.QCA_Case or 2)
+
+		if !att then return end
+
+		local pos, ang = att.Pos, att.Ang
+
+		local ed = EffectData()
+		ed:SetOrigin(pos)
+		ed:SetAngles(ang)
+		ed:SetAttachment(self.QCA_Case or 2)
+		ed:SetScale(1)
+		ed:SetEntity(self)
+		ed:SetNormal(ang:Forward())
+		ed:SetMagnitude(100)
+
+		local efov = {}
+		efov.eff = eff
+		efov.fx  = ed
+
+		util.Effect(eff, ed)
 	end
 end
 
