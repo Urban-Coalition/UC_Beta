@@ -11,7 +11,8 @@ function SWEP:SwitchFiremode(prev)
 		if SERVER then
 			SuppressHostEvents( self:GetOwner() )
 		end
-		self:EmitSound("weapons/smg1/switch_single.wav", 60, 100, 0.5, CHAN_STATIC)
+		self:EmitSound("suburb/firemode.ogg", 60, 100, 0.5, CHAN_STATIC)
+		if CLIENT then self:GetOwner():ChatPrint( "Switched to " .. self:GetFiremodeName() ) end
 		if SERVER then
 			SuppressHostEvents( NULL )
 		end
@@ -77,6 +78,24 @@ function SWEP:PrimaryAttack()
 
 	self:Attack_Sound()
 	self:SendAnimChoose( "fire" )
+
+	local spmp = (SERVER and game.SinglePlayer()) or (CLIENT and IsFirstTimePredicted())
+	local p = self:GetOwner()
+	if IsValid(p) then
+		if !self.RecoilTable then
+			self.RecoilTable = {}
+		end
+		if spmp then
+			local recoil = {}
+			recoil.dir = Angle( self.RecoilUp * (self.RecoilDrift), math.Rand( -1, 1 ) * self.RecoilSide * (self.RecoilDrift) )
+			recoil.speed = self.RecoilDecay
+			table.insert( self.RecoilTable, recoil )
+			local recoil = {}
+			recoil.dir = Angle( self.RecoilUp * (1-self.RecoilDrift), math.Rand( -1, 1 ) * self.RecoilSide * (1-self.RecoilDrift) )
+			recoil.speed = math.huge
+			table.insert( self.RecoilTable, recoil )
+		end
+	end
 
 	local dispersion = self:GetDispersion()
 	for i=1, self.Pellets or 1 do

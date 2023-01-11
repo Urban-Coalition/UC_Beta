@@ -25,8 +25,8 @@ SWEP.ActivePose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.81, -5, 1.32 ),
 	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -0.3, 0, -0.5 ),
-	MidAng = Angle( 0, 0, -3 ),
+	MidPos = Vector( -0.7, 1, -0.4 ),
+	MidAng = Angle( -2, 1, -3 ),
 	ViewModelFOV = 65,
 	Magnification = 1.3,
 }
@@ -75,7 +75,7 @@ SWEP.Sound_TailINT				= {
 --
 SWEP.Primary.Ammo			= "smg1"
 SWEP.Primary.ClipSize		= 30
-SWEP.Delay					= ( 60 / 800 )
+SWEP.Delay					= ( 60 / 900 )
 
 SWEP.Firemodes				= {
 	{
@@ -89,27 +89,35 @@ SWEP.Firemodes				= {
 	},
 }
 
+SWEP.Accuracy				= 1
+
+SWEP.Dispersion				= 3
+SWEP.Dispersion_Air			= 2
+SWEP.Dispersion_Move		= 2
+SWEP.Dispersion_Crouch		= 0.75
+SWEP.Dispersion_Sights		= 0
+
 SWEP.SightTime				= 0.4
 SWEP.SprintTime				= 0.4
 
 --
--- Sexyness
+-- Recoil
 --
-local rottle = {
-	p0.."cloth_1.ogg",
-	p0.."cloth_2.ogg",
-	p0.."cloth_3.ogg",
-	p0.."cloth_4.ogg",
-	p0.."cloth_6.ogg",
-	p0.."rattle.ogg",
-}
-local rattel = {
-	p0.."rattle1.ogg",
-	p0.."rattle2.ogg",
-	p0.."rattle3.ogg",
-}
+SWEP.RecoilUp				= 2					-- degrees punched
+SWEP.RecoilSide				= 1.2				-- degrees punched, in either direction (-100% to 100%)
+SWEP.RecoilDrift			= .8				-- how much will be smooth recoil
+SWEP.RecoilDecay			= 30				-- how much recoil to remove per second
 
+--
+-- Animation
+--
 SWEP.Animations				= {
+	["idle"]	= {
+		Source = "idle",
+	},
+	["idle_empty"]	= {
+		Source = "idle_empty",
+	},
 	["draw"]	= {
 		Source = "draw",
 	},
@@ -136,14 +144,14 @@ SWEP.Animations				= {
 			{ t = 0.3,			s = p1.."magout_empty.ogg" },
 			{ t = 0.95,			s = p1.."magin.ogg" },
 
-			{ t = 0.0,			s = rottle },
-			{ t = 0.25,			s = rattel },
-			{ t = 0.5,			s = rattel },
-			{ t = 1.1,			s = rattel },
-			{ t = 1.39,			s = rottle },
-			{ t = 1.9,			s = rattel },
+			{ t = 0.0,			s = Suburb.snd_rottle },
+			{ t = 0.25,			s = Suburb.snd_rattle },
+			{ t = 0.5,			s = Suburb.snd_rattle },
+			{ t = 1.1,			s = Suburb.snd_rattle },
+			{ t = 1.39,			s = Suburb.snd_rottle },
+			{ t = 1.9,			s = Suburb.snd_rattle },
 		},
-		ReloadingTime = 2,
+		ReloadingTime = 1.8,
 		LoadIn = 1.6,
 	},
 	["reload_empty"] = {
@@ -155,12 +163,12 @@ SWEP.Animations				= {
 			{ t = 0.95,			s = p1.."magin.ogg" },
 			{ t = 1.7,			s = p1.."boltdrop.ogg" },
 
-			{ t = 0.0,			s = rottle },
-			{ t = 0.25,			s = rattel },
-			{ t = 0.5,			s = rattel },
-			{ t = 1.1,			s = rattel },
-			{ t = 1.39,			s = rottle },
-			{ t = 1.9,			s = rattel },
+			{ t = 0.0,			s = Suburb.snd_rottle },
+			{ t = 0.25,			s = Suburb.snd_rattle },
+			{ t = 0.5,			s = Suburb.snd_rattle },
+			{ t = 1.1,			s = Suburb.snd_rattle },
+			{ t = 1.39,			s = Suburb.snd_rottle },
+			{ t = 1.9,			s = Suburb.snd_rattle },
 		},
 		ReloadingTime = 2.5,
 		LoadIn = 1.8,

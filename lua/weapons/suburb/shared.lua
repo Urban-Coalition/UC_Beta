@@ -53,6 +53,14 @@ SWEP.SightTime				= 0.3
 SWEP.SprintTime				= 0.3
 
 --
+-- Recoil
+--
+SWEP.RecoilUp				= 4					-- degrees punched
+SWEP.RecoilSide				= 1				-- degrees punched, in either direction (-100% to 100%)
+SWEP.RecoilDrift			= 0.7				-- how much will be smooth recoil
+SWEP.RecoilDecay			= 20				-- how much recoil to remove per second
+
+--
 -- Damage
 --
 SWEP.DamageNear				= 30
@@ -102,6 +110,9 @@ include("sh_holdtypes.lua")
 
 AddCSLuaFile("sh_firing.lua")
 include("sh_firing.lua")
+
+AddCSLuaFile("sh_think.lua")
+include("sh_think.lua")
 
 AddCSLuaFile("cl_hud.lua")
 if CLIENT then include("cl_hud.lua") end
@@ -153,13 +164,7 @@ function SWEP:Reload()
 	if CurTime() < self:GetNextFire() then
 		return false
 	end
-	if self:Ammo1() <= 0 then
-		return false
-	end
 	if CurTime() < self:GetReloadingTime() then
-		return false
-	end
-	if self:Clip1() >= self.Primary.ClipSize then
 		return false
 	end
 	if self:GetOwner():KeyDown(IN_USE) then
@@ -167,6 +172,12 @@ function SWEP:Reload()
 			self:GetOwner():ConCommand("impulse 150")
 			self:SetFiremodeDebounce( true )
 		end
+		return false
+	end
+	if self:Clip1() >= self.Primary.ClipSize then
+		return false
+	end
+	if self:Ammo1() <= 0 then
 		return false
 	end
 
@@ -177,68 +188,6 @@ function SWEP:Reload()
 end
 
 function SWEP:ReloadLoad()
-end
-
-local superaimedin = 0
-function SWEP:Think()
-	local p = self:GetOwner()
-	if IsValid(p) then
-		local ht = self.HoldTypeHip
-		if self:GetAim() > 0.2 then
-			ht = self.HoldTypeSight
-		end
-		local spint = self:GetSprintPer() > 0.2
-		if spint then
-			ht = self.HoldTypeSprint
-		end
-		self:SetSprintPer( math.Approach( self:GetSprintPer(), p:IsSprinting() and 1 or 0, FrameTime() / self.SprintTime ) )
-		self:SetHoldType( ht )
-		self:SetWeaponHoldType( ht )
-
-		self:SetUserSight( p:KeyDown( IN_ATTACK2 ) )
-		local canaim = self:GetUserSight() and (self:GetStopSightTime() <= CurTime()) and !spint
-		self:SetAim( math.Approach( self:GetAim(), canaim and 1 or 0, FrameTime() / self.SightTime ) )
-
-		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
-			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:Ammo1() )
-			self:SetClip1(self:Clip1() + needtoload)
-			self:GetOwner():RemoveAmmo( needtoload, self.Primary.Ammo )
-			self:SetLoadIn( 0 )
-		end
-
-		if !p:KeyDown( IN_ATTACK ) then
-			self:SetBurstCount( 0 )
-		end
-		if self:GetFiremodeDebounce() and !p:KeyDown(IN_RELOAD) then
-			self:SetFiremodeDebounce( false )
-		end
-		if p:GetViewModel() then
-			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
-		end
-		if CLIENT then
-			superaimedin = math.Approach( superaimedin, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.25 )
-		end
-
-		local movem = p:GetAbsVelocity():Length2D()
-		movem = math.TimeFraction( 100, 200, movem )
-		movem = math.Clamp( movem, 0, 1 )
-		self:SetDISP_Air( math.Approach( self:GetDISP_Air(), p:OnGround() and 0 or 1, FrameTime() / 0.15 ) )
-		self:SetDISP_Move( math.Approach( self:GetDISP_Move(), movem, FrameTime() / 0.15 ) )
-		self:SetDISP_Crouch( math.Approach( self:GetDISP_Crouch(), p:Crouching() and 1 or 0, FrameTime() / 0.4 ) )
-	end
-
-	local pomper = self:GetCurrentAnim()
-	if pomper != "" and self.Animations[pomper] then
-		pomper = self.Animations[pomper]
-		if pomper.Events then
-			for i, v in pairs(pomper.Events) do
-				if !v.PLAYED and v.STARTTIME and v.STARTTIME <= CurTime() then
-					self:EmitSound( Suburb.quickie(v.s), v.l or 60, v.p or 100, v.v or 1, v.c or CHAN_STATIC )
-					v.PLAYED = true
-				end
-			end
-		end
-	end
 end
 
 function SWEP:Deploy()
@@ -267,6 +216,7 @@ end
 
 SWEP.BobScale = 0
 SWEP.SwayScale = 0
+local goddamn_p, goddamn_y = 0, 0
 function SWEP:GetViewModelPosition(pos, ang)
 	local opos, oang = Vector(), Angle()
 	local p = self:GetOwner()
@@ -275,7 +225,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local si = 1
 		si = si * (1-self:GetAim())
-		si = si * (1-self:GetSprintPer())
+		-- si = si * (1-self:GetSprintPer())
 		-- si = math.ease.InOutSine( si )
 
 		b_pos:Add( self.ActivePose.Pos )
@@ -286,11 +236,44 @@ function SWEP:GetViewModelPosition(pos, ang)
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
+	do -- temporary sprint
+		local b_pos, b_ang = Vector(), Angle()
+		local si = math.ease.InOutQuad( self:GetSprintPer() )
+
+		b_pos:Add( Vector( 1, 0, 0 ) )
+		b_ang:Add( Angle( -15, 15, -15 ) )
+		b_pos:Mul( si )
+		b_ang:Mul( si )
+
+		opos:Add( b_pos )
+		oang:Add( b_ang )
+	end
+	do -- thing
+		local b_ang = Angle()
+
+		local wawa = Angle()
+		if self.RecoilTable then
+			for i, asset in pairs(self.RecoilTable) do
+				wawa.p = wawa.p + asset.dir.p
+				wawa.y = wawa.y + asset.dir.y
+			end
+		end
+		goddamn_p = math.max( wawa.p, goddamn_p )
+		goddamn_y = math.max( wawa.y, goddamn_y )
+		b_ang.p = b_ang.p + goddamn_p
+		b_ang.y = b_ang.y + goddamn_y
+		goddamn_p = math.Approach( goddamn_p, 0, FrameTime() * 10 )
+		goddamn_y = math.Approach( goddamn_y, 0, FrameTime() * 10 )
+		b_ang:Mul( 1 - self:GetAim() )
+
+		oang:Add( b_ang )
+	end
 
 	do -- ironsighting
 		local b_pos, b_ang = Vector(), Angle()
 		local si = self:GetAim()
 		local ss_si = math.ease.InOutSine( si )
+		supersi = ss_si
 
 		b_pos:Add( self.IronsightPose.Pos )
 		b_ang:Add( self.IronsightPose.Ang )
@@ -303,7 +286,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local xi = si
 
 		xi = math.sin( math.rad( 90 * si * 2 ) )
-		local ss_xi = xi
+		local ss_xi = math.ease.InCirc( xi )
+		superxi = ss_xi
 
 		b_pos:Add( self.IronsightPose.MidPos or vector_origin )
 		b_ang:Add( self.IronsightPose.MidAng or angle_zero )
@@ -441,15 +425,39 @@ end
 local c1 = Color(255, 255, 255)
 local totaly = 0
 function SWEP:DrawHUD()
-	surface.SetDrawColor( c1 )
-	surface.SetTextColor( c1 )
+	if GetConVar("developer"):GetBool() then
+		surface.SetDrawColor( c1 )
+		surface.SetTextColor( c1 )
+		surface.SetFont("Trebuchet18")
 
-	surface.DrawRect( 64, 64, ( self:GetReloadingTime() - CurTime() ) * 100, 8 )
-	surface.DrawRect( 64, 128, ( self:GetLoadIn() - CurTime() ) * 100, 8 )
+		surface.SetTextPos( 64 + 4, (64) - 18 - 2 )
+		surface.DrawText("ReloadingTime")
+		surface.DrawRect( 64, 64, ( self:GetReloadingTime() - CurTime() ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*1)) - 18 - 2 )
+		surface.DrawText("LoadIn")
+		surface.DrawRect( 64, (64+(48*1)), ( self:GetLoadIn() - CurTime() ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*2)) - 18 - 2 )
+		surface.DrawText("Fire")
+		surface.DrawRect( 64, (64+(48*2)), ( self:GetNextFire() - CurTime() ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*3)) - 18 - 2 )
+		surface.DrawText("IdleIn")
+		surface.DrawRect( 64, (64+(48*3)), ( self:GetIdleIn() - CurTime() ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*4)) - 18 - 2 )
+		surface.DrawText("aimpose")
+		surface.DrawRect( 64, (64+(48*4)), ( supersi or 0 ) * 100, 8 )
+
+		surface.SetTextPos( 64 + 4, (64+(48*5)) - 18 - 2 )
+		surface.DrawText("midpose")
+		surface.DrawRect( 64, (64+(48*5)), ( superxi or 0 ) * 100, 8 )
+	end
 end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( self:GetAim() * (1-superaimedin*0.5), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( self:GetAim() * (1-(self.superaimedin or 0)*0.5), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
 	cam.IgnoreZ(true)
 end
 
@@ -462,7 +470,7 @@ function SWEP:TranslateFOV(fov)
 	if self.IronsightPose and self.IronsightPose.Magnification then
 		mag = self.IronsightPose.Magnification
 	end
-	return fov / Lerp( math.ease.InOutQuad( self:GetAim() * (1-superaimedin*0.5) ), 1, mag )
+	return Lerp( self:GetAim(), fov, fov or 75 ) / Lerp( math.ease.InOutQuad( self:GetAim() * (1-(self.superaimedin or 0)*0.5) ), 1, mag )
 end
 
 function SWEP:AdjustMouseSensitivity()
@@ -470,5 +478,5 @@ function SWEP:AdjustMouseSensitivity()
 	if self.IronsightPose and self.IronsightPose.Magnification then
 		mag = self.IronsightPose.Magnification
 	end
-	return 1 / Lerp( math.ease.InOutQuad( self:GetAim() * (1-superaimedin*0.5) ), 1, mag )
+	return 1 / Lerp( math.ease.InOutQuad( self:GetAim() * (1-(self.superaimedin or 0)*0.5) ), 1, mag )
 end

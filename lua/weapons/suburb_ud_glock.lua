@@ -25,8 +25,8 @@ SWEP.ActivePose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.3, -4, 2.52 ),
 	Ang = Angle( 0.3, 0, 0 ),
-	MidPos = Vector( -0.3, 0, -0.5 ),
-	MidAng = Angle( 0, 0, 0 ),
+	MidPos = Vector( -0.4, 0, -0.4 ),
+	MidAng = Angle( 0, 0, -6 ),
 	ViewModelFOV = 65,
 	Magnification = 1.1,
 }
@@ -83,26 +83,35 @@ SWEP.Firemodes				= {
 	}
 }
 
+SWEP.Accuracy				= 2
+
+SWEP.Dispersion				= 1
+SWEP.Dispersion_Air			= 1
+SWEP.Dispersion_Move		= 1
+SWEP.Dispersion_Crouch		= 0.75
+SWEP.Dispersion_Sights		= 0
+
 SWEP.SightTime				= 0.3
 SWEP.SprintTime				= 0.3
 
 --
--- Sexyness
+-- Recoil
 --
-local rattel = {
-	p0.."pistol_rattle_1.ogg",
-	p0.."pistol_rattle_2.ogg",
-	p0.."pistol_rattle_3.ogg",
-}
-local rottle = {
-	p0.."cloth_2.ogg",
-	p0.."cloth_3.ogg",
-	p0.."cloth_4.ogg",
-	p0.."cloth_6.ogg",
-	p0.."rattle.ogg",
-}
+SWEP.RecoilUp				= 1.5					-- degrees punched
+SWEP.RecoilSide				= 2				-- degrees punched, in either direction (-100% to 100%)
+SWEP.RecoilDrift			= 0.7				-- how much will be smooth recoil
+SWEP.RecoilDecay			= 10				-- how much recoil to remove per second
 
+--
+-- Animation
+--
 SWEP.Animations				= {
+	["idle"]	= {
+		Source = "idle",
+	},
+	["idle_empty"]	= {
+		Source = "idle_empty",
+	},
 	["draw"]	= {
 		Source = "draw",
 	},
@@ -129,10 +138,10 @@ SWEP.Animations				= {
 			{ t = 0.3,			s = p1.."magout_partial.ogg" },
 			{ t = 0.4,			s = p1.."magin_new.ogg" },
 
-			{ t = 0,			s = rottle },
-			{ t = 0.3,			s = rattel },
-			{ t = 0.35,			s = rattel },
-			{ t = 0.5,			s = rottle },
+			{ t = 0,			s = Suburb.snd_rottle },
+			{ t = 0.3,			s = Suburb.snd_rattlepistol },
+			{ t = 0.35,			s = Suburb.snd_rattlepistol },
+			{ t = 0.5,			s = Suburb.snd_rottle },
 		},
 		ReloadingTime = 1.6,
 		LoadIn = 1,
@@ -146,9 +155,9 @@ SWEP.Animations				= {
 			{ t = 0.5,			s = p1.."magin_new.ogg" },
 			{ t = 1.37,			s = p1.."chamber.ogg" },
 
-			{ t = 0,			s = rattel },
-			{ t = 0.5,			s = rattel },
-			{ t = 1.15,			s = rottle },
+			{ t = 0,			s = Suburb.snd_rattlepistol },
+			{ t = 0.5,			s = Suburb.snd_rattlepistol },
+			{ t = 1.15,			s = Suburb.snd_rottle },
 		},
 		ReloadingTime = 1.7,
 		LoadIn = 1.45,

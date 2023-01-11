@@ -25,8 +25,8 @@ SWEP.ActivePose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.865, -7, 1.95 ),
 	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -0.1, 2, -0.1 ),
-	MidAng = Angle( -2, 1, -1 ),
+	MidPos = Vector( -0.8, 0, -0.3 ),
+	MidAng = Angle( 0, 0, -6 ),
 	ViewModelFOV = 65,
 	Magnification = 1.2,
 }
@@ -94,7 +94,15 @@ SWEP.SightTime				= 0.35
 SWEP.SprintTime				= 0.35
 
 --
--- Sexyness
+-- Recoil
+--
+SWEP.RecoilUp				= 1.6					-- degrees punched
+SWEP.RecoilSide				= 1.6				-- degrees punched, in either direction (-100% to 100%)
+SWEP.RecoilDrift			= 0.5				-- how much will be smooth recoil
+SWEP.RecoilDecay			= 5				-- how much recoil to remove per second
+
+--
+-- Animation
 --
 SWEP.Animations				= {
 	["draw"]	= {
@@ -120,8 +128,8 @@ SWEP.Animations				= {
 		Time = 2.1,
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_pull_small.ogg" },
-			{ t = 0.3,			s = p1.."magout.ogg" },
-			{ t = 0.6,			s = p1.."magin.ogg" },
+			{ t = 0.2,			s = p1.."magout.ogg" },
+			{ t = 0.5,			s = p1.."magin.ogg" },
 		},
 		ReloadingTime = 1.8,
 		LoadIn = 1.1,
@@ -131,8 +139,8 @@ SWEP.Animations				= {
 		Time = 3.1,
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_pull_small.ogg" },
-			{ t = 0.4,			s = p1.."magout.ogg" },
-			{ t = 1.1,			s = p1.."magin.ogg" },
+			{ t = 0.3,			s = p1.."magout.ogg" },
+			{ t = 1.0,			s = p1.."magin.ogg" },
 			{ t = 2.0,			s = p1.."chback.ogg" },
 			{ t = 2.25,			s = p1.."chforward.ogg" },
 		},
