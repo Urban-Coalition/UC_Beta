@@ -245,6 +245,8 @@ local lastcurtime1 = 0
 local letsgo = 0
 moves.test1 = {}
 moves.test1.func = function( data ) ------------------------------------------------
+	local w = data.p:GetActiveWeapon()
+	if IsValid(w) and w.Suburb and w:GetCustomizing() then
 	local extra = 75
 
 	local potal = Vector()
@@ -400,6 +402,7 @@ moves.test1.func = function( data ) --------------------------------------------
 			surface.SetDrawColor( crack1 )
 			surface.DrawTexturedRect( 80, 8+((guts)*gaap), 54, 54 )
 		cam.End3D2D()
+	end
 	end
 end ------------------------------------------------
 moves.test1.pos = Vector( -72/2 - 36, 230, 72/2 )

@@ -66,6 +66,13 @@ SWEP.Sound_TailINT				= {
 	{ s = p0.."fire-dist-int-pistol-06.ogg" },
 }
 
+SWEP.MuzzleEffect						= "muzzleflash_1"
+SWEP.QCA_Muzzle							= 1
+
+SWEP.ShellModel							= "models/weapons/arccw/uc_shells/9x19.mdl"
+SWEP.ShellScale							= 1
+SWEP.QCA_Case							= 2
+
 --
 -- Functionality
 --
@@ -96,10 +103,11 @@ SWEP.SprintTime				= 0.35
 --
 -- Recoil
 --
-SWEP.RecoilUp				= 1.6					-- degrees punched
-SWEP.RecoilSide				= 1.6				-- degrees punched, in either direction (-100% to 100%)
-SWEP.RecoilDrift			= 0.5				-- how much will be smooth recoil
-SWEP.RecoilDecay			= 5				-- how much recoil to remove per second
+SWEP.RecoilUp				= 1.4
+SWEP.RecoilSide				= 1.8
+SWEP.RecoilSwing			= 1.5
+SWEP.RecoilDrift			= 0.5
+SWEP.RecoilDecay			= 5
 
 --
 -- Animation

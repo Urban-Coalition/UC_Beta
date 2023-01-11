@@ -38,21 +38,6 @@ function SWEP:GetFiremodeTable(cust)
 	return self.Firemodes[cust or self:GetFiremode()] or false
 end
 
-hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
-	if ply and IsValid(ply) and IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().Suburb then
-		local wep = ply:GetActiveWeapon()
-		if wep:GetHolster_Time() != 0 and wep:GetHolster_Time() <= CurTime() then
-			if IsValid(wep:GetHolster_Entity()) then
-				cmd:SelectWeapon(wep:GetHolster_Entity())
-			end
-		end
-
-		if cmd:GetImpulse() == 150 then
-			wep:SwitchFiremode()
-		end
-	end
-end)
-
 function SWEP:PrimaryAttack()
 	if CurTime() < self:GetNextFire() then
 		return false
@@ -87,14 +72,16 @@ function SWEP:PrimaryAttack()
 			self.RecoilTable = {}
 		end
 		if spmp then
+			local randy = util.SharedRandom( "Suburb_RecoilSide", -1, 1 )
 			local recoil = {}
-			recoil.dir = Angle( self.RecoilUp * (self.RecoilDrift), math.Rand( -1, 1 ) * self.RecoilSide * (self.RecoilDrift) )
+			recoil.dir = Angle( self.RecoilUp * (self.RecoilDrift), randy * self.RecoilSide * (self.RecoilDrift) )
 			recoil.speed = self.RecoilDecay
 			table.insert( self.RecoilTable, recoil )
 			local recoil = {}
-			recoil.dir = Angle( self.RecoilUp * (1-self.RecoilDrift), math.Rand( -1, 1 ) * self.RecoilSide * (1-self.RecoilDrift) )
+			recoil.dir = Angle( self.RecoilUp * (1-self.RecoilDrift), randy * self.RecoilSide * (1-self.RecoilDrift) )
 			recoil.speed = math.huge
 			table.insert( self.RecoilTable, recoil )
+			p:ViewPunch( Angle( self.RecoilUp * 0.2, self.RecoilSide * randy * -0.2, self.RecoilSwing * randy ) )
 		end
 	end
 
@@ -176,9 +163,6 @@ function SWEP:Attack_Effects()
 	-- Flashes
 	do
 		local ed = EffectData()
-		ed:SetStart(self:GetOwner():GetAimVector())
-		ed:SetOrigin(self:GetOwner():GetAimVector())
-		ed:SetScale(1)
 		ed:SetEntity(self)
 		ed:SetAttachment(self.QCA_Muzzle or 1)
 

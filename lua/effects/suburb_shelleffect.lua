@@ -140,30 +140,30 @@ function EFFECT:Init(data)
 
 	phys:SetVelocity((dir * mag * math.Rand(1, 2)) + plyvel)
 
-	phys:AddAngleVelocity(VectorRand() * 100)
-	phys:AddAngleVelocity(ang:Up() * 2500 * math.Rand(0.75, 1.25))
+	phys:AddAngleVelocity(VectorRand(-5000, 5000))
+	phys:AddAngleVelocity(ang:Up() * 2500 * math.Rand(0.5, 2))
 
 	self.HitPitch = self.Pitch + math.Rand(-5,5)
 
-	local emitter = ParticleEmitter(origin)
+	self.emitter = ParticleEmitter( self:GetPos() )
 
-	for i = 1, 3 do
-		local particle = emitter:Add("particles/smokey", origin + (dir * 2))
+	do
+		local particle = self.emitter:Add("particles/smokey", self:GetPos() )
 
 		if (particle) then
-			particle:SetVelocity(VectorRand() * 10 + (dir * i * math.Rand(48, 64)) + plyvel)
-			particle:SetLifeTime(0)
-			particle:SetDieTime(math.Rand(0.05, 0.15))
-			particle:SetStartAlpha(math.Rand(40, 60))
-			particle:SetEndAlpha(0)
-			particle:SetStartSize(0)
-			particle:SetEndSize(math.Rand(18, 24))
-			particle:SetRoll(math.rad(math.Rand(0, 360)))
-			particle:SetRollDelta(math.Rand(-1, 1))
-			particle:SetLighting(true)
-			particle:SetAirResistance(96)
-			particle:SetGravity(Vector(-7, 3, 20))
-			particle:SetColor(150, 150, 150)
+			particle:SetVelocity( ang:Up()*80 )
+			particle:SetLifeTime( 0 )
+			particle:SetDieTime( .2 )
+			particle:SetStartAlpha( 64 )
+			particle:SetEndAlpha( 0 )
+			particle:SetStartSize( 2 )
+			particle:SetEndSize( 4 )
+			particle:SetRoll( math.rad( math.Rand( 0, 360 ) ) )
+			particle:SetRollDelta( math.Rand( -1, 1 ) )
+			particle:SetLighting( true )
+			particle:SetAirResistance( 96 )
+			particle:SetGravity( Vector( 0, 0, -80 ) )
+			particle:SetColor( 0, 0, 0 )
 		end
 	end
 
@@ -180,6 +180,8 @@ function EFFECT:PhysicsCollide()
 	self:Remove()
 end
 
+local lastpoof = 0
+
 function EFFECT:Think()
 	if (self.SpawnTime + self.ShellTime) <= CurTime() then
 		if !IsValid(self) then return end
@@ -193,6 +195,31 @@ function EFFECT:Think()
 			end
 		end
 	end
+	
+	if (self.SpawnTime+0.3) > CurTime() and lastpoof <= CurTime() then
+		for i = 1, 4 do
+			local particle = self.emitter:Add("particles/smokey", self:GetPos() )
+
+			local ca = 180
+			if (particle) then
+				particle:SetVelocity( VectorRand( -4, 4 ) )
+				particle:SetLifeTime( 0.2 )
+				particle:SetDieTime( .4 )
+				particle:SetStartAlpha( 16 )
+				particle:SetEndAlpha( 0 )
+				particle:SetStartSize( 1 )
+				particle:SetEndSize( 0 )
+				particle:SetRoll( math.rad( math.Rand( 0, 360 ) ) )
+				particle:SetRollDelta( math.Rand( -1, 1 ) )
+				particle:SetLighting( true )
+				particle:SetAirResistance( 96 )
+				particle:SetGravity( Vector( 0, 0, 40 ) )
+				particle:SetColor( ca, ca, ca )
+			end
+		end
+		lastpoof = CurTime() + 0.005
+	end
+
 	return true
 end
 

@@ -30,10 +30,10 @@ SWEP.Sound_TailINT			= {}
 
 SWEP.MuzzleEffect						= "muzzleflash_4"
 SWEP.QCA_Muzzle							= 1
-SWEP.QCA_Case							= 2
 
-SWEP.ShellModel							= "models/shells/shell_556.mdl"
+SWEP.ShellModel							= "models/weapons/arccw/uc_shells/9x19.mdl"
 SWEP.ShellScale							= 1
+SWEP.QCA_Case							= 2
 
 --
 -- Functionality
@@ -62,10 +62,11 @@ SWEP.SprintTime				= 0.3
 --
 -- Recoil
 --
-SWEP.RecoilUp				= 4					-- degrees punched
-SWEP.RecoilSide				= 1				-- degrees punched, in either direction (-100% to 100%)
-SWEP.RecoilDrift			= 0.7				-- how much will be smooth recoil
-SWEP.RecoilDecay			= 20				-- how much recoil to remove per second
+SWEP.RecoilUp				= 4				-- degrees punched
+SWEP.RecoilSide				= 2				-- degrees punched, in either direction (-100% to 100%)
+SWEP.RecoilSwing			= 4				-- degrees on yaw punch
+SWEP.RecoilDrift			= 0.7			-- how much will be smooth recoil
+SWEP.RecoilDecay			= 20			-- how much recoil to remove per second
 
 --
 -- Damage
@@ -121,6 +122,9 @@ include("sh_firing.lua")
 AddCSLuaFile("sh_think.lua")
 include("sh_think.lua")
 
+AddCSLuaFile("sh_binds.lua")
+include("sh_binds.lua")
+
 AddCSLuaFile("cl_hud.lua")
 if CLIENT then include("cl_hud.lua") end
 
@@ -128,6 +132,7 @@ local yep = {
 	["Bool"] = {
 		"UserSight",
 		"FiremodeDebounce",
+		"Customizing",
 	},
 	["Int"] = {
 		"BurstCount",
@@ -217,6 +222,7 @@ function SWEP:Holster( ent )
 		return true
 	elseif !IsValid(self:GetHolster_Entity()) then
 		self:SendAnimChoose( "holster", "holster" )
+		self:SetIdleIn( -1 )
 		self:SetHolster_Entity( ent )
 	end
 end

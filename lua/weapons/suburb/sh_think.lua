@@ -6,7 +6,7 @@ function SWEP:Think()
 		if self:GetAim() > 0.2 then
 			ht = self.HoldTypeSight
 		end
-		local spint = self:GetSprintPer() > 0.2
+		local spint = p:IsSprinting() or self:GetSprintPer() > 0.5
 		if spint then
 			ht = self.HoldTypeSprint
 		end
