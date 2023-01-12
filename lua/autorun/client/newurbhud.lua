@@ -46,38 +46,45 @@ moves.health.func = function( data ) -------------------------------------------
 
 	local weed = (data.ang:Up() * globalweed)
 
-	cam.Start3D2D( data.pos, data.ang, 0.1 )
-		surface.SetMaterial( test2 )
-		surface.SetDrawColor( cs2 )
-		surface.DrawTexturedRect( 0, 0, 300, 180 )
-	cam.End3D2D()
-
-	for i=1, 2 do
-		cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
-			local col = i == 1 and cs or cw
-			draw.DrawText(
-				"HP",
-				"Solar_A_1",
-				260,
-				80+extra,
-				col,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_TOP
-			)
-			draw.DrawText(
-				data.p:Health(),
-				"Solar_B_1",
-				260,
-				10+extra,
-				col,
-				TEXT_ALIGN_RIGHT,
-				TEXT_ALIGN_TOP
-			)
+	for b=1, 2 do
+		if data.p:Armor() == 0 and b==2 then continue end
+		cam.Start3D2D( data.pos, data.ang, 0.1 )
+			surface.SetMaterial( test2 )
+			surface.SetDrawColor( cs2 )
+			surface.DrawTexturedRect( (b==2 and 350 or 0), 0, 300, 180 )
 		cam.End3D2D()
-	end
+
+		for i=1, 2 do
+			cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
+				local col = i == 1 and cs or cw
+				draw.DrawText(
+					b==2 and "AP" or "HP",
+					"Solar_A_1",
+					260 + (b==2 and 350 or 0),
+					80+extra,
+					col,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+				draw.DrawText(
+					b==2 and data.p:Armor() or data.p:Health(),
+					"Solar_B_1",
+					260 + (b==2 and 350 or 0),
+					10+extra,
+					col,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+				surface.SetDrawColor( col )
+				surface.DrawRect( 20 + (b==2 and 350 or 0) + 40, 140, 200 * (i==1 and 1 or (b==2 and (data.p:Armor()/data.p:GetMaxArmor()) or (data.p:Health()/data.p:GetMaxHealth()))), 10 )
+				surface.DrawRect( 20 + (b==2 and 350 or 0) - 6 + 40, 140, 3, 10 )
+				surface.DrawRect( 20 + (b==2 and 350 or 0) + 200 + 3 + 40, 140, 3, 10 )
+			cam.End3D2D()
+		end
+		end
 	end
 end ------------------------------------------------
-moves.health.pos = Vector( -95, 300, -40 )
+moves.health.pos = Vector( -105, 300, -45 )
 moves.health.ang = Angle( -20, 0, 0 )
 
 moves.ammo = {}
@@ -156,7 +163,7 @@ moves.ammo.func = function( data ) ---------------------------------------------
 	end
 	end
 end ------------------------------------------------
-moves.ammo.pos = Vector( 85 - (350*0.1), 300, -40 )
+moves.ammo.pos = Vector( 95 - (350*0.1), 300, -45 )
 moves.ammo.ang = Angle( -20, 0, 0 )
 
 local papi1 = {

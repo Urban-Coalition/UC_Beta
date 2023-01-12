@@ -295,8 +295,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 		LASTAIM:Set(p:EyeAngles())
 
 		local sii = self:GetAim()
-		local mult = 0.15
-		local mult_aim = 0.1
+		local mult = 0.04
+		local mult_aim = 0.2
 		local correct = Lerp( sii, 0.12, self.SwayCorrection )
 		local test = GetConVar("uc_dev_aimcorrect"):GetInt()
 		if test == 1 then
