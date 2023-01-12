@@ -95,6 +95,7 @@ SWEP.Firemodes				= {
 		Mode = 1,
 	},
 }
+SWEP.SwayCorrection = 0.45
 
 SWEP.Accuracy				= 1
 

@@ -87,6 +87,7 @@ SWEP.IronsightPose = {
 	ViewModelFOV = 65,
 	Magnification = 1.1,
 }
+SWEP.SwayCorrection = 0.35
 
 -- stuff:
 --		StopSightTime
@@ -235,6 +236,10 @@ SWEP.BobScale = 0
 SWEP.SwayScale = 0
 local goddamn_p, goddamn_y = 0, 0
 local custtemp = 0
+
+local ox, oy = 0, 0
+local LASTAIM
+
 function SWEP:GetViewModelPosition(pos, ang)
 	local opos, oang = Vector(), Angle()
 	local p = self:GetOwner()
@@ -279,27 +284,43 @@ function SWEP:GetViewModelPosition(pos, ang)
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
-	do -- thing
-		local b_ang = Angle()
+	do -- sway
+		local b_pos, b_ang = Vector(), Angle()
+		local EY = p:EyeAngles()
+		if !LASTAIM then LASTAIM = EY end
+		ox = math.ApproachAngle(ox, ox + (EY.y - LASTAIM.y), math.huge)
+		oy = math.ApproachAngle(oy, oy - (EY.p - LASTAIM.p), math.huge)
+		ox = math.Approach(ox, ox*(1-(math.min(FrameTime(), (1/8))*8)), math.huge)
+		oy = math.Approach(oy, oy*(1-(math.min(FrameTime(), (1/8))*8)), math.huge)
+		LASTAIM:Set(p:EyeAngles())
 
-		local wawa = Angle()
-		if self.RecoilTable then
-			for i, asset in pairs(self.RecoilTable) do
-				wawa.p = wawa.p + asset.dir.p
-				wawa.y = wawa.y + asset.dir.y
-			end
+		local sii = self:GetAim()
+		local mult = 0.15
+		local mult_aim = 0.1
+		local correct = Lerp( sii, 0.12, self.SwayCorrection )
+		local test = GetConVar("uc_dev_aimcorrect"):GetInt()
+		if test == 1 then
+			ox = (math.sin(CurTime()*3))*90
+		elseif test == 2 then
+			oy = (math.sin(CurTime()*3))*90
 		end
-		goddamn_p = math.max( wawa.p, goddamn_p )
-		goddamn_y = math.max( wawa.y, goddamn_y )
-		b_ang.p = b_ang.p + goddamn_p
-		b_ang.y = b_ang.y + goddamn_y
-		goddamn_p = math.Approach( goddamn_p, 0, FrameTime() * 10 )
-		goddamn_y = math.Approach( goddamn_y, 0, FrameTime() * 10 )
-		b_ang:Mul( 1 - self:GetAim() )
 
-		oang:Add( b_ang )
+		b_pos.x = b_pos.x + ox*correct
+		b_ang.y = b_ang.y + ox*1
+
+		b_pos.z = b_pos.z + oy*-correct
+		b_ang.x = b_ang.x + oy*1
+
+		--b_pos.z = b_pos.z - math.abs(ox*0.04)
+
+		mult = mult * Lerp( sii, 1, mult_aim )
+		b_pos:Mul( mult )
+		b_ang:Mul( mult )
+		b_ang:Normalize()
+
+		opos:Add(b_pos)
+		oang:Add(b_ang)
 	end
-
 	do -- ironsighting
 		local b_pos, b_ang = Vector(), Angle()
 		local si = self:GetAim()

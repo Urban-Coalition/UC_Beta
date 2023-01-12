@@ -30,6 +30,7 @@ SWEP.IronsightPose = {
 	ViewModelFOV = 65,
 	Magnification = 1.1,
 }
+SWEP.SwayCorrection = 0.33
 
 SWEP.HoldTypeHip			= "pistol"
 SWEP.HoldTypeSight			= "revolver"

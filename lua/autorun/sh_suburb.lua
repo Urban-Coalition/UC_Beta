@@ -1,4 +1,8 @@
 
+if CLIENT then
+	CreateClientConVar("uc_dev_aimcorrect", 0, false, false)
+end
+
 Suburb = {}
 
 Suburb.HUToM = 0.0254

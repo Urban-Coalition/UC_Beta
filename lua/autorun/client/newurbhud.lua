@@ -22,6 +22,8 @@ surface.CreateFont( "Solar_A_4", { font = "FOT-Rodin Pro DB", size = 60, weight 
 surface.CreateFont( "Solar_A_5", { font = "FOT-Rodin Pro DB", size = 22, weight = 0 } )
 surface.CreateFont( "Solar_B_1", { font = "Carbon Bold", size = 120, weight = 0 } )
 surface.CreateFont( "Solar_B_2", { font = "Carbon Bold", size = 70, weight = 0 } )
+surface.CreateFont( "Solar_C_1", { font = "Consolas", size = 32, weight = 0 } )
+surface.CreateFont( "Solar_C_2", { font = "Consolas", size = 20, weight = 0 } )
 
 local moves = {}
 moves.fix = Angle( 90, -90, 0 )
@@ -51,7 +53,7 @@ moves.health.func = function( data ) -------------------------------------------
 	cam.End3D2D()
 
 	for i=1, 2 do
-		cam.Start3D2D( data.pos + (weed * Lerp(i/2, 0.5, 1)), data.ang, 0.1 )
+		cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
 			local col = i == 1 and cs or cw
 			draw.DrawText(
 				"HP",
@@ -120,8 +122,8 @@ moves.ammo.func = function( data ) ---------------------------------------------
 		cam.End3D2D()
 
 		for i=1, 2 do
-		local col = i == 1 and cs or cw
-			cam.Start3D2D( data.pos + (weed * Lerp( i/2, 0.5, 1 )), data.ang, 0.1 )
+			local col = i == 1 and cs or cw
+			cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
 				draw.DrawText(
 					w_clip,
 					"Solar_B_1",
@@ -345,57 +347,95 @@ moves.test1.func = function( data ) --------------------------------------------
 		end
 		puss[guts] = wheeler
 
-		cam.Start3D2D( data.pos + (weed1*0.5) + ( weed2 * math.ease.InOutCubic(rain) ), data.ang, 0.1 )
-			local crack1 = Color( cs2.r, cs2.g, cs2.b, Lerp( rain, 63, 255 ) )
-			local crack2 = Color( cs2.r, cs2.g, cs2.b, Lerp( rain, 0, 255 ) )
-			draw.DrawText(
-				v["Title"],
-				"Solar_A_2",
-				159,
-				0+8+((guts)*gaap),
-				crack1,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_TOP
-			)
-			draw.DrawText(
-				--[[ami and v["Subtitle2"] or ]]v["Subtitle"],
-				"Solar_A_3",
-				160,
-				38+8+((guts)*gaap),
-				crack2,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_TOP
-			)
-			surface.SetMaterial( v["Icon"] )
-			surface.SetDrawColor( crack1 )
-			surface.DrawTexturedRect( 80, 8+((guts)*gaap), 54, 54 )
-		cam.End3D2D()
-		cam.Start3D2D( data.pos + (weed1) + ( weed2 * math.ease.InOutCubic(rain) ), data.ang, 0.1 )
-			local crack1 = Color( cw.r, cw.g, cw.b, Lerp( rain, 63, 255 ) )
-			local crack2 = Color( cw.r, cw.g, cw.b, Lerp( rain, 0, 255 ) )
-			draw.DrawText(
-				v["Title"],
-				"Solar_A_2",
-				159,
-				0+8+((guts)*gaap),
-				crack1,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_TOP
-			)
-			draw.DrawText(
-				--[[ami and v["Subtitle2"] or ]]v["Subtitle"],
-				"Solar_A_3",
-				160,
-				38+8+((guts)*gaap),
-				crack2,
-				TEXT_ALIGN_LEFT,
-				TEXT_ALIGN_TOP
-			)
-			surface.SetMaterial( v["Icon"] )
-			surface.SetDrawColor( crack1 )
-			surface.DrawTexturedRect( 80, 8+((guts)*gaap), 54, 54 )
-		cam.End3D2D()
+		for i=1, 2 do
+			local col = i == 1 and cs2 or cw
+			cam.Start3D2D( data.pos + ( weed1 * (i/2) ) + ( weed2 * math.ease.InOutCubic(rain) ), data.ang, 0.1 )
+				local crack1 = Color( col.r, col.g, col.b, Lerp( rain, 63, 255 ) )
+				local crack2 = Color( col.r, col.g, col.b, Lerp( rain, 0, 255 ) )
+				draw.DrawText(
+					v["Title"],
+					"Solar_A_2",
+					159,
+					0+8+((guts)*gaap),
+					crack1,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+				draw.DrawText(
+					--[[ami and v["Subtitle2"] or ]]v["Subtitle"],
+					"Solar_A_3",
+					160,
+					38+8+((guts)*gaap),
+					crack2,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+				surface.SetMaterial( v["Icon"] )
+				surface.SetDrawColor( crack1 )
+				surface.DrawTexturedRect( 80, 8+((guts)*gaap), 54, 54 )
+			cam.End3D2D()
+		end
+		
+
+		for i=1, 2 do
+			local col = i == 1 and cs2 or cw
+			cam.Start3D2D( data.pos + ( weed1 * (i/2) ) + ( weed2 * math.ease.InOutCubic(rain) ), data.ang, 0.1 )
+				local crack1 = Color( col.r, col.g, col.b, Lerp( rain, 63, 255 ) )
+				local crack2 = Color( col.r, col.g, col.b, Lerp( rain, 0, 255 ) )
+				draw.DrawText(
+					v["Title"],
+					"Solar_A_2",
+					159,
+					0+8+((guts)*gaap),
+					crack1,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+				draw.DrawText(
+					--[[ami and v["Subtitle2"] or ]]v["Subtitle"],
+					"Solar_A_3",
+					160,
+					38+8+((guts)*gaap),
+					crack2,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+			cam.End3D2D()
+		end
 	end
+	
+
+	for b=1, 5 do
+		for i=1, 2 do
+			local col = i == 1 and cs2 or cw
+			cam.Start3D2D( data.pos + ( weed1 * (i/2) ) + ( weed1 ), data.ang, 0.1 )
+				surface.SetDrawColor( i == 2 and Color( 32, 32, 32, 255 ) or Color( 0, 0, 0, 127 ) )
+				surface.DrawRect( 159 - 32, 32 + (b*40), 200 + 32, 35 )
+				local crack1 = Color( col.r, col.g, col.b, Lerp( b==1 and 1 or 0, 63, 255 ) )
+				local crack2 = Color( col.r, col.g, col.b, Lerp( b==1 and 1 or 0, 0, 255 ) )
+				draw.DrawText(
+					"ACOG",
+					"Solar_C_1",
+					159,
+					32+(b*40),
+					crack1,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+				local bongx, bongy = surface.GetTextSize( "ACOG" )
+				draw.DrawText(
+					"4x OPTICAL",
+					"Solar_C_2",
+					159+12+bongx,
+					32+(b*40)+(6),
+					crack1,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+			cam.End3D2D()
+		end
+	end
+
 	end
 end ------------------------------------------------
 moves.test1.pos = Vector( -72/2 - 36, 230, 72/2 )
