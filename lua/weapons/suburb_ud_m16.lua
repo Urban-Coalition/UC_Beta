@@ -186,12 +186,15 @@ SWEP.Animations				= {
 SWEP.Attachments = {
 	{
 		Name = "Rear Sight",
+		SortOrder = 1,
 	},
 	{
 		Name = "Optical Sight",
+		SortOrder = 1.1,
 	},
 	{
 		Name = "Front Sight",
+		SortOrder = 1.2,
 	},
 }
 

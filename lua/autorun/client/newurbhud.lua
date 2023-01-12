@@ -158,7 +158,7 @@ moves.ammo.pos = Vector( 85 - (350*0.1), 300, -40 )
 moves.ammo.ang = Angle( -20, 0, 0 )
 
 local papi1 = {
-	{
+	--[[{
 		["Title"] = "REAR SIGHT",
 		["Subtitle"] = "Optical device that draws the user's sight.",
 		["Subtitle2"] = "Integrated Carry Handle",
@@ -220,7 +220,7 @@ local papi1 = {
 		["Subtitle2"] = "None",
 		["SortOrder"] = 8,
 		["Icon"] = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth")
-	},
+	},]]
 }
 local puss = {}
 pusx, pusy = 0, 0
@@ -267,8 +267,15 @@ moves.test1.func = function( data ) --------------------------------------------
 
 	local gaap = 70
 	local ifuckinghateyou = {}
-	for i, v in SortedPairsByMemberValue( papi1, "SortOrder", false ) do
-		table.insert( ifuckinghateyou, v )
+	for i, v in SortedPairsByMemberValue( w.Attachments, "SortOrder", false ) do
+		if i == "BaseClass" then continue end
+		local item = {
+			Title = string.upper( v.Name ),
+			Subtitle = "null",
+			Icon = Material("entities/arccw_ud_glock.png", "mips smooth"),
+			oslot = v
+		}
+		table.insert( ifuckinghateyou, i, item )
 	end
 
 	--[[if game.SinglePlayer() or (!game.SinglePlayer() and IsFirstTimePredicted()) then
@@ -298,11 +305,12 @@ moves.test1.func = function( data ) --------------------------------------------
 	for i, v in ipairs( ifuckinghateyou ) do
 		local guts = i
 		local ami = selected1 == i
-		v.iRaise = math.Approach(v.iRaise or 0, ami and 1 or 0, FrameTime()/0.2)
+		v.oslot.iRaise = math.Approach(v.oslot.iRaise or 0, ami and 1 or 0, FrameTime()/0.2)
+		local rain = v.oslot.iRaise
 		cam.Start3D2D( data.pos + (weed1), data.ang, 0.1 )
-			local crack1 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 127, 255 ) )
-			local crack2 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 0, 255 ) )
-			local crack3 = Color( 0, 0, 255, Lerp( v.iRaise, 31, 127 ) )
+			local crack1 = Color( cs2.r, cs2.g, cs2.b, Lerp( rain, 127, 255 ) )
+			local crack2 = Color( cs2.r, cs2.g, cs2.b, Lerp( rain, 0, 255 ) )
+			local crack3 = Color( 0, 0, 255, Lerp( rain, 31, 127 ) )
 			surface.SetDrawColor( crack3 )
 			--surface.DrawRect( 0, 8+((guts)*gaap), 800, 64 )
 		cam.End3D2D()
@@ -337,9 +345,9 @@ moves.test1.func = function( data ) --------------------------------------------
 		end
 		puss[guts] = wheeler
 
-		cam.Start3D2D( data.pos + (weed1*0.5) + ( weed2 * math.ease.InOutCubic(v.iRaise) ), data.ang, 0.1 )
-			local crack1 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 63, 255 ) )
-			local crack2 = Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 0, 255 ) )
+		cam.Start3D2D( data.pos + (weed1*0.5) + ( weed2 * math.ease.InOutCubic(rain) ), data.ang, 0.1 )
+			local crack1 = Color( cs2.r, cs2.g, cs2.b, Lerp( rain, 63, 255 ) )
+			local crack2 = Color( cs2.r, cs2.g, cs2.b, Lerp( rain, 0, 255 ) )
 			draw.DrawText(
 				v["Title"],
 				"Solar_A_2",
@@ -362,9 +370,9 @@ moves.test1.func = function( data ) --------------------------------------------
 			surface.SetDrawColor( crack1 )
 			surface.DrawTexturedRect( 80, 8+((guts)*gaap), 54, 54 )
 		cam.End3D2D()
-		cam.Start3D2D( data.pos + (weed1) + ( weed2 * math.ease.InOutCubic(v.iRaise) ), data.ang, 0.1 )
-			local crack1 = Color( cw.r, cw.g, cw.b, Lerp( v.iRaise, 63, 255 ) )
-			local crack2 = Color( cw.r, cw.g, cw.b, Lerp( v.iRaise, 0, 255 ) )
+		cam.Start3D2D( data.pos + (weed1) + ( weed2 * math.ease.InOutCubic(rain) ), data.ang, 0.1 )
+			local crack1 = Color( cw.r, cw.g, cw.b, Lerp( rain, 63, 255 ) )
+			local crack2 = Color( cw.r, cw.g, cw.b, Lerp( rain, 0, 255 ) )
 			draw.DrawText(
 				v["Title"],
 				"Solar_A_2",
