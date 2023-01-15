@@ -73,6 +73,9 @@ SWEP.ShellModel							= "models/weapons/arccw/uc_shells/9x19.mdl"
 SWEP.ShellScale							= 1
 SWEP.QCA_Case							= 2
 
+SWEP.QCA_Camera							= 3
+SWEP.CameraCorrection					= Angle( 0, 0, -90 )
+
 --
 -- Functionality
 --
@@ -105,7 +108,7 @@ SWEP.SprintTime				= 0.35
 -- Recoil
 --
 SWEP.RecoilUp				= 1.4
-SWEP.RecoilSide				= 1.8
+SWEP.RecoilSide				= 0.8
 SWEP.RecoilSwing			= 1.5
 SWEP.RecoilDrift			= 0.5
 SWEP.RecoilDecay			= 5

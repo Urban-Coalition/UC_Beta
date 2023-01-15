@@ -77,6 +77,9 @@ SWEP.ShellModel							= "models/weapons/arccw/uc_shells/556x45.mdl"
 SWEP.ShellScale							= 1
 SWEP.QCA_Case							= 2
 
+SWEP.QCA_Camera							= 3
+SWEP.CameraCorrection					= Angle( 0, 0, -90 )
+
 --
 -- Functionality
 --
@@ -191,7 +194,7 @@ SWEP.Animations				= {
 SWEP.Attachments = {
 	{
 		Name = "Rear Sight",
-		SortOrder = 1,
+		SortOrder = 1.0,
 	},
 	{
 		Name = "Optical Sight",
@@ -200,6 +203,34 @@ SWEP.Attachments = {
 	{
 		Name = "Front Sight",
 		SortOrder = 1.2,
+	},
+	{
+		Name = "Barrel",
+		SortOrder = 2.0,
+	},
+	{
+		Name = "Handguard",
+		SortOrder = 2.1,
+	},
+	{
+		Name = "Upper Receiver",
+		SortOrder = 2.2,
+	},
+	{
+		Name = "Lower Receiver",
+		SortOrder = 2.3,
+	},
+	{
+		Name = "Muzzle",
+		SortOrder = 3.0,
+	},
+	{
+		Name = "Tactical",
+		SortOrder = 3.1,
+	},
+	{
+		Name = "Underbarrel",
+		SortOrder = 3.2,
 	},
 }
 

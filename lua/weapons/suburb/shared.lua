@@ -504,3 +504,23 @@ function SWEP:AdjustMouseSensitivity()
 	end
 	return 1 / Lerp( math.ease.InOutQuad( self:GetAim() * (1-(self.superaimedin or 0)*0.5) ), 1, mag )
 end
+
+local correct = Angle( 0, -90, -90 )
+
+function SWEP:CalcView( ply, pos, ang, fov )
+	if self.QCA_Camera then
+		if !Suburb_CL1 then
+			Suburb_CL1 = ClientsideModel( "models/weapons/c_pistol.mdl" )
+		end
+		local vm = ply:GetViewModel()
+		Suburb_CL1:SetModel( vm:GetModel() )
+		Suburb_CL1:SetSequence( vm:GetSequence() )
+		Suburb_CL1:SetCycle( vm:GetCycle() )
+		local result = Suburb_CL1:GetAttachment( self.QCA_Camera )
+		local addy = Angle()
+		addy:Set( result.Ang )
+		addy:Add( self.CameraCorrection or correct )
+		ang:Add( addy )
+	end
+	return pos, ang, fov
+end

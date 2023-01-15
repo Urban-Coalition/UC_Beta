@@ -236,7 +236,19 @@ local test_attachments = {
 	{
 		Name = "Trijicon Advanced Combat Optical Gunsight (4x)",
 		ShortName = "ACOG",
-		ShortNameSubtitle = "4x",
+		ShortNameSubtitle = "4x OPTICAL",
+	},
+	{
+		ShortName = "EOTech",
+		ShortNameSubtitle = "HOLOGRAPHIC",
+	},
+	{
+		ShortName = "EOTech & MAGNIFIER",
+		ShortNameSubtitle = "2x OPTICAL/HOLOGRAPHIC",
+	},
+	{
+		ShortName = "MRS",
+		ShortNameSubtitle = "REFLEX",
 	}
 }
 
@@ -421,16 +433,21 @@ moves.test1.func = function( data ) --------------------------------------------
 	end
 	
 
-	for b=1, 5 do
+	for b, att in ipairs(test_attachments) do
 		for i=1, 2 do
 			local col = i == 1 and cs2 or cw
 			cam.Start3D2D( data.pos + ( weed1 * (i/2) ) + ( weed1 ), data.ang, 0.1 )
-				surface.SetDrawColor( i == 2 and Color( 32, 32, 32, 255 ) or Color( 0, 0, 0, 127 ) )
-				surface.DrawRect( 159 - 32, 32 + (b*40), 200 + 32, 35 )
+				surface.SetDrawColor( i == 2 and Color( 60, 80, 100, 255 ) or Color( 0, 0, 0, 127 ) )
+				if i == 1 then
+					surface.DrawRect( 159 - 32, 32 + (b*40), 600, 35 )
+				else
+					surface.DrawOutlinedRect( 159 - 32, 32 + (b*40), 600, 35, 2 )
+				end
+				--surface.DrawRect( 159 - 32, 32 + (b*40), 600, 35 )
 				local crack1 = Color( col.r, col.g, col.b, Lerp( b==1 and 1 or 0, 63, 255 ) )
 				local crack2 = Color( col.r, col.g, col.b, Lerp( b==1 and 1 or 0, 0, 255 ) )
 				draw.DrawText(
-					"ACOG",
+					att.ShortName,
 					"Solar_C_1",
 					159,
 					32+(b*40),
@@ -438,11 +455,11 @@ moves.test1.func = function( data ) --------------------------------------------
 					TEXT_ALIGN_LEFT,
 					TEXT_ALIGN_TOP
 				)
-				local bongx, bongy = surface.GetTextSize( "ACOG" )
+				local bongx, bongy = surface.GetTextSize( att.ShortName )
 				draw.DrawText(
-					"4x OPTICAL",
+					att.ShortNameSubtitle,
 					"Solar_C_2",
-					159+12+bongx,
+					159+12+math.max(bongx, 300),
 					32+(b*40)+(6),
 					crack1,
 					TEXT_ALIGN_LEFT,

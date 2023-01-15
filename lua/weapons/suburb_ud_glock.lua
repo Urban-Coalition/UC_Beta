@@ -78,6 +78,9 @@ SWEP.ShellModel							= "models/weapons/arccw/uc_shells/9x19.mdl"
 SWEP.ShellScale							= 1
 SWEP.QCA_Case							= 2
 
+SWEP.QCA_Camera							= 3
+SWEP.CameraCorrection					= Angle( 0, -90, -90 )
+
 --
 -- Functionality
 --
