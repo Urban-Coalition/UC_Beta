@@ -231,6 +231,15 @@ local papi1 = {
 		["Icon"] = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth")
 	},]]
 }
+
+local test_attachments = {
+	{
+		Name = "Trijicon Advanced Combat Optical Gunsight (4x)",
+		ShortName = "ACOG",
+		ShortNameSubtitle = "4x",
+	}
+}
+
 local puss = {}
 pusx, pusy = 0, 0
 local chingas = 720

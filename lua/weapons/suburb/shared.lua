@@ -295,7 +295,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		LASTAIM:Set(p:EyeAngles())
 
 		local sii = self:GetAim()
-		local mult = 0.04
+		local mult = 0.08
 		local mult_aim = 0.2
 		local correct = Lerp( sii, 0.12, self.SwayCorrection )
 		local test = GetConVar("uc_dev_aimcorrect"):GetInt()
@@ -312,6 +312,16 @@ function SWEP:GetViewModelPosition(pos, ang)
 		b_ang.x = b_ang.x + oy*1
 
 		b_ang.z = b_ang.z - ox * Lerp( sii, 1, 5 )
+
+		-- Wobble while swaying
+		local joink = (math.abs( ox + oy ) ^ 2) * 0.01
+		b_pos.x = b_pos.x + ( math.sin( CurTime() * 1.0 * 16 ) * joink * 0.1 )
+		b_pos.y = b_pos.y + ( math.sin( CurTime() * 0.6 * 16 ) * joink * 0.1 )
+		b_pos.z = b_pos.z + ( math.sin( CurTime() * 0.3 * 16 ) * joink * 0.1 )
+
+		b_ang.x = b_ang.x + ( math.sin( CurTime() * 1.0 * 16 ) * joink * 0.2 )
+		b_ang.y = b_ang.y + ( math.sin( CurTime() * 0.6 * 16 ) * joink * 0.2 )
+		b_ang.z = b_ang.z + ( math.sin( CurTime() * 0.3 * 16 ) * joink * 0.2 )
 
 		mult = mult * Lerp( sii, 1, mult_aim )
 		b_pos:Mul( mult )
