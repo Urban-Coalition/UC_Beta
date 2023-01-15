@@ -532,6 +532,7 @@ function SWEP:CalcView( ply, pos, ang, fov )
 	if self.QCA_Camera then
 		if !Suburb_CL1 then
 			Suburb_CL1 = ClientsideModel( "models/weapons/c_pistol.mdl" )
+			Suburb_CL1:SetNoDraw( true )
 		end
 		local vm = ply:GetViewModel()
 		Suburb_CL1:SetModel( vm:GetModel() )

@@ -202,13 +202,13 @@ function EFFECT:Think()
 
 			local ca = 140
 			if (particle) then
-				particle:SetVelocity( VectorRand( -8, 8 ) )
+				particle:SetVelocity( VectorRand( -10, 10 ) )
 				particle:SetLifeTime( 0.1 )
-				particle:SetDieTime( .4 )
+				particle:SetDieTime( .7 )
 				particle:SetStartAlpha( 12 )
 				particle:SetEndAlpha( 0 )
 				particle:SetStartSize( 2 )
-				particle:SetEndSize( 0.5 )
+				particle:SetEndSize( 1 )
 				particle:SetRoll( math.rad( math.Rand( 0, 360 ) ) )
 				particle:SetRollDelta( math.Rand( -1, 1 ) )
 				particle:SetLighting( true )
@@ -217,7 +217,7 @@ function EFFECT:Think()
 				particle:SetColor( ca, ca, ca )
 			end
 		end
-		lastpoof = CurTime() + 0.002
+		lastpoof = CurTime() + 0.016
 	end
 
 	return true
