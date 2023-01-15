@@ -147,23 +147,23 @@ function EFFECT:Init(data)
 
 	self.emitter = ParticleEmitter( self:GetPos() )
 
-	do
+	for i=1, 3 do
 		local particle = self.emitter:Add("particles/smokey", self:GetPos() )
 
 		if (particle) then
-			particle:SetVelocity( ang:Up()*80 )
+			particle:SetVelocity( ang:Up()*Lerp(i/3, 20, 80) )
 			particle:SetLifeTime( 0 )
-			particle:SetDieTime( .2 )
-			particle:SetStartAlpha( 64 )
+			particle:SetDieTime( 1 )
+			particle:SetStartAlpha( 12 )
 			particle:SetEndAlpha( 0 )
-			particle:SetStartSize( 2 )
-			particle:SetEndSize( 4 )
+			particle:SetStartSize( 4 )
+			particle:SetEndSize( 3 )
 			particle:SetRoll( math.rad( math.Rand( 0, 360 ) ) )
 			particle:SetRollDelta( math.Rand( -1, 1 ) )
 			particle:SetLighting( true )
-			particle:SetAirResistance( 96 )
-			particle:SetGravity( Vector( 0, 0, -80 ) )
-			particle:SetColor( 0, 0, 0 )
+			particle:SetAirResistance( 216 )
+			particle:SetGravity( Vector( 0, 0, -50 ) )
+			particle:SetColor( 140, 140, 140 )
 		end
 	end
 
@@ -200,15 +200,15 @@ function EFFECT:Think()
 		for i = 1, 4 do
 			local particle = self.emitter:Add("particles/smokey", self:GetPos() )
 
-			local ca = 180
+			local ca = 140
 			if (particle) then
-				particle:SetVelocity( VectorRand( -4, 4 ) )
-				particle:SetLifeTime( 0.2 )
+				particle:SetVelocity( VectorRand( -8, 8 ) )
+				particle:SetLifeTime( 0.1 )
 				particle:SetDieTime( .4 )
-				particle:SetStartAlpha( 16 )
+				particle:SetStartAlpha( 12 )
 				particle:SetEndAlpha( 0 )
-				particle:SetStartSize( 1 )
-				particle:SetEndSize( 0 )
+				particle:SetStartSize( 2 )
+				particle:SetEndSize( 0.5 )
 				particle:SetRoll( math.rad( math.Rand( 0, 360 ) ) )
 				particle:SetRollDelta( math.Rand( -1, 1 ) )
 				particle:SetLighting( true )
@@ -217,7 +217,7 @@ function EFFECT:Think()
 				particle:SetColor( ca, ca, ca )
 			end
 		end
-		lastpoof = CurTime() + 0.005
+		lastpoof = CurTime() + 0.002
 	end
 
 	return true
