@@ -127,10 +127,10 @@ local function starvingchildren( self, detail, volumemult, level, chan )
 end
 
 function SWEP:Attack_Sound()
-	local shotthing1 = 150+((self:GetTotalShotCount()+0)%4)
-	local shotthing2 = 154+((self:GetTotalShotCount()+1)%4)
-	local shotthing3 = 158+((self:GetTotalShotCount()+2)%4)
-	local shotthing4 = 162+((self:GetTotalShotCount()+3)%4)
+	local shotthing1 = CHAN_USER_BASE+50 -- 150+((self:GetTotalShotCount()+0)%4)
+	local shotthing2 = CHAN_USER_BASE+51 -- 154+((self:GetTotalShotCount()+1)%4)
+	local shotthing3 = CHAN_VOICE2 -- 158+((self:GetTotalShotCount()+2)%4)
+	local shotthing4 = CHAN_STREAM -- 162+((self:GetTotalShotCount()+3)%4)
 
 	if #self.Sound_Blast > 0 then
 		self.Sound_Blast["BaseClass"] = nil
@@ -144,16 +144,18 @@ function SWEP:Attack_Sound()
 		starvingchildren( self, detail, Lerp( self:GetAim(), 0.5, 1 ), 70, shotthing2 )
 	end
 
+	local innyouty = self:InnyOuty()
+
 	if #self.Sound_TailEXT > 0 then
 		self.Sound_TailEXT["BaseClass"] = nil
 		local detail = self.Sound_TailEXT[math.Round(util.SharedRandom("Suburb_SoundBlast3", 1, #self.Sound_TailEXT))]
-		starvingchildren( self, detail, 1, 120, shotthing3 )
+		starvingchildren( self, detail, innyouty, 120, shotthing3 )
 	end
 
 	if #self.Sound_TailINT > 0 then
 		self.Sound_TailINT["BaseClass"] = nil
 		local detail = self.Sound_TailINT[math.Round(util.SharedRandom("Suburb_SoundBlast4", 1, #self.Sound_TailINT))]
-		--starvingchildren( self, detail, 1, 160, shotthing4 )
+		starvingchildren( self, detail, 1-innyouty, 160, shotthing4 )
 	end
 end
 
@@ -213,4 +215,86 @@ function SWEP:GetDispersion()
 	disp = Lerp( self:GetAim(), disp, disp * self.Dispersion_Sights )
 
 	return disp
+end
+
+
+
+-- Indoor outdoor sound stuff
+
+
+local tracestuff = {
+	{
+		Distance = Vector(0, 0, 1024),
+		Influence = 1,
+	}, -- Up
+	{
+		Distance = Vector(0, 1024, 1024),
+		Influence = 1,
+	}, -- Up Forward
+	{
+		Distance = Vector(0, -1024, 1024),
+		Influence = 1,
+	}, -- Up Back
+	{
+		Distance = Vector(0, 768, 0),
+		Influence = 0.35,
+	}, -- Forward
+	{
+		Distance = Vector(0, -1024, 0),
+		Influence = 0.35,
+	}, -- Back
+	{
+		Distance = Vector(768, 768, 0),
+		Influence = 0.35,
+	}, -- Right
+	{
+		Distance = Vector(-768, 768, 0),
+		Influence = 0.35,
+	}, -- Left
+	{
+		Distance = Vector(-768, -768, 0),
+		Influence = 0.35,
+	}, -- Left Back
+	{
+		Distance = Vector(768, -768, 0),
+		Influence = 0.35,
+	}, -- Right Back
+}
+
+local tracebase = {
+    start = 0,
+    endpos = 0,
+    filter = NULL,
+}
+
+function SWEP:InnyOuty()
+	local vol = 0
+	local wo = self:GetOwner()
+	local wop = wo:EyePos()
+	local woa = Angle(0, wo:EyeAngles().y, 0)
+	local t_influ = 0
+
+	for _, tin in ipairs(tracestuff) do
+		tracebase.start = wop
+		offset = Vector()
+		offset = offset + (tin.Distance.x * woa:Right())
+		offset = offset + (tin.Distance.y * woa:Forward())
+		offset = offset + (tin.Distance.z * woa:Up())
+		tracebase.endpos = wop + offset
+		tracebase.filter = wo
+		t_influ = t_influ + (tin.Influence or 1)
+		local result = util.TraceLine(tracebase)
+		if GetConVar("developer"):GetInt() > 1 then
+			debugoverlay.Line(wop - (vector_up * 4), result.HitPos - (vector_up * 4), 1, Color((_ / 4) * 255, 0, (1 - (_ / 4)) * 255))
+			debugoverlay.Text(result.HitPos - (vector_up * 4), math.Round((result.HitSky and 1 or result.Fraction) * 100) .. "%", 1)
+		end
+		vol = vol + (result.HitSky and 1 or result.Fraction) * tin.Influence
+	end
+
+	vol = vol / t_influ
+	if GetConVar("developer"):GetInt() > 1 then
+		print(vol)
+	end
+
+	return vol
 end

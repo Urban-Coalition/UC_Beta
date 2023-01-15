@@ -123,9 +123,13 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
+		ReloadingTime = 0.3,
+		StopSightTime = 0.1,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
+		ReloadingTime = 0.3,
+		StopSightTime = 0.1,
 	},
 	["holster"]	= {
 		Source = "holster",

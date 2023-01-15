@@ -19,8 +19,12 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 end)
 
 hook.Add("OnContextMenuOpen", "Suburb_OnContextMenuOpen", function()
-	LocalPlayer():ConCommand("impulse 151")
-	return true
+	local ply = LocalPlayer()
+	local w = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon()
+	if w and w.Suburb then
+		LocalPlayer():ConCommand("impulse 151")
+		return true
+	end
 end)
 
 function SWEP:ToggleCustomize()

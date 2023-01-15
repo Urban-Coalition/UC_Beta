@@ -25,8 +25,8 @@ SWEP.ActivePose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.81, -5, 1.32 ),
 	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -0.7, 1, -0.4 ),
-	MidAng = Angle( -2, 1, -3 ),
+	MidPos = Vector( -0.85, 0.5, -0.25 ),
+	MidAng = Angle( 0, 0, 0 ),
 	ViewModelFOV = 65,
 	Magnification = 1.3,
 }
@@ -129,9 +129,13 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
+		ReloadingTime = 0.3,
+		StopSightTime = 0.1,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
+		ReloadingTime = 0.3,
+		StopSightTime = 0.1,
 	},
 	["holster"]	= {
 		Source = "holster",

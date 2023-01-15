@@ -311,7 +311,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		b_pos.z = b_pos.z + oy*-correct
 		b_ang.x = b_ang.x + oy*1
 
-		--b_pos.z = b_pos.z - math.abs(ox*0.04)
+		b_ang.z = b_ang.z - ox * Lerp( sii, 1, 5 )
 
 		mult = mult * Lerp( sii, 1, mult_aim )
 		b_pos:Mul( mult )
@@ -473,7 +473,7 @@ function SWEP:SendAnim( act, hold )
 end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( self:GetAim() * (1-(self.superaimedin or 0)*0.5), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InOutQuad( self:GetAim() * (1-(self.superaimedin or 0)*0.5) ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
 	cam.IgnoreZ(true)
 end
 

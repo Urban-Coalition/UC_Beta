@@ -2,6 +2,13 @@
 function SWEP:Think()
 	local p = self:GetOwner()
 	if IsValid(p) then
+		local vm = p:GetViewModel()
+		if IsValid(vm) then
+			for i=1, 32 do
+				vm:SetBodygroup( i-1, 0 )
+				vm:SetSkin(0)
+			end
+		end
 		local ht = self.HoldTypeHip
 		if self:GetAim() > 0.2 then
 			ht = self.HoldTypeSight
@@ -35,7 +42,7 @@ function SWEP:Think()
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
 		end
 		if CLIENT then
-			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.25 )
+			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.33 )
 		end
 
 		local movem = p:GetAbsVelocity():Length2D()

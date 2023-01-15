@@ -114,11 +114,18 @@ SWEP.RecoilDecay			= 5
 -- Animation
 --
 SWEP.Animations				= {
+	["idle"]	= {
+		Source = "idle",
+	},
 	["draw"]	= {
 		Source = "draw",
+		ReloadingTime = 0.3,
+		StopSightTime = 0.1,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
+		ReloadingTime = 0.3,
+		StopSightTime = 0.1,
 	},
 	["holster"]	= {
 		Source = "holster",
