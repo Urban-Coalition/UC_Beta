@@ -25,8 +25,8 @@ SWEP.ActivePose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.3, -4, 2.52 ),
 	Ang = Angle( 0.3, 0, 0 ),
-	MidPos = Vector( -0.4, 0, -0.4 ),
-	MidAng = Angle( 0, 0, -6 ),
+	MidPos = Vector( -0.5, -1, -0.3 ),
+	MidAng = Angle( 0, 0, 0 ),
 	ViewModelFOV = 65,
 	Magnification = 1.1,
 }

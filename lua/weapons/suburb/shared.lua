@@ -247,7 +247,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 	do -- ActivePose, 'idle'
 		local b_pos, b_ang = Vector(), Angle()
 		local si = 1
-		si = si * (1-self:GetAim())
+		si = si * (1-math.ease.InOutSine( self:GetAim() ))
 		-- si = si * (1-self:GetSprintPer())
 		-- si = math.ease.InOutSine( si )
 
@@ -334,15 +334,13 @@ function SWEP:GetViewModelPosition(pos, ang)
 		oang:Add( b_ang )
 		
 		local b_pos, b_ang = Vector(), Angle()
-		local xi = si
-
-		xi = math.sin( math.rad( 90 * si * 2 ) )
-		local ss_xi = math.ease.InCirc( xi )
+		local xi = ss_si
+		xi = math.sin( math.rad( 90 * xi * 2 ) )
 
 		b_pos:Add( self.IronsightPose.MidPos or vector_origin )
 		b_ang:Add( self.IronsightPose.MidAng or angle_zero )
-		b_pos:Mul( ss_xi )
-		b_ang:Mul( ss_xi )
+		b_pos:Mul( xi )
+		b_ang:Mul( xi )
 
 		opos:Add( b_pos )
 		oang:Add( b_ang )
