@@ -3,8 +3,10 @@
 
 CreateClientConVar("newurb_enabled", 0)
 
-local test1 = Material( "solar/gradient_up.png", "")
-local test2 = Material( "solar/gradient_down.png", "")
+local grad_up = Material( "solar/gradient_up.png", "")
+local grad_down = Material( "solar/gradient_down.png", "")
+local grad_left = Material( "solar/gradient_left.png", "")
+local grad_right = Material( "solar/gradient_right.png", "")
 local test3 = Material( "gui/center_gradient", "")
 
 local cw = Color( 224, 240, 245, 255 )
@@ -47,11 +49,12 @@ moves.health.func = function( data ) -------------------------------------------
 	local weed = (data.ang:Up() * globalweed)
 
 	for b=1, 2 do
+		local agap = b==2 and (280+50) or 0
 		if data.p:Armor() == 0 and b==2 then continue end
 		cam.Start3D2D( data.pos, data.ang, 0.1 )
-			surface.SetMaterial( test2 )
+			surface.SetMaterial( grad_down )
 			surface.SetDrawColor( cs2 )
-			surface.DrawTexturedRect( (b==2 and 350 or 0), 0, 300, 180 )
+			surface.DrawTexturedRect( (b==2 and agap or 0), 0, 280, 180 )
 		cam.End3D2D()
 
 		for i=1, 2 do
@@ -60,8 +63,8 @@ moves.health.func = function( data ) -------------------------------------------
 				draw.DrawText(
 					b==2 and "AP" or "HP",
 					"Solar_A_1",
-					260 + (b==2 and 350 or 0),
-					80+extra,
+					65 + (b==2 and agap or 0),
+					4+extra,
 					col,
 					TEXT_ALIGN_LEFT,
 					TEXT_ALIGN_TOP
@@ -69,16 +72,16 @@ moves.health.func = function( data ) -------------------------------------------
 				draw.DrawText(
 					b==2 and data.p:Armor() or data.p:Health(),
 					"Solar_B_1",
-					260 + (b==2 and 350 or 0),
+					55 + (b==2 and agap or 0),
 					10+extra,
 					col,
-					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_LEFT,
 					TEXT_ALIGN_TOP
 				)
 				surface.SetDrawColor( col )
-				surface.DrawRect( 20 + (b==2 and 350 or 0) + 40, 140, 200 * (i==1 and 1 or (b==2 and (data.p:Armor()/data.p:GetMaxArmor()) or (data.p:Health()/data.p:GetMaxHealth()))), 10 )
-				surface.DrawRect( 20 + (b==2 and 350 or 0) - 6 + 40, 140, 3, 10 )
-				surface.DrawRect( 20 + (b==2 and 350 or 0) + 200 + 3 + 40, 140, 3, 10 )
+				surface.DrawRect( 10 + (b==2 and agap or 0) + 40, 140, 200 * (i==1 and 1 or (b==2 and (data.p:Armor()/data.p:GetMaxArmor()) or (data.p:Health()/data.p:GetMaxHealth()))), 10 )
+				surface.DrawRect( 10 + (b==2 and agap or 0) - 6 + 40, 140, 3, 10 )
+				surface.DrawRect( 10 + (b==2 and agap or 0) + 200 + 3 + 40, 140, 3, 10 )
 			cam.End3D2D()
 		end
 		end
@@ -123,7 +126,7 @@ moves.ammo.func = function( data ) ---------------------------------------------
 
 	if w and w_clip then
 		cam.Start3D2D( data.pos, data.ang, 0.1 )
-			surface.SetMaterial( test2 )
+			surface.SetMaterial( grad_down )
 			surface.SetDrawColor( cs2 )
 			surface.DrawTexturedRect( 0, 0, 450, 180 )
 		cam.End3D2D()
@@ -239,23 +242,32 @@ local test_attachments = {
 		ShortNameSubtitle = "4x OPTICAL",
 	},
 	{
-		ShortName = "EOTech",
-		ShortNameSubtitle = "HOLOGRAPHIC",
+		ShortName = "SPITFIRE",
+		ShortNameSubtitle = "1.5-3x OPTICAL",
 	},
 	{
-		ShortName = "EOTech & MAGNIFIER",
-		ShortNameSubtitle = "2x OPTICAL/HOLOGRAPHIC",
+		ShortName = "EOTech 553 w/ 2x",
+		ShortNameSubtitle = "HOLOGRAPHIC / 2x OPTICAL",
+	},
+	{
+		ShortName = "EOTech 552",
+		ShortNameSubtitle = "HOLOGRAPHIC",
 	},
 	{
 		ShortName = "MRS",
 		ShortNameSubtitle = "REFLEX",
-	}
+	},
+	{
+		ShortName = "HOLOSUN",
+		ShortNameSubtitle = "REFLEX",
+	},
 }
 
 local puss = {}
 pusx, pusy = 0, 0
 local chingas = 720
 local selected1 = 1
+local selected_attachment = 0
 local lastcurtime1 = 0
 local letsgo = 0
 moves.test1 = {}
@@ -283,7 +295,7 @@ moves.test1.func = function( data ) --------------------------------------------
 	local weed2 = ( data.ang:Up() * globalweed3 )
 
 	cam.Start3D2D( data.pos, data.ang, 0.1 )
-		surface.SetMaterial( test2 )
+		surface.SetMaterial( grad_down )
 		surface.SetDrawColor( cs2 )
 		surface.DrawTexturedRectRotated( chingas/2, chingas/2, chingas, chingas, 90 )
 	cam.End3D2D()
@@ -433,39 +445,43 @@ moves.test1.func = function( data ) --------------------------------------------
 	end
 	
 
-	for b, att in ipairs(test_attachments) do
-		for i=1, 2 do
-			local col = i == 1 and cs2 or cw
-			cam.Start3D2D( data.pos + ( weed1 * (i/2) ) + ( weed1 ), data.ang, 0.1 )
-				surface.SetDrawColor( i == 2 and Color( 60, 80, 100, 255 ) or Color( 0, 0, 0, 127 ) )
-				if i == 1 then
-					surface.DrawRect( 159 - 32, 32 + (b*40), 600, 35 )
-				else
-					surface.DrawOutlinedRect( 159 - 32, 32 + (b*40), 600, 35, 2 )
-				end
-				--surface.DrawRect( 159 - 32, 32 + (b*40), 600, 35 )
-				local crack1 = Color( col.r, col.g, col.b, Lerp( b==1 and 1 or 0, 63, 255 ) )
-				local crack2 = Color( col.r, col.g, col.b, Lerp( b==1 and 1 or 0, 0, 255 ) )
-				draw.DrawText(
-					att.ShortName,
-					"Solar_C_1",
-					159,
-					32+(b*40),
-					crack1,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_TOP
-				)
-				local bongx, bongy = surface.GetTextSize( att.ShortName )
-				draw.DrawText(
-					att.ShortNameSubtitle,
-					"Solar_C_2",
-					159+12+math.max(bongx, 300),
-					32+(b*40)+(6),
-					crack1,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_TOP
-				)
-			cam.End3D2D()
+	if selected_attachment > 0 then
+		for b, att in ipairs(test_attachments) do
+				local selected2 = b==3--math.ceil( (CurTime()*1) % (#test_attachments) ) == b
+				cam.Start3D2D( data.pos + ( weed2 * 2 ), data.ang, 0.1 )
+					surface.SetMaterial( grad_right )
+					surface.SetDrawColor( Color( 60, 80, 100, 255 ) )
+					surface.DrawTexturedRect( 159 - 32, 32 + (b*40), 600, 35 )
+				cam.End3D2D()
+				cam.Start3D2D( data.pos + ( weed2 * 2 ) + ( weed2 * 0.5 ), data.ang, 0.1 )
+					surface.SetMaterial( grad_right )
+					surface.SetDrawColor( Color( 255, 162, 40, selected2 and 127 or 0 ) )
+					surface.DrawTexturedRect( 159 - 32, 32 + (b*40), 600, 35, 2 )
+				cam.End3D2D()
+			for i=1, 2 do
+				local col = i == 1 and cs2 or cw
+				cam.Start3D2D( data.pos + ( weed2 * 2 ) + ( weed1 * (i/2) ) + ( weed2 * (selected2 and 1 or 0) ), data.ang, 0.1 )
+					local crack1 = Color( col.r, col.g, col.b, Lerp( (selected2 and 1 or 0), 255, 255 ) )
+					draw.DrawText(
+						att.ShortName,
+						"Solar_C_1",
+						159,
+						32+(b*40),
+						crack1,
+						TEXT_ALIGN_LEFT,
+						TEXT_ALIGN_TOP
+					)
+					draw.DrawText(
+						att.ShortNameSubtitle,
+						"Solar_C_2",
+						159+12+300,
+						32+(b*40)+(6),
+						crack1,
+						TEXT_ALIGN_LEFT,
+						TEXT_ALIGN_TOP
+					)
+				cam.End3D2D()
+			end
 		end
 	end
 
@@ -473,6 +489,9 @@ moves.test1.func = function( data ) --------------------------------------------
 end ------------------------------------------------
 moves.test1.pos = Vector( -72/2 - 36, 230, 72/2 )
 moves.test1.ang = Angle( -10, 0, 0 )
+
+--moves.test1.pos = Vector( -72/2 - 36, 230, 72/2 )
+--moves.test1.ang = Angle( -45, 0, -45 )
 
 local papi2 = {
 	[1] = {
@@ -518,7 +537,6 @@ local papi2 = {
 }
 local chingas = 720
 local selected2 = 1
-local letsgo = 0
 moves.test2 = {}
 moves.test2.func = function( data ) ------------------------------------------------
 	local w = data.p:GetActiveWeapon()
@@ -541,32 +559,10 @@ moves.test2.func = function( data ) --------------------------------------------
 	local weed2 = ( data.ang:Up() * globalweed3 )
 
 	cam.Start3D2D( data.pos, data.ang, 0.1 )
-		surface.SetMaterial( test2 )
+		surface.SetMaterial( grad_down )
 		surface.SetDrawColor( cs2 )
 		surface.DrawTexturedRectRotated( chingas/2, chingas/2, chingas, chingas, 270 )
 	cam.End3D2D()
-
-	if data.p:KeyPressed( IN_MOVELEFT ) then
-		selected2 = selected2 - 1
-		if selected2 <= 0 then
-			selected2 = #papi2
-		end
-	elseif data.p:KeyPressed( IN_MOVERIGHT ) then
-		selected2 = selected2 + 1
-		if selected2 > #papi2 then
-			selected2 = 1
-		end
-	end
-	if data.p:KeyPressed( IN_MOVELEFT ) or data.p:KeyPressed( IN_MOVERIGHT ) then
-		--data.p:EmitSound("garrysmod/ui_hover.wav", nil, 100, 0.5)
-	end
-
-	if letsgo > -1 then
-		letsgo = math.Approach(letsgo, 1, FrameTime()/0.5)
-	end
-	if letsgo == 1 then
-		letsgo = -1
-	end
 
 	local gaap = 0
 	for i, v in ipairs( papi2 ) do
@@ -664,7 +660,7 @@ if CLIENT then
 		local buttons = {}
 		for i, v in pairs(puss) do
 			local button = vgui.Create("DButton", menu)
-			button:SetText("")
+			button:SetText(i)
 			button:SetPos(v["tl"].x, v["tl"].y)
 			button:SetSize(v["tr"].x-v["tl"].x, v["br"].y-v["tl"].y)
 			button.Index = i
@@ -676,7 +672,7 @@ if CLIENT then
 			end
 			function button:Think()
 				if self.Index != lastselect1 then
-					if self:IsHovered() then
+					if self:IsHovered() and selected_attachment != 1 then
 						selected1 = self.Index
 						LocalPlayer():EmitSound("arc9/newui/uimouse_hover.ogg", nil, 100, 0.5, CHAN_STATIC)
 						LocalPlayer():EmitSound("arc9/newui/uisweep_bass.ogg", nil, 100, 0.2, CHAN_STATIC)
@@ -686,9 +682,13 @@ if CLIENT then
 			end
 			function button:DoClick()
 				LocalPlayer():EmitSound("arc9/newui/uimouse_click_return.ogg", nil, 100, 0.5, CHAN_STATIC)
+				selected_attachment = 1
+				selected1 = 0
 			end
 			function button:DoRightClick()
 				LocalPlayer():EmitSound("arc9/newui/uimouse_click_tab.ogg", nil, 100, 0.5, CHAN_STATIC)
+				selected_attachment = 0
+				selected1 = 1
 			end
 		end
 

@@ -196,19 +196,19 @@ function EFFECT:Think()
 		end
 	end
 	
-	if (self.SpawnTime+0.3) > CurTime() and lastpoof <= CurTime() then
+	if (self.SpawnTime+0.5) > CurTime() and lastpoof <= CurTime() then
 		for i = 1, 4 do
 			local particle = self.emitter:Add("particles/smokey", self:GetPos() )
 
 			local ca = 140
 			if (particle) then
 				particle:SetVelocity( VectorRand( -10, 10 ) )
-				particle:SetLifeTime( 0.1 )
+				particle:SetLifeTime( 0 )
 				particle:SetDieTime( .7 )
 				particle:SetStartAlpha( 12 )
 				particle:SetEndAlpha( 0 )
 				particle:SetStartSize( 2 )
-				particle:SetEndSize( 1 )
+				particle:SetEndSize( 3 )
 				particle:SetRoll( math.rad( math.Rand( 0, 360 ) ) )
 				particle:SetRollDelta( math.Rand( -1, 1 ) )
 				particle:SetLighting( true )
