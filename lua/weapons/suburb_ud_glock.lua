@@ -136,9 +136,13 @@ SWEP.Animations				= {
 	},
 	["holster"]	= {
 		Source = "holster",
+		Time = 0.2,
+		HolsterTime = 0.2,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
+		Time = 0.2,
+		HolsterTime = 0.2,
 	},
 	["fire"]	= {
 		Source = "fire",
