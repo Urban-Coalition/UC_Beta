@@ -81,6 +81,12 @@ SWEP.ActivePose = {
 	Pos = Vector( 0, 0, 0 ),
 	Ang = Angle( 0, 0, 0 )
 }
+SWEP.CrouchPose = {
+	Pos = Vector(-2.5, -2, -0.6),
+	Ang = Angle(0, 0, -14),
+	MidPos = Vector( 0, 0, 0 ),
+	MidAng = Angle( 0, 0, 0 ),
+}
 SWEP.IronsightPose = {
 	Pos = Vector( -2, -2, 2 ),
 	Ang = Angle( 0, 0, 0 ),
@@ -240,6 +246,13 @@ local custtemp = 0
 local ox, oy = 0, 0
 local LASTAIM
 
+subdeath = subdeath or {}
+local MovePosCorrect = Vector( -12.906250, 2.736328, 3.873047 )
+local MoveAngCorrect = Angle( 0, -90, -90 )
+
+local ler_walk = 0
+local ler_sprint = 0
+
 function SWEP:GetViewModelPosition(pos, ang)
 	local opos, oang = Vector(), Angle()
 	local p = self:GetOwner()
@@ -259,14 +272,29 @@ function SWEP:GetViewModelPosition(pos, ang)
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
-	do -- temporary sprint
-		local b_pos, b_ang = Vector(), Angle()
-		local si = math.ease.InOutQuad( self:GetSprintPer() )
+	do -- crouching
+		local viewOffsetZ = p:GetViewOffset().z
+		local crouchdelta = math.Clamp( math.ease.InOutSine((viewOffsetZ - p:GetCurrentViewOffset().z) / (viewOffsetZ - p:GetViewOffsetDucked().z) ), 0, 1)
 
-		b_pos:Add( Vector( 1, 0, 0 ) )
-		b_ang:Add( Angle( -15, 15, -15 ) )
-		b_pos:Mul( si )
-		b_ang:Mul( si )
+		local b_pos, b_ang = Vector(), Angle()
+		local si = crouchdelta
+		local ss_si = math.ease.InOutSine( si )
+
+		b_pos:Add( self.CrouchPose.Pos )
+		b_ang:Add( self.CrouchPose.Ang )
+		b_pos:Mul( ss_si )
+		b_ang:Mul( ss_si )
+		opos:Add( b_pos )
+		oang:Add( b_ang )
+		
+		local b_pos, b_ang = Vector(), Angle()
+		local xi = ss_si
+		xi = math.sin( math.rad( 90 * xi * 2 ) )
+
+		b_pos:Add( self.CrouchPose.MidPos or vector_origin )
+		b_ang:Add( self.CrouchPose.MidAng or angle_zero )
+		b_pos:Mul( xi )
+		b_ang:Mul( xi )
 
 		opos:Add( b_pos )
 		oang:Add( b_ang )
@@ -359,22 +387,105 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 
 		if false then--self.QCA_Camera then
-			if !Suburb_CL2 then
-				Suburb_CL2 = ClientsideModel( "models/weapons/c_pistol.mdl" )
+			for i=1, 4 do
+				if !(subdeath[i] and IsValid(subdeath[i])) then
+					subdeath[i] = ClientsideModel( "models/weapons/c_pistol.mdl" )
+					local mod = subdeath[i]
+					mod:SetModel( "models/suburb/suburb_1.mdl" )
+					local seq = "rifle_idle"
+					if i == 1 then
+						seq = "rifle_idle"
+					elseif i == 2 then
+						seq = "rifle_idle_active"
+					elseif i == 3 then
+						seq = "rifle_walk"
+					elseif i == 4 then
+						seq = "rifle_run"
+					end
+					seq = mod:LookupSequence( seq )
+					mod:ResetSequence( seq )
+				end
+				local mod = subdeath[i]
+				mod:SetCycle( (CurTime()/5) % 1 )
+				local result = mod:GetAttachment( 1 )
+				local oddy, addy = Vector(), Angle()
+				oddy:Set( result.Pos )
+				addy:Set( result.Ang )
+				oddy:Add( MovePosCorrect )
+				addy:Add( MoveAngCorrect )
+
+				local speed = p:GetAbsVelocity():Length2D()
+
+				if i == 1 then -- Sighted idle
+					oddy:Mul( 0 ) -- No need!
+					addy:Mul( 0 )
+				elseif i == 2 then -- Active idle
+					oddy:Mul( 1 - self:GetAim() )
+					addy:Mul( 1 - self:GetAim() )
+				elseif i == 4 then -- Run
+					local ler = math.TimeFraction( p:GetWalkSpeed(), p:GetRunSpeed(), speed )
+					ler = math.Clamp( ler, 0, 1 )
+					ler_sprint = math.Approach( ler_sprint, p:IsSprinting() and ler or 0, FrameTime() / 0.4 )
+					local res = math.ease.InOutSine( ler_sprint )
+					oddy:Mul( res )
+					addy:Mul( res )
+				elseif i == 3 then -- Walk
+					local ler = math.TimeFraction( 50, 100, speed )
+					ler = math.Clamp( ler, 0, 1 )
+					ler_walk = math.Approach( ler_walk, p:IsSprinting() and 0 or ler, FrameTime() / 0.4 )
+					local res = math.ease.InOutSine( ler_walk )
+					oddy:Mul( res )
+					addy:Mul( res )
+				end
+
+				b_pos:Add( oddy )
+				b_ang:Add( addy )
 			end
-			local vm = ply:GetViewModel()
-			Suburb_CL2:SetModel( vm:GetModel() )
-			Suburb_CL2:SetSequence( vm:GetSequence() )
-			Suburb_CL2:SetCycle( vm:GetCycle() )
-			local result = Suburb_CL2:GetAttachment( self.QCA_Camera )
-			local addy = Angle()
-			addy:Set( result.Ang )
-			addy:Add( angle_zero )
-			ang:Add( addy )
+
 		end
 
-		b_pos:Add( vector_origin )
-		b_ang:Add( angle_zero )
+		-- Anchor rotation test
+		if true then
+			if self.UniversalAnimationInfo then
+				local bi = self.UniversalAnimationInfo
+				if !(uni and IsValid(uni)) then
+					uni = ClientsideModel( "models/weapons/c_pistol.mdl" )
+					uni:SetNoDraw( false )
+				end
+				local vm = p:GetViewModel()
+				uni:SetModel( vm:GetModel() )
+				uni:SetSequence( vm:GetSequence() )
+				uni:SetCycle( vm:GetCycle() )
+				
+				for i=0, vm:GetNumPoseParameters()-1 do
+					local ppn = vm:GetPoseParameterName( i )
+					local ppa = vm:GetPoseParameter( ppn )
+					uni:SetPoseParameter( ppn, ppa )
+					uni:InvalidateBoneCache()
+				end
+				
+				uni:SetupBones()
+				local result = uni:GetBoneMatrix( uni:LookupBone( bi.bone ) )
+				if !result then return end
+				if bi.pos then result:Translate( bi.pos ) end
+				if bi.ang then result:Rotate( bi.ang ) end
+				local rp, ra = result:GetTranslation(), result:GetAngles()
+
+				debugoverlay.Cross( rp, 0.5, 0, Color( 222, 209, 145 ), true )
+				debugoverlay.Axis( rp, ra, 1, 0, true )
+
+				local bp, ba = ArcCW.RotateAroundPoint2( rp, ra, vector_origin, Vector( 0, 0, 0 ), angle_zero )
+				debugoverlay.Axis( bp, ba, 1, 0, true )
+				debugoverlay.Cross( bp, 0.5, 0, Color( 98, 199, 224 ), true )
+
+				local oddy = Vector()
+				local addy = Angle()
+
+				b_pos:Add( oddy )
+				b_ang:Add( addy )
+			end
+		end
+
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
@@ -504,7 +615,8 @@ function SWEP:SendAnim( act, hold )
 end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InOutQuad( self:GetAim() * (1-(self.superaimedin or 0)*0.5) ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
+	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
 	cam.IgnoreZ(true)
 end
 
@@ -513,24 +625,26 @@ function SWEP:PostDrawViewModel( vm, weapon, ply )
 end
 
 function SWEP:TranslateFOV(fov)
+	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
 	if self.IronsightPose and self.IronsightPose.Magnification then
 		mag = self.IronsightPose.Magnification
 	end
-	return Lerp( self:GetAim(), fov, fov or 75 ) / Lerp( math.ease.InOutQuad( self:GetAim() * (1-(self.superaimedin or 0)*0.5) ), 1, mag )
+	return Lerp( self:GetAim(), fov, fov or 75 ) / Lerp( math.ease.InQuad( self:GetAim() * device ), 1, mag )
 end
 
 function SWEP:AdjustMouseSensitivity()
+	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
 	if self.IronsightPose and self.IronsightPose.Magnification then
 		mag = self.IronsightPose.Magnification
 	end
-	return 1 / Lerp( math.ease.InOutQuad( self:GetAim() * (1-(self.superaimedin or 0)*0.5) ), 1, mag )
+	return 1 / Lerp( math.ease.InQuad( self:GetAim() * device ), 1, mag )
 end
 
 function SWEP:CalcView( ply, pos, ang, fov )
 	if self.QCA_Camera then
-		if !Suburb_CL1 then
+		if !(Suburb_CL1 and IsValid(Suburb_CL1)) then
 			Suburb_CL1 = ClientsideModel( "models/weapons/c_pistol.mdl" )
 			Suburb_CL1:SetNoDraw( true )
 		end
@@ -538,7 +652,9 @@ function SWEP:CalcView( ply, pos, ang, fov )
 		Suburb_CL1:SetModel( vm:GetModel() )
 		Suburb_CL1:SetSequence( vm:GetSequence() )
 		Suburb_CL1:SetCycle( vm:GetCycle() )
+		Suburb_CL1:SetupBones()
 		local result = Suburb_CL1:GetAttachment( self.QCA_Camera )
+		if !result then return end
 		local addy = Angle()
 		addy:Set( result.Ang )
 		addy:Add( self.CameraCorrection or angle_zero )

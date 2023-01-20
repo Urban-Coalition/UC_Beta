@@ -22,6 +22,10 @@ SWEP.ActivePose = {
 	Pos = Vector( 0, -3, 1 ),
 	Ang = Angle( 0, 0, -3 )
 }
+SWEP.CrouchPose = {
+	Pos = Vector(-3, -2, -1),
+	Ang = Angle(0, 0, -20),
+}
 SWEP.IronsightPose = {
 	Pos = Vector( -2.3, -4, 2.52 ),
 	Ang = Angle( 0.3, 0, 0 ),
@@ -137,12 +141,12 @@ SWEP.Animations				= {
 	["holster"]	= {
 		Source = "holster",
 		Time = 0.2,
-		HolsterTime = 0.2,
+		HolsterTime = 0.15,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
 		Time = 0.2,
-		HolsterTime = 0.2,
+		HolsterTime = 0.15,
 	},
 	["fire"]	= {
 		Source = "fire",

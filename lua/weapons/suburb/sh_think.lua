@@ -42,7 +42,7 @@ function SWEP:Think()
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
 		end
 		if CLIENT then
-			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.33 )
+			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.5 )
 		end
 
 		local movem = p:GetAbsVelocity():Length2D()

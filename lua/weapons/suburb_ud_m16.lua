@@ -22,10 +22,16 @@ SWEP.ActivePose = {
 	Pos = Vector( 0.5, -2, 0.75 ),
 	Ang = Angle( 0, 0, -3 )
 }
+SWEP.CrouchPose = {
+	Pos = Vector(-2.5, -2, -0.6),
+	Ang = Angle(0, 0, -14),
+	MidPos = Vector( -0.2, 0, -0.5 ),
+	MidAng = Angle( 0, 0, 0 ),
+}
 SWEP.IronsightPose = {
 	Pos = Vector( -2.81, -6, 1.32 ),
 	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -0.85, 0.5, -0.25 ),
+	MidPos = Vector( -1.15, 0.5, -0.25 ),
 	MidAng = Angle( -0.5, 0, -6 ),
 	ViewModelFOV = 65,
 	Magnification = 1.3,
@@ -120,6 +126,12 @@ SWEP.RecoilSwing			= 1
 SWEP.RecoilDrift			= .8
 SWEP.RecoilDecay			= 15
 
+SWEP.UniversalAnimationInfo = {
+	bone = "m16_parent",
+	pos = Vector( 0, 0, 0 ),
+	ang = Angle( 0, 0, 0 ),
+}
+
 --
 -- Animation
 --
@@ -142,13 +154,13 @@ SWEP.Animations				= {
 	},
 	["holster"]	= {
 		Source = "holster",
-		Time = 0.4,
-		HolsterTime = 0.3,
+		Time = 0.3,
+		HolsterTime = 0.15,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
-		Time = 0.4,
-		HolsterTime = 0.3,
+		Time = 0.3,
+		HolsterTime = 0.15,
 	},
 	["fire"]	= {
 		Source = "fire",

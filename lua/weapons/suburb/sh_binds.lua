@@ -15,6 +15,10 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 		if cmd:GetImpulse() == 151 then
 			wep:ToggleCustomize()
 		end
+
+		if cmd:GetImpulse() == 152 then
+			-- Toggle or hold?
+		end
 	end
 end)
 
