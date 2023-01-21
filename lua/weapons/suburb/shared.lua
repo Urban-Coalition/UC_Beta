@@ -383,15 +383,16 @@ function SWEP:GetViewModelPosition(pos, ang)
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
-	do -- THINGING
+	if false then -- THINGING
 		local b_pos, b_ang = Vector(), Angle()
 
-		if false then--self.QCA_Camera then
+		if true then--self.QCA_Camera then
 			for i=1, 4 do
 				if !(subdeath[i] and IsValid(subdeath[i])) then
 					subdeath[i] = ClientsideModel( "models/weapons/c_pistol.mdl" )
 					local mod = subdeath[i]
 					mod:SetModel( "models/suburb/suburb_1.mdl" )
+					mod:SetNoDraw(true)
 					local seq = "rifle_idle"
 					if i == 1 then
 						seq = "rifle_idle"
@@ -438,8 +439,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 					addy:Mul( res )
 				end
 
-				b_pos:Add( oddy )
-				b_ang:Add( addy )
+				--b_pos:Add( oddy )
+				--b_ang:Add( addy )
 			end
 
 		end
@@ -454,8 +455,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 				end
 				local vm = p:GetViewModel()
 				uni:SetModel( vm:GetModel() )
-				uni:SetSequence( vm:GetSequence() )
-				uni:SetCycle( vm:GetCycle() )
+				uni:SetSequence( uni:LookupSequence( "idle" ) )
+				uni:SetCycle( 0 )--vm:GetCycle() )
 				
 				for i=0, vm:GetNumPoseParameters()-1 do
 					local ppn = vm:GetPoseParameterName( i )
@@ -464,6 +465,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 					uni:InvalidateBoneCache()
 				end
 				
+				local magic = Vector( 11.468750, -2.806641, -4.148438 )
 				uni:SetupBones()
 				local result = uni:GetBoneMatrix( uni:LookupBone( bi.bone ) )
 				if !result then return end
@@ -471,18 +473,12 @@ function SWEP:GetViewModelPosition(pos, ang)
 				if bi.ang then result:Rotate( bi.ang ) end
 				local rp, ra = result:GetTranslation(), result:GetAngles()
 
-				debugoverlay.Cross( rp, 0.5, 0, Color( 222, 209, 145 ), true )
-				debugoverlay.Axis( rp, ra, 1, 0, true )
+				local rotato = Angle( 0, math.sin(CurTime())*90, 0 )
 
-				local bp, ba = ArcCW.RotateAroundPoint2( rp, ra, vector_origin, Vector( 0, 0, 0 ), angle_zero )
-				debugoverlay.Axis( bp, ba, 1, 0, true )
-				debugoverlay.Cross( bp, 0.5, 0, Color( 98, 199, 224 ), true )
+				local bp, ba = ArcCW.RotateAroundPoint2( Vector(), Angle(), Vector(), Vector(), rotato )
 
-				local oddy = Vector()
-				local addy = Angle()
-
-				b_pos:Add( oddy )
-				b_ang:Add( addy )
+				b_pos:Add( bp )
+				b_ang:Add( ba )
 			end
 		end
 
