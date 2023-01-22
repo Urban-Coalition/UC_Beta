@@ -93,6 +93,9 @@ local grad_right = Material( "solar/gradient_right.png", "")
 
 local items = {
 	{
+		Name = "SWITCH TO ALTERNATIVE",
+	},
+	{
 		Name = "THERMAL SIGHT",
 		Options = {
 			"WHOT",
@@ -159,7 +162,7 @@ function SWEP:DrawHUD()
 
 			for e=1, 3 do
 				draw.Text( {
-					text = item.Name,
+					text = item.Name or "no name??",
 					font = e != 3 and "SolarIG_1" or "SolarI_1",
 					color = e != 3 and cs2 or cw,
 					pos = { rx, ry + s( (e == 1 and 0.5) or (e == 2 and -0.1) or 0) },
@@ -168,7 +171,7 @@ function SWEP:DrawHUD()
 				} )
 			end
 				
-			for h, k in ipairs(item.Options) do
+			if item.Options then for h, k in ipairs(item.Options) do
 				surface.SetFont("SolarI_2")
 				local tx = surface.GetTextSize(k)
 				surface.SetMaterial( grad_up )
@@ -197,7 +200,7 @@ function SWEP:DrawHUD()
 					yalign = TEXT_ALIGN_BOTTOM,
 				} )
 			end
-		end
+		end end
 	end
 
 	if GetConVar("developer"):GetBool() then
