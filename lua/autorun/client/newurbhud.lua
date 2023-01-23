@@ -24,12 +24,15 @@ surface.CreateFont( "Solar_A_4", { font = "FOT-Rodin Pro DB", size = 60, weight 
 surface.CreateFont( "Solar_A_5", { font = "FOT-Rodin Pro DB", size = 22, weight = 0 } )
 surface.CreateFont( "Solar_B_1", { font = "Carbon Bold", size = 120, weight = 0 } )
 surface.CreateFont( "Solar_B_2", { font = "Carbon Bold", size = 70, weight = 0 } )
+surface.CreateFont( "Solar_B2_1", { font = "Carbon Bold", size = 100, weight = 0 } )
+surface.CreateFont( "Solar_B2_2", { font = "Carbon Bold", size = 50, weight = 0 } )
 surface.CreateFont( "Solar_C_1", { font = "Consolas", size = 32, weight = 0 } )
 surface.CreateFont( "Solar_C_2", { font = "Consolas", size = 20, weight = 0 } )
 
 local moves = {}
 moves.fix = Angle( 90, -90, 0 )
 moves.health = {}
+local agap = (280+50)
 moves.health.func = function( data ) ------------------------------------------------
 	if GetConVar("newurb_enabled"):GetBool() then
 	local extra = 20
@@ -49,7 +52,6 @@ moves.health.func = function( data ) -------------------------------------------
 	local weed = (data.ang:Up() * globalweed)
 
 	for b=1, 2 do
-		local agap = b==2 and (280+50) or 0
 		if data.p:Armor() == 0 and b==2 then continue end
 		cam.Start3D2D( data.pos, data.ang, 0.1 )
 			surface.SetMaterial( grad_down )
@@ -109,22 +111,21 @@ moves.ammo.func = function( data ) ---------------------------------------------
 		w = false
 	end
 
-	local potal = Vector()
-	potal:Add( moves.ammo.pos )
-	data.pos:Add( potal.x * ( data.eang:Right() ) )
-	data.pos:Add( potal.y * ( data.eang:Forward() ) )
-	data.pos:Add( potal.z * ( data.eang:Up() ) )
-
-	local total = Angle()
-	total:Set( moves.ammo.ang )
-	data.ang:RotateAroundAxis( data.ang:Up(), total.y )
-	data.ang:RotateAroundAxis( data.ang:Right(), total.r )
-	data.ang:RotateAroundAxis( data.ang:Forward(), total.p )
-
-	local weed = (data.ang:Up() * globalweed)
-	local fuck = vector_origin--(data.ang:Up() * (math.ease.OutCubic(math.ease.OutBounce((CurTime()%1)))*7))
-
 	if w and w_clip then
+		local potal = Vector()
+		potal:Add( moves.ammo.pos )
+		data.pos:Add( potal.x * ( data.eang:Right() ) )
+		data.pos:Add( potal.y * ( data.eang:Forward() ) )
+		data.pos:Add( potal.z * ( data.eang:Up() ) )
+	
+		local total = Angle()
+		total:Set( moves.ammo.ang )
+		data.ang:RotateAroundAxis( data.ang:Up(), total.y )
+		data.ang:RotateAroundAxis( data.ang:Right(), total.r )
+		data.ang:RotateAroundAxis( data.ang:Forward(), total.p )
+	
+		local weed = (data.ang:Up() * globalweed)
+
 		cam.Start3D2D( data.pos, data.ang, 0.1 )
 			surface.SetMaterial( grad_down )
 			surface.SetDrawColor( cs2 )
@@ -168,6 +169,84 @@ moves.ammo.func = function( data ) ---------------------------------------------
 end ------------------------------------------------
 moves.ammo.pos = Vector( 95 - (350*0.1), 300, -45 )
 moves.ammo.ang = Angle( -20, 0, 0 )
+
+moves.ammo2 = {}
+moves.ammo2.func = function( data ) ------------------------------------------------
+	if GetConVar("newurb_enabled"):GetBool() then
+	local w_clip = false
+	local w_ammo = false
+	local extra = 20
+
+	local w = data.p:GetActiveWeapon()
+	if IsValid(w) then
+		if w:Clip2() >= 0 then
+			w_clip = w:Clip2()
+		end
+		if w:GetSecondaryAmmoType() >= 0 then
+			w_ammo = data.p:GetAmmoCount( w:GetSecondaryAmmoType() )
+		end
+	else
+		w = false
+	end
+
+	if w and w_clip and w_ammo then
+		local potal = Vector()
+		potal:Add( moves.ammo2.pos )
+		data.pos:Add( potal.x * ( data.eang:Right() ) )
+		data.pos:Add( potal.y * ( data.eang:Forward() ) )
+		data.pos:Add( potal.z * ( data.eang:Up() ) )
+	
+		local total = Angle()
+		total:Set( moves.ammo2.ang )
+		data.ang:RotateAroundAxis( data.ang:Up(), total.y )
+		data.ang:RotateAroundAxis( data.ang:Right(), total.r )
+		data.ang:RotateAroundAxis( data.ang:Forward(), total.p )
+	
+		local weed = (data.ang:Up() * globalweed)
+
+		cam.Start3D2D( data.pos, data.ang, 0.1 )
+			surface.SetMaterial( grad_down )
+			surface.SetDrawColor( cs2 )
+			surface.DrawTexturedRect( 0, 0, 300, 100 )
+		cam.End3D2D()
+
+		for i=1, 2 do
+			local col = i == 1 and cs or cw
+			cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
+				draw.DrawText(
+					w_clip,
+					"Solar_B2_1",
+					130,
+					0+extra,
+					col,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+				--  draw.DrawText(
+				--  	string.upper( w.GetFiremodeName and w:GetFiremodeName() or "" ),
+				--  	"Solar_A_1",
+				--  	224,
+				--  	80+extra,
+				--  	col,
+				--  	TEXT_ALIGN_LEFT,
+				--  	TEXT_ALIGN_TOP
+				--  )
+				draw.DrawText(
+					w_ammo,
+					"Solar_B2_2",
+					130,
+					8+extra,
+					col,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+			cam.End3D2D()
+		end
+	end
+	end
+end ------------------------------------------------
+moves.ammo2.pos = Vector( 95 - (200*0.1), 310, -35 )
+moves.ammo2.ang = Angle( -20, 0, 0 )
 
 local papi1 = {
 	--[[{
