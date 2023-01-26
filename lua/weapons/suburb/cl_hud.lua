@@ -76,6 +76,7 @@ surface.CreateFont( "SolarIG_1", { font = "FOT-Rodin Pro DB", size = s(10), weig
 surface.CreateFont( "SolarI_2", { font = "Consolas", size = s(9), weight = 0 } )
 surface.CreateFont( "SolarIG_2", { font = "Consolas", size = s(9), weight = 0, blursize = 1 } )
 surface.CreateFont( "SolarI_3", { font = "FOT-Rodin Pro DB", size = s(8), weight = 0 } )
+surface.CreateFont( "SolarI_4", { font = "Consolas", size = s(6), weight = 0, italic = true } )
 
 local c1 = Color(255, 255, 255)
 
@@ -129,10 +130,51 @@ local items = {
 	},
 }
 
-function SWEP:DrawHUD()
-	if false then -- Attachment toggle select
-		local x, y = ScrW()/2, ScrH()/2
+local COMBO_HOLD = 1
 
+local hints = {
+	{
+		Action = "SWITCH TO ALTERNATIVE",
+		Combo = {
+			{
+				"E",
+				COMBO_HOLD,
+			}
+		},
+	},
+	{
+		Action = "SWITCH TO STUPID",
+		Combo = {
+			{
+				"E",
+			}
+		},
+	},
+	{
+		Action = "SUPER SPEED RELOAD",
+		Combo = {
+			{
+				"R",
+				COMBO_HOLD,
+			},
+			{
+				"C",
+				COMBO_HOLD,
+			},
+			{
+				"D",
+			},
+			{
+				"E",
+				COMBO_HOLD,
+			}
+		},
+	}
+}
+
+function SWEP:DrawHUD()
+	local x, y = ScrW()/2, ScrH()/2
+	if false then -- Attachment toggle select
 		local interval = 360/#items
 		for i, item in ipairs(items) do
 			local de = 0 - ( i * interval ) + interval
@@ -140,18 +182,8 @@ function SWEP:DrawHUD()
 			local dist = s( Lerp( math.TimeFraction( 3, 8, #items ), 50, 90 ) )
 			local ox, oy = math.sin( de ) * dist * 1.8, math.cos( de ) * dist
 			local rx, ry = x + ox, y + oy
-
-			--surface.SetDrawColor( color_white )
-			--surface.DrawLine( x, y, rx, ry )
-			
 			local bx, by = s( 110 ), s( 12 )
-			local shad = s( 1 )
-
 			local r2x, r2y = rx - (bx/2), ry - (by/2)
-
-			surface.SetMaterial( grad_up )
-			surface.SetDrawColor( cs_h )
-			surface.DrawTexturedRect( r2x, r2y, bx + shad, by + shad )
 
 			surface.SetDrawColor( cs2 )
 			surface.DrawRect( r2x, r2y, bx, by )
@@ -170,25 +202,6 @@ function SWEP:DrawHUD()
 					yalign = TEXT_ALIGN_CENTER,
 				} )
 			end
-				
-			if item.Options then for h, k in ipairs(item.Options) do
-				surface.SetFont("SolarI_2")
-				local tx = surface.GetTextSize(k)
-				surface.SetMaterial( grad_up )
-				surface.SetDrawColor( cs_h )
-				surface.DrawTexturedRect( rx - (tx/2) - s(2), ry + s(6) + s( (h-1) * 9 ), tx + s(4), s(10) )
-
-				for i=1, 3 do
-					draw.Text( {
-						text = k,
-						font = i != 3 and "SolarIG_2" or "SolarI_2",
-						color = i != 3 and cs2 or cw,
-						pos = { rx, ry + s(11) + s( (i == 1 and 0.5) or (i == 2 and -0.1) or 0) + s( (h-1) * 9 ) },
-						xalign = TEXT_ALIGN_CENTER,
-						yalign = TEXT_ALIGN_CENTER,
-					} )
-				end
-			end
 
 			for e=1, 3 do
 				draw.Text( {
@@ -200,7 +213,104 @@ function SWEP:DrawHUD()
 					yalign = TEXT_ALIGN_BOTTOM,
 				} )
 			end
-		end end
+				
+			if item.Options then
+				for h, k in ipairs(item.Options) do
+					surface.SetFont("SolarI_2")
+					local tx = surface.GetTextSize(k)
+					surface.SetMaterial( grad_up )
+					surface.SetDrawColor( cs_h )
+					surface.DrawTexturedRect( rx - (tx/2) - s(2), ry + s(6) + s( (h-1) * 9 ), tx + s(4), s(10) )
+
+					for i=1, 3 do
+						draw.Text( {
+							text = k,
+							font = i != 3 and "SolarIG_2" or "SolarI_2",
+							color = i != 3 and cs2 or cw,
+							pos = { rx, ry + s(11) + s( (i == 1 and 0.5) or (i == 2 and -0.1) or 0) + s( (h-1) * 9 ) },
+							xalign = TEXT_ALIGN_CENTER,
+							yalign = TEXT_ALIGN_CENTER,
+						} )
+					end
+				end
+			end
+
+		end
+	end
+
+	if true then -- Hint system
+		local bx, by = s( 140 ), s( 28 )
+		local shad = s( 1 )
+		local cx = s( 8 )
+		local ms = s( 10 )
+		local ms1 = s( 9 )
+		
+		local offset = 0
+		for i, item in ipairs(hints) do
+			surface.SetDrawColor( cs2 )
+			surface.DrawRect( cx, cx + offset, bx, by )
+
+			surface.SetMaterial( grad_up )
+			surface.SetDrawColor( cs )
+			surface.DrawTexturedRect( cx, cx + (by/2) + offset, bx, by/2 )
+			
+			for e=1, 3 do
+				draw.Text( {
+					text = item.Action,
+					font = e != 3 and "SolarIG_1" or "SolarI_1",
+					color = e != 3 and cs2 or cw,
+					pos = { cx + s(4), cx + offset + s(4) + s( (e == 1 and 0.5) or (e == 2 and -0.1) or 0) },
+					xalign = TEXT_ALIGN_LEFT,
+					yalign = TEXT_ALIGN_TOP,
+				} )
+			end
+			
+			local o1x = s(8)
+			for g, combo in ipairs(item.Combo) do
+				
+				if combo[2] == COMBO_HOLD then
+					if g != 1 then
+						o1x = o1x + s(1)
+					end
+					draw.Text( {
+						text = "Hold",
+						font = "SolarI_4",
+						color = cw,
+						pos = { cx + o1x, cx + offset + by - s(8) },
+						xalign = TEXT_ALIGN_CENTER,
+						yalign = TEXT_ALIGN_CENTER,
+					} )
+					o1x = o1x + s(12)
+				end
+				
+				surface.SetDrawColor( cw )
+				surface.DrawOutlinedRect( cx - (ms1/2) + o1x, cx + offset + by - s(8) - (ms1/2), ms, ms )
+				draw.Text( {
+					text = combo[1],
+					font = "SolarI_2",
+					color = cw,
+					pos = { cx + o1x, cx + offset + by - s(8) },
+					xalign = TEXT_ALIGN_CENTER,
+					yalign = TEXT_ALIGN_CENTER,
+				} )
+				o1x = o1x + s(4)
+				
+				if g != #item.Combo then
+					o1x = o1x + s(8)
+					draw.Text( {
+						text = "and",
+						font = "SolarI_4",
+						color = cw,
+						pos = { cx + o1x, cx + offset + by - s(8) },
+						xalign = TEXT_ALIGN_CENTER,
+						yalign = TEXT_ALIGN_CENTER,
+					} )
+					o1x = o1x + s(12)
+				end
+			end
+
+			offset = offset + by+cx
+		end
 	end
 
 	if GetConVar("developer"):GetBool() then
