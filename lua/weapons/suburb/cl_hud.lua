@@ -77,6 +77,10 @@ surface.CreateFont( "SolarI_2", { font = "Consolas", size = s(9), weight = 0 } )
 surface.CreateFont( "SolarIG_2", { font = "Consolas", size = s(9), weight = 0, blursize = 1 } )
 surface.CreateFont( "SolarI_3", { font = "FOT-Rodin Pro DB", size = s(8), weight = 0 } )
 surface.CreateFont( "SolarI_4", { font = "Consolas", size = s(6), weight = 0, italic = true } )
+surface.CreateFont( "SolarI_5", { font = "FOT-Rodin Pro DB", size = s(8), weight = 0 } )
+surface.CreateFont( "SolarIG_5", { font = "FOT-Rodin Pro DB", size = s(8), weight = 0, blursize = 1 } )
+surface.CreateFont( "SolarI_6", { font = "Trebuchet MS", size = s(8), weight = 600 } )
+
 
 local c1 = Color(255, 255, 255)
 
@@ -130,51 +134,36 @@ local items = {
 	},
 }
 
-local COMBO_HOLD = 1
-
 local hints = {
 	{
-		Action = "SWITCH TO ALTERNATIVE",
+		Action = "Switch to Alternative",
 		Combo = {
-			{
-				"E",
-				COMBO_HOLD,
-			}
+			{ "E" }
 		},
 	},
 	{
-		Action = "SWITCH TO STUPID",
+		Action = "Switch Firemodes",
 		Combo = {
-			{
-				"E",
-			}
+			{ "X" },
 		},
 	},
 	{
-		Action = "SUPER SPEED RELOAD",
+		Action = "Attachment Radial",
 		Combo = {
-			{
-				"R",
-				COMBO_HOLD,
-			},
-			{
-				"C",
-				COMBO_HOLD,
-			},
-			{
-				"D",
-			},
-			{
-				"E",
-				COMBO_HOLD,
-			}
+			{ "F" },
 		},
-	}
+	},
+	{
+		Action = "Customize",
+		Combo = {
+			{ "C" },
+		},
+	},
 }
 
 function SWEP:DrawHUD()
 	local x, y = ScrW()/2, ScrH()/2
-	if false then -- Attachment toggle select
+	if LocalPlayer().AttachmentRadial then -- Attachment toggle select
 		local interval = 360/#items
 		for i, item in ipairs(items) do
 			local de = 0 - ( i * interval ) + interval
@@ -239,11 +228,10 @@ function SWEP:DrawHUD()
 	end
 
 	if true then -- Hint system
-		local bx, by = s( 140 ), s( 28 )
+		local bx, by = s( 100 ), s( 12 )
 		local shad = s( 1 )
-		local cx = s( 8 )
-		local ms = s( 10 )
-		local ms1 = s( 9 )
+		local cx = s( 3 )
+		local ms = s( 8 )
 		
 		local offset = 0
 		for i, item in ipairs(hints) do
@@ -257,56 +245,34 @@ function SWEP:DrawHUD()
 			for e=1, 3 do
 				draw.Text( {
 					text = item.Action,
-					font = e != 3 and "SolarIG_1" or "SolarI_1",
+					font = e != 3 and "SolarIG_5" or "SolarI_5",
 					color = e != 3 and cs2 or cw,
-					pos = { cx + s(4), cx + offset + s(4) + s( (e == 1 and 0.5) or (e == 2 and -0.1) or 0) },
+					pos = { cx + s(4), cx + offset + (by/2) + s( (e == 1 and 0.5) or (e == 2 and -0.1) or 0) },
 					xalign = TEXT_ALIGN_LEFT,
-					yalign = TEXT_ALIGN_TOP,
+					yalign = TEXT_ALIGN_CENTER,
 				} )
 			end
 			
-			local o1x = s(8)
+			local o1x = bx-s(8)
+			local knot = s(10)
+			local kisser = (#item.Combo-1)*knot*-1
 			for g, combo in ipairs(item.Combo) do
-				
-				if combo[2] == COMBO_HOLD then
-					if g != 1 then
-						o1x = o1x + s(1)
-					end
-					draw.Text( {
-						text = "Hold",
-						font = "SolarI_4",
-						color = cw,
-						pos = { cx + o1x, cx + offset + by - s(8) },
-						xalign = TEXT_ALIGN_CENTER,
-						yalign = TEXT_ALIGN_CENTER,
-					} )
-					o1x = o1x + s(12)
-				end
-				
 				surface.SetDrawColor( cw )
-				surface.DrawOutlinedRect( cx - (ms1/2) + o1x, cx + offset + by - s(8) - (ms1/2), ms, ms )
+				local msw = ms
+				if combo.calc then
+					surface.SetFont( "SolarI_6" )
+					msw = surface.GetTextSize( combo[1] ) + s(2)
+				end
+				surface.DrawOutlinedRect( cx + o1x + kisser - (msw/2), offset + (by/2) + cx - (ms/2), msw, ms )
 				draw.Text( {
 					text = combo[1],
-					font = "SolarI_2",
+					font = "SolarI_6",
 					color = cw,
-					pos = { cx + o1x, cx + offset + by - s(8) },
+					pos = { cx + o1x + kisser, offset + (by/2) + cx },
 					xalign = TEXT_ALIGN_CENTER,
 					yalign = TEXT_ALIGN_CENTER,
 				} )
-				o1x = o1x + s(4)
-				
-				if g != #item.Combo then
-					o1x = o1x + s(8)
-					draw.Text( {
-						text = "and",
-						font = "SolarI_4",
-						color = cw,
-						pos = { cx + o1x, cx + offset + by - s(8) },
-						xalign = TEXT_ALIGN_CENTER,
-						yalign = TEXT_ALIGN_CENTER,
-					} )
-					o1x = o1x + s(12)
-				end
+				o1x = o1x + knot
 			end
 
 			offset = offset + by+cx
