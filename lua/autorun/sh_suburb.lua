@@ -1,17 +1,45 @@
 
 if CLIENT then
 	CreateClientConVar("uc_dev_aimcorrect", 0, false, false)
+	CreateClientConVar("uc_cl_aimtoggle", 0, true, true)
 end
+
+CreateConVar( "uc_dev_debug", 0, FCVAR_REPLICATED, "Spit debug information" )
 
 Suburb = {}
 
+Suburb.debug = function() return GetConVar("uc_dev_debug"):GetBool() end
+Suburb.AttTable = {}
+
+function Suburb_ReloadAtts()
+	-- Wipe the attachment list.
+	table.Empty( Suburb.AttTable )
+
+	-- Start generating every attachment
+
+	-- Tell all clients to regenerate their gun's stats
+end
+
+function Suburb_LoadAtts()
+end
+
+function Suburb_GenAtt( tabl, name )
+	assert( name, "No name given!" )
+	assert( isstring(name), "Name given is not a string!" )
+	assert( tabl, "Table is nil!" )
+	assert( istable(tabl), "Table given is not a table!" )
+	print( tabl, tabl.Name or "", name )
+end
+
+
 Suburb.HUToM = 0.0254
 
-Suburb.sounds = {}
-Ssnd = Suburb.sounds
+UC = {}
+UC.sounds = {}
+Ssnd = UC.sounds
 
 local p0 = ")arccw_uc/common/"
-Suburb.sounds.rottle = {
+UC.sounds.rottle = {
 	p0.."cloth_1.ogg",
 	p0.."cloth_2.ogg",
 	p0.."cloth_3.ogg",
@@ -19,12 +47,12 @@ Suburb.sounds.rottle = {
 	p0.."cloth_6.ogg",
 	p0.."rattle.ogg",
 }
-Suburb.sounds.rattle = {
+UC.sounds.rattle = {
 	p0.."rattle1.ogg",
 	p0.."rattle2.ogg",
 	p0.."rattle3.ogg",
 }
-Suburb.sounds.rattlepistol = {
+UC.sounds.rattlepistol = {
 	p0.."pistol_rattle_1.ogg",
 	p0.."pistol_rattle_2.ogg",
 	p0.."pistol_rattle_3.ogg",
