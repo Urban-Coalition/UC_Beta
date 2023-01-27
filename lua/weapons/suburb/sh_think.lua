@@ -1,3 +1,6 @@
+function SPred()
+	return ((game.SinglePlayer() or SERVER) and true) or (!game.SinglePlayer() and IsFirstTimePredicted())
+end
 
 function SWEP:Think()
 	local p = self:GetOwner()
@@ -35,7 +38,7 @@ function SWEP:Think()
 		if !p:KeyDown( IN_ATTACK ) then
 			self:SetBurstCount( 0 )
 		end
-		if p:GetViewModel() then
+		if p:GetViewModel() and SPred() then
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
 		end
 		if CLIENT then

@@ -8,14 +8,11 @@ function SWEP:SwitchFiremode(prev)
 	end
 	if self:GetFiremode() != nextfm then
 		self:SetFiremode(nextfm)
-		if SERVER then
-			SuppressHostEvents( self:GetOwner() )
-		end
-		self:EmitSound("suburb/firemode.ogg", 60, 100, 0.5, CHAN_STATIC)
-		if CLIENT then self:GetOwner():ChatPrint( "Switched to " .. self:GetFiremodeName() ) end
-		if SERVER then
-			SuppressHostEvents( NULL )
-		end
+		if !IsFirstTimePredicted() then return end
+		if SERVER then SuppressHostEvents( self:GetOwner() ) end
+			self:EmitSound("suburb/firemode.ogg", 60, 100, 0.5, CHAN_STATIC)
+			if CLIENT then self:GetOwner():ChatPrint( "Switched to " .. self:GetFiremodeName() ) end
+		if SERVER then SuppressHostEvents( NULL ) end
 	end
 end
 

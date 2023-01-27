@@ -13,8 +13,8 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 			if cmd:KeyDown(IN_ZOOM) then
 				if !wep:GetFiremodeDebounce() then
 					cmd:SetImpulse(150)
+					wep:SetFiremodeDebounce(true)
 				end
-				wep:SetFiremodeDebounce(true)
 			else
 				wep:SetFiremodeDebounce(false)
 			end

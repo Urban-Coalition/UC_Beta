@@ -310,11 +310,13 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local EY = p:EyeAngles()
 		if !LASTAIM then LASTAIM = EY end
-		ox = math.ApproachAngle(ox, ox + (EY.y - LASTAIM.y), math.huge)
-		oy = math.ApproachAngle(oy, oy - (EY.p - LASTAIM.p), math.huge)
-		ox = math.Approach(ox, ox*(1-(math.min(FrameTime(), (1/8))*8)), math.huge)
-		oy = math.Approach(oy, oy*(1-(math.min(FrameTime(), (1/8))*8)), math.huge)
-		LASTAIM:Set(p:EyeAngles())
+		if IsFirstTimePredicted() then
+			ox = math.ApproachAngle(ox, ox + (EY.y - LASTAIM.y), math.huge)
+			oy = math.ApproachAngle(oy, oy - (EY.p - LASTAIM.p), math.huge)
+			ox = math.Approach(ox, ox*(1-(math.min(FrameTime(), (1/8))*8)), math.huge)
+			oy = math.Approach(oy, oy*(1-(math.min(FrameTime(), (1/8))*8)), math.huge)
+			LASTAIM:Set(p:EyeAngles())
+		end
 
 		local sii = self:GetAim()
 		local mult = 0.08
