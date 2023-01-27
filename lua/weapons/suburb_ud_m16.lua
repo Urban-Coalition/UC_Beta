@@ -43,6 +43,7 @@ SWEP.HoldTypeSprint			= "passive"
 
 local p0 = ")arccw_uc/common/"
 local p1 = ")weapons/arccw_ud/m16/"
+local tail = ")/arccw_uc/common/556x45/"
 SWEP.Sound_Blast			= {
 	{ s = p1.."fire-01.ogg" },
 	{ s = p1.."fire-02.ogg" },
@@ -60,12 +61,12 @@ SWEP.Sound_Mech				= {
 	{ s = p1.."mech-06.ogg" },
 }
 SWEP.Sound_TailEXT				= {
-	{ s = p1.."fire-dist-01.ogg" },
-	{ s = p1.."fire-dist-02.ogg" },
-	{ s = p1.."fire-dist-03.ogg" },
-	{ s = p1.."fire-dist-04.ogg" },
-	{ s = p1.."fire-dist-05.ogg" },
-	{ s = p1.."fire-dist-06.ogg" },
+	{ s = tail.."fire-dist-556x45-rif-ext-01.ogg" },
+	{ s = tail.."fire-dist-556x45-rif-ext-02.ogg" },
+	{ s = tail.."fire-dist-556x45-rif-ext-03.ogg" },
+	{ s = tail.."fire-dist-556x45-rif-ext-04.ogg" },
+	{ s = tail.."fire-dist-556x45-rif-ext-05.ogg" },
+	{ s = tail.."fire-dist-556x45-rif-ext-06.ogg" },
 }
 SWEP.Sound_TailINT				= {
 	{ s = p0.."fire-dist-int-rifle-01.ogg" },
