@@ -22,8 +22,8 @@ function SWEP:Think()
 		self:SetWeaponHoldType( ht )
 
 		self:SetUserSight( p:KeyDown( IN_ATTACK2 ) )
-		local canaim = self:GetUserSight() and (self:GetStopSightTime() <= CurTime()) and !spint
-		self:SetAim( math.Approach( self:GetAim(), canaim and 1 or 0, FrameTime() / self.SightTime ) )
+		local canaim = (self:GetStopSightTime() <= CurTime()) and !spint
+		self:SetAim( math.Approach( self:GetAim(), self:GetUserSight() and canaim and 1 or 0, FrameTime() / (canaim and self.SightTime or 0.2) ) )
 
 		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
 			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:Ammo1() )
@@ -34,9 +34,6 @@ function SWEP:Think()
 
 		if !p:KeyDown( IN_ATTACK ) then
 			self:SetBurstCount( 0 )
-		end
-		if self:GetFiremodeDebounce() and !p:KeyDown(IN_RELOAD) then
-			self:SetFiremodeDebounce( false )
 		end
 		if p:GetViewModel() then
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )

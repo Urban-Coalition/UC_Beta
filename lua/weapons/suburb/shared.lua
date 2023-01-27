@@ -190,13 +190,6 @@ function SWEP:Reload()
 	if CurTime() < self:GetReloadingTime() then
 		return false
 	end
-	if self:GetOwner():KeyDown(IN_USE) then
-		if !self:GetFiremodeDebounce() then
-			self:GetOwner():ConCommand("impulse 150")
-			self:SetFiremodeDebounce( true )
-		end
-		return false
-	end
 	if self:Clip1() >= self.Primary.ClipSize then
 		return false
 	end
@@ -278,6 +271,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 
 		local b_pos, b_ang = Vector(), Angle()
 		local si = crouchdelta
+		si = si * (1-math.ease.InOutSine( self:GetAim() ))
 		local ss_si = math.ease.InOutSine( si )
 
 		b_pos:Add( self.CrouchPose.Pos )
