@@ -13,8 +13,8 @@ local function ScaleFOVByWidthRatio( fovDegrees, ratio )
 	return retDegrees * 2
 end
 
-function Suburb.FOVix( fov )
-	return ScaleFOVByWidthRatio( fov, (ScrW and ScrW() or 4)/(ScrH and ScrH() or 3)/(4/3) )
+function Suburb.FOVix( fov, cw, ch )
+	return ScaleFOVByWidthRatio( fov, (cw or (ScrW and ScrW()) or 4)/(ch or (ScrH and ScrH()) or 3)/(4/3) )
 end
 
 function Suburb.getdamagefromrange( dmg_near, dmg_far, range_near, range_far, dist )

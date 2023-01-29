@@ -81,24 +81,25 @@ function SWEP:PrimaryAttack()
 			p:ViewPunch( Angle( self.RecoilUp * 0.2, self.RecoilSide * randy * -0.2, self.RecoilSwing * randy ) )
 		end
 	end
+	
+	local dir = p:EyeAngles()
+	local dir_disp = Angle( dir.p, dir.y, 0 ):Forward()
+	self:ApplyRandomSpread( dir_disp, 1*(0/90) )
 
 	local dispersion = self:GetDispersion()
 	for i=1, self.Pellets or 1 do
 		local p = self:GetOwner()
-		
-		local fsa = p:EyeAngles()
-		local dir = Angle( fsa.p, fsa.y, 0 )
-		local shared_rand = CurTime() + (i-1)
-		local x = util.SharedRandom(shared_rand, -0.5, 0.5) + util.SharedRandom(shared_rand + 1, -0.5, 0.5)
-		local y = util.SharedRandom(shared_rand + 2, -0.5, 0.5) + util.SharedRandom(shared_rand + 3, -0.5, 0.5)
-		dir = dir:Forward() + (x * math.rad(dispersion) * dir:Right()) + (y * math.rad(dispersion) * dir:Up())
+		local dir_acc = dir_disp:Angle():Forward()
+		self:ApplyRandomSpread( dir_acc, 1*(90/90), i )
+
 		self:FireBullets({
 			Attacker = IsValid(p) and p or self,
 			Damage = 0,
 			Force = self.Force,
 			Tracer = 1,
-			Dir = dir,
+			Dir = dir_acc,
 			Src = p:EyePos(),
+			Spread = vector_origin,
 			Callback = function( atk, tr, dmg )
 				local ent = tr.Entity
 
@@ -113,6 +114,17 @@ function SWEP:PrimaryAttack()
 	end
 
 	return true
+end
+
+function SWEP:ApplyRandomSpread( dir, spread, pellet )
+	local radius = util.SharedRandom("Suburb_RandSpread1", 0, 1, pellet )
+	local theta = util.SharedRandom("Suburb_RandSpread2", 0, math.rad(360), pellet )
+	local bulletang = dir:Angle()
+	local forward, right, up = bulletang:Forward(), bulletang:Right(), bulletang:Up()
+	local x = radius * math.sin(theta)
+	local y = radius * math.cos(theta)
+
+	dir:Set(dir + right * spread * x + up * spread * y)
 end
 
 function SWEP:SecondaryAttack()
@@ -157,7 +169,7 @@ function SWEP:Attack_Sound()
 end
 
 function SWEP:Attack_Effects()
-	if !game.SinglePlayer() and !IsFirstTimePredicted() then return end
+	if SPred() then return end
 
 	-- Flashes
 	do
