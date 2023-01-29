@@ -96,7 +96,7 @@ function SWEP:PrimaryAttack()
 			Attacker = IsValid(p) and p or self,
 			Damage = 0,
 			Force = self.Force,
-			Tracer = 0,
+			Tracer = 1,
 			Dir = dir,
 			Src = p:EyePos(),
 			Callback = function( atk, tr, dmg )
@@ -146,7 +146,7 @@ function SWEP:Attack_Sound()
 	if #self.Sound_TailEXT > 0 then
 		self.Sound_TailEXT["BaseClass"] = nil
 		local detail = self.Sound_TailEXT[math.Round(util.SharedRandom("Suburb_SoundBlast3", 1, #self.Sound_TailEXT))]
-		starvingchildren( self, detail, innyouty, 120, shotthing3 )
+		starvingchildren( self, detail, innyouty, 160, shotthing3 )
 	end
 
 	if #self.Sound_TailINT > 0 then

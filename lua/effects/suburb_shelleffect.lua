@@ -5,7 +5,7 @@ EFFECT.Scale = 1.5
 EFFECT.PhysScale = 1
 EFFECT.Model = "models/shells/shell_57.mdl"
 EFFECT.Material = nil
-EFFECT.JustOnce = true
+EFFECT.JustOnce = false
 EFFECT.AlreadyPlayedSound = false
 EFFECT.ShellTime = 2
 
@@ -170,19 +170,23 @@ function EFFECT:Init(data)
 	self.SpawnTime = CurTime()
 end
 
-function EFFECT:PhysicsCollide()
+function EFFECT:PhysicsCollide( col )
 	if self.AlreadyPlayedSound and self.JustOnce then return end
+	local phys = self:GetPhysicsObject()
+	if !self.AlreadyPlayedSound then
+		phys:SetVelocityInstantaneous( col.HitNormal * -150 )
+		sound.Play(self.Sounds[math.random(#self.Sounds)], self:GetPos(), 65, self.HitPitch, 1)
+	end
+	self:StopSound("Default.ScrapeRough")
 
-	sound.Play(self.Sounds[math.random(#self.Sounds)], self:GetPos(), 65, self.HitPitch, 1)
 
 	self.AlreadyPlayedSound = true
-
-	self:Remove()
 end
 
 local lastpoof = 0
 
 function EFFECT:Think()
+	self:StopSound("Default.ScrapeRough")
 	if (self.SpawnTime + self.ShellTime) <= CurTime() then
 		if !IsValid(self) then return end
 		self:SetRenderFX( kRenderFxFadeFast )
