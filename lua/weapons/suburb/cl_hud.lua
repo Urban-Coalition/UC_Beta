@@ -70,16 +70,16 @@ function SWEP:DoDrawCrosshair()
 	return true
 end
 
-local s = ScreenScale
-surface.CreateFont( "SolarI_1", { font = "FOT-Rodin Pro DB", size = s(10), weight = 0 } )
-surface.CreateFont( "SolarIG_1", { font = "FOT-Rodin Pro DB", size = s(10), weight = 0, blursize = 1 } )
-surface.CreateFont( "SolarI_2", { font = "Consolas", size = s(9), weight = 0 } )
-surface.CreateFont( "SolarIG_2", { font = "Consolas", size = s(9), weight = 0, blursize = 1 } )
-surface.CreateFont( "SolarI_3", { font = "FOT-Rodin Pro DB", size = s(8), weight = 0 } )
-surface.CreateFont( "SolarI_4", { font = "Consolas", size = s(6), weight = 0, italic = true } )
-surface.CreateFont( "SolarI_5", { font = "FOT-Rodin Pro DB", size = s(8), weight = 0 } )
-surface.CreateFont( "SolarIG_5", { font = "FOT-Rodin Pro DB", size = s(8), weight = 0, blursize = 1 } )
-surface.CreateFont( "SolarI_6", { font = "Trebuchet MS", size = s(8), weight = 600 } )
+local s = function( size )
+	return math.Round( size * ( ScrH() / 480 ) )
+end
+surface.CreateFont( "SolarI_1", { font = "FOT-Rodin Pro DB", size = s(18), weight = 0 } )
+surface.CreateFont( "SolarIG_1", { font = "FOT-Rodin Pro DB", size = s(18), weight = 0, blursize = 1 } )
+surface.CreateFont( "SolarI_2", { font = "Consolas", size = s(14), weight = 0 } )
+surface.CreateFont( "SolarIG_2", { font = "Consolas", size = s(14), weight = 0, blursize = 1 } )
+surface.CreateFont( "SolarI_5", { font = "FOT-Rodin Pro DB", size = s(14), weight = 0 } )
+surface.CreateFont( "SolarIG_5", { font = "FOT-Rodin Pro DB", size = s(14), weight = 0, blursize = 1 } )
+surface.CreateFont( "SolarI_6", { font = "Trebuchet MS", size = s(14), weight = 600 } )
 
 
 local c1 = Color(255, 255, 255)
@@ -98,10 +98,10 @@ local grad_right = Material( "solar/gradient_right.png", "")
 
 local items = {
 	{
-		Name = "SWITCH TO ALTERNATIVE",
+		Name = "Alt. Weapon",
 	},
 	{
-		Name = "THERMAL SIGHT",
+		Name = "Thermal Sight",
 		Options = {
 			"WHOT",
 			"BHOT",
@@ -109,7 +109,7 @@ local items = {
 		},
 	},
 	{
-		Name = "COMBO MODULE",
+		Name = "Combo Module",
 		Options = {
 			"LASER + LIGHT",
 			"LASER",
@@ -118,7 +118,7 @@ local items = {
 		},
 	},
 	{
-		Name = "GRENADE LAUNCHER",
+		Name = "Grenade Launcher",
 		Options = {
 			"HIGH EXPLOSIVE",
 			"BUCKSHOT",
@@ -126,7 +126,7 @@ local items = {
 		},
 	},
 	{
-		Name = "STOCK",
+		Name = "Stock",
 		Options = {
 			"EXTENDED",
 			"COLLAPSED",
@@ -162,16 +162,17 @@ local hints = {
 }
 
 function SWEP:DrawHUD()
-	local x, y = ScrW()/2, ScrH()/2
+	local sw, sh = ScrW(), ScrH()
+	local x, y = sw/2, sh/2
 	if LocalPlayer().AttachmentRadial then -- Attachment toggle select
 		local interval = 360/#items
 		for i, item in ipairs(items) do
 			local de = 0 - ( i * interval ) + interval
 			de = math.rad( de + 180 )
-			local dist = s( Lerp( math.TimeFraction( 3, 8, #items ), 50, 90 ) )
+			local dist = s( Lerp( math.TimeFraction( 3, 6, #items ), 60, 100 ) )
 			local ox, oy = math.sin( de ) * dist * 1.8, math.cos( de ) * dist
 			local rx, ry = x + ox, y + oy
-			local bx, by = s( 110 ), s( 12 )
+			local bx, by = s( 180 ), s( 18 )
 			local r2x, r2y = rx - (bx/2), ry - (by/2)
 
 			surface.SetDrawColor( cs2 )
@@ -197,7 +198,7 @@ function SWEP:DrawHUD()
 					text = tostring(i),
 					font = e != 3 and "SolarIG_1" or "SolarI_1",
 					color = e != 3 and cs2 or cw,
-					pos = { r2x + s(2), ry - s(8) + s( (e == 1 and 0.5) or (e == 2 and -0.1) or 0) },
+					pos = { r2x + s(2), ry - s(10) + s( (e == 1 and 0.5) or (e == 2 and -0.1) or 0) },
 					xalign = TEXT_ALIGN_LEFT,
 					yalign = TEXT_ALIGN_BOTTOM,
 				} )
@@ -209,14 +210,14 @@ function SWEP:DrawHUD()
 					local tx = surface.GetTextSize(k)
 					surface.SetMaterial( grad_up )
 					surface.SetDrawColor( cs_h )
-					surface.DrawTexturedRect( rx - (tx/2) - s(2), ry + s(6) + s( (h-1) * 9 ), tx + s(4), s(10) )
+					surface.DrawTexturedRect( rx - (tx/2) - s(4), ry + s(12) + s( (h-1) * 12 ), tx + s(8), s(11) )
 
 					for i=1, 3 do
 						draw.Text( {
 							text = k,
 							font = i != 3 and "SolarIG_2" or "SolarI_2",
 							color = i != 3 and cs2 or cw,
-							pos = { rx, ry + s(11) + s( (i == 1 and 0.5) or (i == 2 and -0.1) or 0) + s( (h-1) * 9 ) },
+							pos = { rx, ry + s(17) + s( (i == 1 and 0.5) or (i == 2 and -0.1) or 0) + s( (h-1) * 12 ) },
 							xalign = TEXT_ALIGN_CENTER,
 							yalign = TEXT_ALIGN_CENTER,
 						} )
@@ -228,10 +229,10 @@ function SWEP:DrawHUD()
 	end
 
 	if true then -- Hint system
-		local bx, by = s( 100 ), s( 12 )
+		local bx, by = s( 180 ), s( 18 )
 		local shad = s( 1 )
-		local cx = s( 3 )
-		local ms = s( 8 )
+		local cx = s( 4 )
+		local ms = s( 12 )
 		
 		local offset = 0
 		for i, item in ipairs(hints) do
@@ -277,6 +278,18 @@ function SWEP:DrawHUD()
 
 			offset = offset + by+cx
 		end
+	end
+
+	if self:GetAim() > 0 then
+		render.RenderView( {
+			origin = EyePos(),
+			angles = EyeAngles(),
+			x = (sw-sh)/2, y = 0,
+			w = sh, h = ScrH(),
+			aspect = 1,
+			fov = 90,
+			drawviewmodel = false,
+		} )
 	end
 
 	if GetConVar("developer"):GetBool() then
