@@ -84,13 +84,12 @@ function SWEP:PrimaryAttack()
 	
 	local dir = p:EyeAngles()
 	local dir_disp = Angle( dir.p, dir.y, 0 ):Forward()
-	self:ApplyRandomSpread( dir_disp, 1*(0/90) )
+	self:ApplyRandomSpread( dir_disp, 1*(self:GetDispersion()/90) )
 
-	local dispersion = self:GetDispersion()
 	for i=1, self.Pellets or 1 do
 		local p = self:GetOwner()
 		local dir_acc = dir_disp:Angle():Forward()
-		self:ApplyRandomSpread( dir_acc, 1*(90/90), i )
+		self:ApplyRandomSpread( dir_acc, 1*(self.Accuracy/90), i )
 
 		self:FireBullets({
 			Attacker = IsValid(p) and p or self,

@@ -280,7 +280,7 @@ function SWEP:DrawHUD()
 		end
 	end
 
-	if self:GetAim() > 0 then
+	if false and self:GetAim() > 0 then
 		render.RenderView( {
 			origin = EyePos(),
 			angles = EyeAngles(),
