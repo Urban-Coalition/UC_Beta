@@ -1,5 +1,5 @@
 function SPred()
-	return !game.SinglePlayer() and !IsFirstTimePredicted()
+	return (game.SinglePlayer() and true) or (!game.SinglePlayer() and !IsFirstTimePredicted())
 end
 
 function SWEP:Think()

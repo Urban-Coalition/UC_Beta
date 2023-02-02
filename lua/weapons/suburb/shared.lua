@@ -246,6 +246,9 @@ local MoveAngCorrect = Angle( 0, -90, -90 )
 local ler_walk = 0
 local ler_sprint = 0
 
+local tempsprintpos, tempsprintang = Vector( 1, 0, 0.5 ), Angle( -15, 10, -10 )
+local tempcustpos, tempcustang = Vector( 3, 0, -1 ), Angle( 15, 15, 15 )
+
 function SWEP:GetViewModelPosition(pos, ang)
 	local opos, oang = Vector(), Angle()
 	local p = self:GetOwner()
@@ -298,8 +301,20 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local si = math.ease.InOutSine( custtemp or 0 )
 		custtemp = math.Approach( custtemp, self:GetCustomizing() and 1 or 0, FrameTime() / 0.5 )
 
-		b_pos:Add( Vector( 3, 0, -1 ) )
-		b_ang:Add( Angle( 15, 15, 15 ) )
+		b_pos:Add( tempcustpos )
+		b_ang:Add( tempcustang )
+		b_pos:Mul( si )
+		b_ang:Mul( si )
+
+		opos:Add( b_pos )
+		oang:Add( b_ang )
+	end
+	do -- temporary sprint
+		local b_pos, b_ang = Vector(), Angle()
+		local si = math.ease.InOutSine( self:GetSprintPer() )
+
+		b_pos:Add( tempsprintpos )
+		b_ang:Add( tempsprintang )
 		b_pos:Mul( si )
 		b_ang:Mul( si )
 

@@ -31,8 +31,6 @@ function SWEP:DoDrawCrosshair()
 	gau = ( gau - lool.y )
 	gap = gau
 
-	gap = gap + ( self:GetAim() * s(40) )
-
 	local touse1 = col_1
 	local touse2 = col_2
 	for i=1, 2 do
