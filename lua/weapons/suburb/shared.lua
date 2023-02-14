@@ -140,11 +140,12 @@ local yep = {
 		"UserSight",
 		"FiremodeDebounce",
 		"Customizing",
+		"ShotgunReloading",
+		"NeedCycle",
 	},
 	["Int"] = {
 		"BurstCount",
 		"Firemode",
-		"ShotgunReloading",
 		"CycleCount",
 		"TotalShotCount",
 	},
@@ -160,6 +161,7 @@ local yep = {
 		"DISP_Air",
 		"DISP_Move",
 		"DISP_Crouch",
+		"ShotgunReloadingTime",
 	},
 	["Entity"] = {
 		"Holster_Entity",
@@ -199,11 +201,9 @@ function SWEP:Reload()
 
 	self:SetReloadingTime( CurTime() + 1 )
 	self:SetLoadIn( CurTime() + 1 )
-	self:SendAnimChoose( "reload", "reload" )
+	self:SendAnimChoose( "sgreload_start", "reload" )
+	self:SetShotgunReloading( true )
 	return true
-end
-
-function SWEP:ReloadLoad()
 end
 
 function SWEP:Deploy()
@@ -623,7 +623,7 @@ end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil)
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 0.05, 1000)
 	cam.IgnoreZ(true)
 end
 

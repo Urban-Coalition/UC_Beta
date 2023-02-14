@@ -4,7 +4,10 @@ end
 
 function SWEP:Think()
 	local p = self:GetOwner()
-	if IsValid(p) then
+	if !IsValid(p) then
+		p = false
+	end
+	if p then
 		local vm = p:GetViewModel()
 		if IsValid(vm) then
 			for i=1, 32 do
@@ -35,14 +38,34 @@ function SWEP:Think()
 			self:SetLoadIn( 0 )
 		end
 
-		if !p:KeyDown( IN_ATTACK ) then
+		local trdown = p:KeyDown(IN_ATTACK)
+		if !trdown then
 			self:SetBurstCount( 0 )
 		end
-		if p:GetViewModel() and SPred() then
+		if p:GetViewModel() then
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
 		end
 		if CLIENT then
 			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.5 )
+		end
+
+		local pred = game.SinglePlayer() and SERVER or (!game.SinglePlayer() and CLIENT and IsFirstTimePredicted())
+		if self:GetShotgunReloading() then
+			if self:GetShotgunReloadingTime() <= CurTime() then
+				if trdown or self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
+					self:SendAnim("sgreload_finish")
+					self:SetShotgunReloading(false)
+				else
+					self:SetReloadingTime(CurTime() + 0.9)
+					self:SetNW2Float("MasterkeyReloadTime", CurTime() + 0.7)
+					self:SendAnim("sgreload_insert", 0.9)
+					self:SetClip1(self:Clip1() + 1)
+					self:GetOwner():RemoveAmmo(1, "buckshot")
+				end
+			end
+		elseif self:GetCycleCount() == 1 and self:Clip1() > 0 and !trdown then
+			self:SetNeedCycle(true)
+			self:SendAnim("cycle")
 		end
 
 		local movem = p:GetAbsVelocity():Length2D()
