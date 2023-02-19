@@ -42,15 +42,16 @@ SWEP.HoldTypeSight			= "rpg"
 SWEP.HoldTypeSprint			= "passive"
 
 local p0 = ")arccw_uc/common/"
-local p1 = ")weapons/arccw_ud/870/"
-local tail = ")arccw_uc/common/12gauge/"
+local p1 = ")weapons/arccw_ud/m1014/"
+local p2 = ")weapons/arccw_ud/870/"
+local tail = ")arccw_uc/common/12ga/"
 SWEP.Sound_Blast			= {
-	{ s = p1.."fire-01.ogg" },
-	{ s = p1.."fire-02.ogg" },
-	{ s = p1.."fire-03.ogg" },
-	{ s = p1.."fire-04.ogg" },
-	{ s = p1.."fire-05.ogg" },
-	{ s = p1.."fire-06.ogg" },
+	{ s = p2.."fire-01.ogg" },
+	{ s = p2.."fire-02.ogg" },
+	{ s = p2.."fire-03.ogg" },
+	{ s = p2.."fire-04.ogg" },
+	{ s = p2.."fire-05.ogg" },
+	{ s = p2.."fire-06.ogg" },
 }
 SWEP.Sound_Mech				= {
 	{ s = p1.."mech-01.ogg" },
@@ -61,12 +62,12 @@ SWEP.Sound_Mech				= {
 	{ s = p1.."mech-06.ogg" },
 }
 SWEP.Sound_TailEXT				= {
-	{ s = tail.."fire-dist-556x45-rif-ext-01.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-02.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-03.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-04.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-05.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-06.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-01.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-02.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-03.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-04.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-05.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-06.ogg" },
 }
 SWEP.Sound_TailINT				= {
 	{ s = p0.."fire-dist-int-rifle-01.ogg" },
@@ -130,6 +131,12 @@ SWEP.UniversalAnimationInfo = {
 --
 -- Animation
 --
+local shellin = {
+	p1 .. "shell-insert-01.ogg",
+	p1 .. "shell-insert-02.ogg",
+	p1 .. "shell-insert-03.ogg"
+}
+SWEP.ShotgunReloading		= true
 SWEP.Animations				= {
 	["idle"]	= {
 		Source = "idle",
@@ -168,21 +175,25 @@ SWEP.Animations				= {
 		Time = 0.6,
 		Events = {
 		},
-		ReloadingTime = 0.4,
+		ShotgunReloadingTime = 0.3,
 	},
 	["sgreload_insert"] = {
 		Source = "sgreload_insert",
 		Time = 0.6,
 		Events = {
+			{s = shellin, t = 0},
+			{s = Ssnd.rottle, t = 0.05},
 		},
-		LoadIn = 0.4,
+		LoadIn = 0.2,
+		AmountToLoad = 1,
+		ShotgunReloadingTime = 0.3,
 	},
 	["sgreload_finish"] = {
 		Source = "sgreload_finish",
-		Time = 0.6,
+		Time = 0.8,
 		Events = {
 		},
-		ReloadingTime = 0.6,
+		ReloadingTime = 0,
 	},
 }
 

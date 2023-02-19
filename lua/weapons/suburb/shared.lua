@@ -148,6 +148,7 @@ local yep = {
 		"Firemode",
 		"CycleCount",
 		"TotalShotCount",
+		"LoadAmount",
 	},
 	["Float"] = {
 		"NextFire",
@@ -183,6 +184,7 @@ function SWEP:SetupDataTables()
 	end
 	self.Primary.DefaultClip = self.Primary.ClipSize * 1
 	self:SetFiremode(1)
+	self:SetLoadAmount(math.huge)
 end
 
 function SWEP:Reload()
@@ -190,6 +192,12 @@ function SWEP:Reload()
 		return false
 	end
 	if CurTime() < self:GetReloadingTime() then
+		return false
+	end
+	if CurTime() < self:GetShotgunReloadingTime() then
+		return false
+	end
+	if self:GetShotgunReloading() then
 		return false
 	end
 	if self:Clip1() >= self.Primary.ClipSize then
@@ -201,8 +209,13 @@ function SWEP:Reload()
 
 	self:SetReloadingTime( CurTime() + 1 )
 	self:SetLoadIn( CurTime() + 1 )
-	self:SendAnimChoose( "sgreload_start", "reload" )
-	self:SetShotgunReloading( true )
+	local shotgun = self.ShotgunReloading
+	if shotgun then
+		self:SendAnimChoose( "sgreload_start", "reload" )
+		self:SetShotgunReloading( true )
+	else
+		self:SendAnimChoose( "reload", "reload" )
+	end
 	return true
 end
 
@@ -558,9 +571,10 @@ function SWEP:SendAnim( act, hold )
 		self:SetIdleIn( CurTime() + seqdur )
 	end
 
-	local stopsight = hold and hold != "reload"
+	local stopsight = hold and hold != "reload" and hold != "sginsert"
 	local reloadtime = hold
-	local loadin = hold == "reload"
+	local loadin = hold == "reload" or hold == "sginsert"
+	local shotgunreloadingtime = hold == "reload" or hold == "sginsert" or hold == "cycle"
 	local suppresstime = false
 	local cycledelaytime = hold == "cycle" or hold == "fire"
 	local attacktime = false
@@ -575,6 +589,9 @@ function SWEP:SendAnim( act, hold )
 	if anim.LoadIn then
 		loadin = true
 	end
+	if anim.ShotgunReloadingTime then
+		shotgunreloadingtime = true
+	end
 	if anim.SuppressTime then
 		suppresstime = true
 	end
@@ -587,6 +604,9 @@ function SWEP:SendAnim( act, hold )
 	if anim.HolsterTime then
 		holstertime = true
 	end
+	if anim.AmountToLoad then
+		loadamount = true
+	end
 
 	if reloadtime then
 		self:SetReloadingTime( CurTime() + (anim.ReloadingTime or seqdur) )
@@ -596,6 +616,9 @@ function SWEP:SendAnim( act, hold )
 	end
 	if loadin then
 		self:SetLoadIn( CurTime() + (anim.LoadIn or seqdur) )
+	end
+	if shotgunreloadingtime then
+		self:SetShotgunReloadingTime( CurTime() + (anim.ShotgunReloadingTime or seqdur) )
 	end
 	if suppresstime then
 		self:SetSuppressIn( CurTime() + (anim.SuppressTime or seqdur) )
@@ -609,6 +632,7 @@ function SWEP:SendAnim( act, hold )
 	if holstertime then
 		self:SetHolster_Time( CurTime() + (anim.HolsterTime or seqdur) )
 	end
+	self:SetLoadAmount( anim.AmountToLoad or 300 )
 
 	if anim.Events then
 		for i, v in pairs(anim.Events) do

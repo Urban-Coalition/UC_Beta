@@ -31,13 +31,6 @@ function SWEP:Think()
 		local canaim = (self:GetStopSightTime() <= CurTime()) and !spint
 		self:SetAim( math.Approach( self:GetAim(), self:GetUserSight() and canaim and 1 or 0, FrameTime() / (canaim and self.SightTime or 0.2) ) )
 
-		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
-			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:Ammo1() )
-			self:SetClip1(self:Clip1() + needtoload)
-			self:GetOwner():RemoveAmmo( needtoload, self.Primary.Ammo )
-			self:SetLoadIn( 0 )
-		end
-
 		local trdown = p:KeyDown(IN_ATTACK)
 		if !trdown then
 			self:SetBurstCount( 0 )
@@ -53,19 +46,26 @@ function SWEP:Think()
 		if self:GetShotgunReloading() then
 			if self:GetShotgunReloadingTime() <= CurTime() then
 				if trdown or self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
-					self:SendAnim("sgreload_finish")
+					self:SetReloadingTime( CurTime() )
+					self:SetLoadIn( 0 )
+					self:SendAnimChoose("sgreload_finish", "sgfinish")
 					self:SetShotgunReloading(false)
 				else
-					self:SetReloadingTime(CurTime() + 0.9)
-					self:SetNW2Float("MasterkeyReloadTime", CurTime() + 0.7)
-					self:SendAnim("sgreload_insert", 0.9)
-					self:SetClip1(self:Clip1() + 1)
-					self:GetOwner():RemoveAmmo(1, "buckshot")
+					self:SendAnimChoose("sgreload_insert", "sginsert")
 				end
 			end
 		elseif self:GetCycleCount() == 1 and self:Clip1() > 0 and !trdown then
 			self:SetNeedCycle(true)
-			self:SendAnim("cycle")
+			self:SendAnimChoose("cycle", "cycle")
+		end
+
+		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
+			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:GetLoadAmount(), self:Ammo1() )
+			print("yum", needtoload, self:Clip1(), self:GetLoadAmount())
+			self:SetLoadIn( 0 )
+			assert( (self:Clip1() + needtoload) > 0, "What the fuck?? Why are you loading under 0 rounds??" .. (self:Clip1() + needtoload) )
+			self:SetClip1(self:Clip1() + needtoload)
+			self:GetOwner():RemoveAmmo( needtoload, self.Primary.Ammo )
 		end
 
 		local movem = p:GetAbsVelocity():Length2D()
