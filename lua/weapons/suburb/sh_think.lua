@@ -48,20 +48,29 @@ function SWEP:Think()
 				if trdown or self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
 					self:SetReloadingTime( CurTime() )
 					self:SetLoadIn( 0 )
-					self:SendAnimChoose("sgreload_finish", "sgfinish")
+					if self.ManualAction and self:GetCycleCount() >= self.ManualAction then
+						self:SendAnimChoose("sgreload_finish_empty", "sgfinish")
+						self:SetCycleCount( 0 )
+					else
+						self:SendAnimChoose("sgreload_finish", "sgfinish")
+					end
 					self:SetShotgunReloading(false)
 				else
 					self:SendAnimChoose("sgreload_insert", "sginsert")
 				end
 			end
-		elseif self:GetCycleCount() == 1 and self:Clip1() > 0 and !trdown then
-			self:SetNeedCycle(true)
+		elseif self.ManualAction and self:GetCycleDelayTime() <= CurTime() and self:GetCycleCount() >= self.ManualAction and self:Clip1() > 0 and !trdown then
+			self:SetCycleCount(0)
 			self:SendAnimChoose("cycle", "cycle")
+		end
+
+		if self:GetShellEjectTime() != 0 and self:GetShellEjectTime() <= CurTime() then
+			self:Attack_Effects_Shell()
+			self:SetShellEjectTime( 0 )
 		end
 
 		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
 			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:GetLoadAmount(), self:Ammo1() )
-			print("yum", needtoload, self:Clip1(), self:GetLoadAmount())
 			self:SetLoadIn( 0 )
 			assert( (self:Clip1() + needtoload) > 0, "What the fuck?? Why are you loading under 0 rounds??" .. (self:Clip1() + needtoload) )
 			self:SetClip1(self:Clip1() + needtoload)

@@ -99,7 +99,6 @@ SWEP.SwayCorrection = 0.35
 --		StopSightTime
 --		ReloadingTime
 --		LoadIn
---		SuppressTime
 --		CycleDelayTime
 --		AttackTime
 --		HolsterTime
@@ -163,6 +162,8 @@ local yep = {
 		"DISP_Move",
 		"DISP_Crouch",
 		"ShotgunReloadingTime",
+		"ShellEjectTime",
+		"CycleDelayTime",
 	},
 	["Entity"] = {
 		"Holster_Entity",
@@ -571,14 +572,14 @@ function SWEP:SendAnim( act, hold )
 		self:SetIdleIn( CurTime() + seqdur )
 	end
 
-	local stopsight = hold and hold != "reload" and hold != "sginsert"
-	local reloadtime = hold
+	local stopsight = hold and hold != "reload" and hold != "sginsert" and hold != "sgfinish" and hold != "cycle"
+	local reloadtime = hold and hold != "cycle"
 	local loadin = hold == "reload" or hold == "sginsert"
-	local shotgunreloadingtime = hold == "reload" or hold == "sginsert" or hold == "cycle"
-	local suppresstime = false
+	local shotgunreloadingtime = hold == "reload" or hold == "sginsert"
 	local cycledelaytime = hold == "cycle" or hold == "fire"
 	local attacktime = false
 	local holstertime = hold == "holster"
+	local shelleject = false
 
 	if anim.StopSightTime then
 		stopsight = true
@@ -592,9 +593,6 @@ function SWEP:SendAnim( act, hold )
 	if anim.ShotgunReloadingTime then
 		shotgunreloadingtime = true
 	end
-	if anim.SuppressTime then
-		suppresstime = true
-	end
 	if anim.CycleDelayTime then
 		cycledelaytime = true
 	end
@@ -606,6 +604,9 @@ function SWEP:SendAnim( act, hold )
 	end
 	if anim.AmountToLoad then
 		loadamount = true
+	end
+	if anim.ShellEjectTime then
+		shelleject = true
 	end
 
 	if reloadtime then
@@ -620,9 +621,6 @@ function SWEP:SendAnim( act, hold )
 	if shotgunreloadingtime then
 		self:SetShotgunReloadingTime( CurTime() + (anim.ShotgunReloadingTime or seqdur) )
 	end
-	if suppresstime then
-		self:SetSuppressIn( CurTime() + (anim.SuppressTime or seqdur) )
-	end
 	if cycledelaytime then
 		self:SetCycleDelayTime( CurTime() + (anim.CycleDelayTime or seqdur) )
 	end
@@ -631,6 +629,9 @@ function SWEP:SendAnim( act, hold )
 	end
 	if holstertime then
 		self:SetHolster_Time( CurTime() + (anim.HolsterTime or seqdur) )
+	end
+	if shelleject then
+		self:SetShellEjectTime( CurTime() + anim.ShellEjectTime )
 	end
 	self:SetLoadAmount( anim.AmountToLoad or 300 )
 

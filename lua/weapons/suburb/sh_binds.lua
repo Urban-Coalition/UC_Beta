@@ -2,7 +2,6 @@
 hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 	if ply and IsValid(ply) then
 		if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().Suburb then
-			ply:SetCanZoom( false )
 			local wep = ply:GetActiveWeapon()
 			if wep:GetHolster_Time() != 0 and wep:GetHolster_Time() <= CurTime() then
 				if IsValid(wep:GetHolster_Entity()) then
@@ -10,33 +9,38 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 				end
 			end
 
-			if cmd:KeyDown(IN_ZOOM) then
-				if !wep:GetFiremodeDebounce() then
-					cmd:SetImpulse(150)
-					wep:SetFiremodeDebounce(true)
+			if !cmd:KeyDown(IN_USE) then
+				ply:SetCanZoom( false )
+				if cmd:KeyDown(IN_ZOOM) then
+					if !wep:GetFiremodeDebounce() then
+						cmd:SetImpulse(150)
+						wep:SetFiremodeDebounce(true)
+					end
+				else
+					wep:SetFiremodeDebounce(false)
+				end
+
+				if cmd:GetImpulse() == 100 then
+					cmd:SetImpulse(152)
+				end
+
+				if cmd:GetImpulse() == 150 then
+					wep:SwitchFiremode()
+				end
+
+				if cmd:GetImpulse() == 151 then
+					wep:ToggleCustomize()
+				end
+
+				if cmd:GetImpulse() == 152 then
+					if ply.AttachmentRadial then
+						ply.AttachmentRadial = false
+					else
+						ply.AttachmentRadial = true
+					end
 				end
 			else
-				wep:SetFiremodeDebounce(false)
-			end
-
-			if cmd:GetImpulse() == 100 then
-				cmd:SetImpulse(152)
-			end
-
-			if cmd:GetImpulse() == 150 then
-				wep:SwitchFiremode()
-			end
-
-			if cmd:GetImpulse() == 151 then
-				wep:ToggleCustomize()
-			end
-
-			if cmd:GetImpulse() == 152 then
-				if ply.AttachmentRadial then
-					ply.AttachmentRadial = false
-				else
-					ply.AttachmentRadial = true
-				end
+				ply:SetCanZoom( true )
 			end
 			if SERVER and ply:FlashlightIsOn() then ply:Flashlight() end
 		else
@@ -60,8 +64,10 @@ hook.Add("OnContextMenuOpen", "Suburb_OnContextMenuOpen", function()
 	local ply = LocalPlayer()
 	local w = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon()
 	if w and w.Suburb then
-		LocalPlayer():ConCommand("impulse 151")
-		return true
+		if !LocalPlayer():KeyDown(IN_USE) then
+			LocalPlayer():ConCommand("impulse 151")
+			return true
+		end
 	end
 end)
 

@@ -320,6 +320,14 @@ function SWEP:DrawHUD()
 		surface.DrawText("ShotgunReloading")
 		surface.DrawRect( xa, (64+(48*5)), ( self:GetShotgunReloading() and 1 or 0 ) * 100, 8 )
 
+		surface.SetTextPos( xa + 4, (64+(48*6)) - 18 - 2 )
+		surface.DrawText("CycleCount")
+		surface.DrawRect( xa, (64+(48*6)), ( self:GetCycleCount() ) * 100, 8 )
+
+		surface.SetTextPos( xa + 4, (64+(48*7)) - 18 - 2 )
+		surface.DrawText("CycleDelayTime")
+		surface.DrawRect( xa, (64+(48*7)), ( self:GetCycleDelayTime() - CurTime() ) * 100, 8 )
+
 		for i, v in pairs(self.Attachments) do
 			if i == "BaseClass" then continue end
 			local x, y = ScrW()*0.8, (64+(48*(i-1)))

@@ -123,11 +123,13 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
+		Time = 0.4,
 		ReloadingTime = 0.3,
 		StopSightTime = 0.1,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
+		Time = 0.4,
 		ReloadingTime = 0.3,
 		StopSightTime = 0.1,
 	},
@@ -143,9 +145,11 @@ SWEP.Animations				= {
 	},
 	["fire"]	= {
 		Source = "fire",
+		ShellEjectTime = 0,
 	},
 	["fire_empty"] = {
 		Source = "fire_empty",
+		ShellEjectTime = 0,
 	},
 	["reload"]	= {
 		Source = "reload",

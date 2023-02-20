@@ -52,10 +52,19 @@ function SWEP:PrimaryAttack()
 	if self:GetBurstCount() >= self:GetFiremodeTable().Mode then
 		return false
 	end
+	if self.ManualAction and self:GetCycleCount() >= self.ManualAction then
+		return false
+	end
+	if CurTime() < self:GetCycleDelayTime() then
+		return false
+	end
 
 	self:SetNextFire( CurTime() + self.Delay )
 	self:SetClip1( self:Clip1() - 1 )
 	self:SetBurstCount( self:GetBurstCount() + 1 )
+	if self.ManualAction then
+		self:SetCycleCount( self:GetCycleCount() + 1 )
+	end
 	self:SetTotalShotCount( self:GetTotalShotCount() + 1 )
 
 	self:Attack_Sound()
@@ -170,47 +179,43 @@ end
 function SWEP:Attack_Effects()
 	if SPred() then return end
 
-	-- Flashes
-	do
-		local ed = EffectData()
-		ed:SetEntity(self)
-		ed:SetAttachment(self.QCA_Muzzle or 1)
+	local ed = EffectData()
+	ed:SetEntity(self)
+	ed:SetAttachment(self.QCA_Muzzle or 1)
 
-		util.Effect("suburb_muzzleeffect", ed)
-	end
+	util.Effect("suburb_muzzleeffect", ed)
+end
 
-	-- Shells
-	do
-		local eff = "suburb_shelleffect"
+function SWEP:Attack_Effects_Shell()
+	local eff = "suburb_shelleffect"
 
-		local owner = self:GetOwner()
-		if !IsValid(owner) then return end
+	local owner = self:GetOwner()
+	if !IsValid(owner) then return end
 
-		local vm = self
+	local vm = self
 
-		if !owner:IsNPC() then owner:GetViewModel() end
+	if !owner:IsNPC() then owner:GetViewModel() end
 
-		local att = vm:GetAttachment(self.QCA_Case or 2)
+	local att = vm:GetAttachment(self.QCA_Case or 2)
 
-		if !att then return end
+	if !att then return end
 
-		local pos, ang = att.Pos, att.Ang
+	local pos, ang = att.Pos, att.Ang
 
-		local ed = EffectData()
-		ed:SetOrigin(pos)
-		ed:SetAngles(ang)
-		ed:SetAttachment(self.QCA_Case or 2)
-		ed:SetScale(1)
-		ed:SetEntity(self)
-		ed:SetNormal(ang:Forward())
-		ed:SetMagnitude(100)
+	local ed = EffectData()
+	ed:SetOrigin(pos)
+	ed:SetAngles(ang)
+	ed:SetAttachment(self.QCA_Case or 2)
+	ed:SetScale(1)
+	ed:SetEntity(self)
+	ed:SetNormal(ang:Forward())
+	ed:SetMagnitude(100)
 
-		local efov = {}
-		efov.eff = eff
-		efov.fx  = ed
+	local efov = {}
+	efov.eff = eff
+	efov.fx  = ed
 
-		util.Effect(eff, ed)
-	end
+	util.Effect(eff, ed)
 end
 
 function SWEP:GetDispersion()

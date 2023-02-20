@@ -5,7 +5,7 @@ SWEP.Spawnable				= true
 --
 -- Description
 --
-SWEP.PrintName				= "Benelli M4"
+SWEP.PrintName				= "Benelli M1014"
 SWEP.Category				= "Urban Coalition"
 SWEP.Description			= [[Iconic 12 gauge shotgun.]]
 SWEP.Slot					= 2
@@ -78,11 +78,11 @@ SWEP.Sound_TailINT				= {
 	{ s = p0.."fire-dist-int-rifle-06.ogg" },
 }
 
-SWEP.MuzzleEffect						= "muzzleflash_1"
+SWEP.MuzzleEffect						= "muzzleflash_shotgun"
 SWEP.QCA_Muzzle							= 1
 
-SWEP.ShellModel							= "models/weapons/arccw/uc_shells/556x45.mdl"
-SWEP.ShellScale							= 1
+SWEP.ShellModel							= "models/weapons/arccw/uc_shells/12g.mdl"
+SWEP.ShellScale							= 0.5
 SWEP.QCA_Case							= 2
 
 SWEP.QCA_Camera							= 3
@@ -104,7 +104,7 @@ SWEP.SwayCorrection = 0.45
 
 SWEP.Accuracy				= 6
 
-SWEP.Dispersion				= 5
+SWEP.Dispersion				= 0
 SWEP.Dispersion_Air			= 3
 SWEP.Dispersion_Move		= 3
 SWEP.Dispersion_Crouch		= 0.75
@@ -121,6 +121,17 @@ SWEP.RecoilSide				= 0.6
 SWEP.RecoilSwing			= 1
 SWEP.RecoilDrift			= .8
 SWEP.RecoilDecay			= 15
+
+--
+-- Damage
+--
+SWEP.DamageNear				= ArcCW.UC.StdDmg["12g_s"].max
+SWEP.RangeNear				= 4
+SWEP.DamageFar				= ArcCW.UC.StdDmg["12g_s"].min
+SWEP.RangeFar				= 40
+SWEP.Force					= 5
+SWEP.Penetration			= ArcCW.UC.StdDmg["12g_s"].pen
+SWEP.Pellets				= ArcCW.UC.StdDmg["12g_s"].num
 
 SWEP.UniversalAnimationInfo = {
 	bone = "m16_parent",
@@ -146,11 +157,13 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
+		Time = 0.8,
 		ReloadingTime = 0.3,
 		StopSightTime = 0.1,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
+		Time = 0.8,
 		ReloadingTime = 0.3,
 		StopSightTime = 0.1,
 	},
@@ -166,16 +179,18 @@ SWEP.Animations				= {
 	},
 	["fire"]	= {
 		Source = "fire",
+		ShellEjectTime = 0,
 	},
 	["fire_empty"] = {
 		Source = "fire_empty",
+		ShellEjectTime = 0,
 	},
 	["sgreload_start"] = {
 		Source = "sgreload_start",
-		Time = 0.6,
+		Time = 0.5,
 		Events = {
 		},
-		ShotgunReloadingTime = 0.3,
+		ShotgunReloadingTime = 0.5,
 	},
 	["sgreload_insert"] = {
 		Source = "sgreload_insert",
@@ -184,9 +199,9 @@ SWEP.Animations				= {
 			{s = shellin, t = 0},
 			{s = Ssnd.rottle, t = 0.05},
 		},
-		LoadIn = 0.2,
+		LoadIn = 0.3,
 		AmountToLoad = 1,
-		ShotgunReloadingTime = 0.3,
+		ShotgunReloadingTime = 0.5,
 	},
 	["sgreload_finish"] = {
 		Source = "sgreload_finish",

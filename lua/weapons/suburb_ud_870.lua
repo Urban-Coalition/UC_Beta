@@ -42,7 +42,7 @@ SWEP.HoldTypeSight			= "rpg"
 SWEP.HoldTypeSprint			= "passive"
 
 local p0 = ")arccw_uc/common/"
-local p1 = ")weapons/arccw_ud/m16/"
+local p1 = ")weapons/arccw_ud/870/"
 local tail = ")/arccw_uc/common/556x45/"
 SWEP.Sound_Blast			= {
 	{ s = p1.."fire-01.ogg" },
@@ -77,11 +77,11 @@ SWEP.Sound_TailINT				= {
 	{ s = p0.."fire-dist-int-rifle-06.ogg" },
 }
 
-SWEP.MuzzleEffect						= "muzzleflash_1"
+SWEP.MuzzleEffect						= "muzzleflash_shotgun"
 SWEP.QCA_Muzzle							= 1
 
-SWEP.ShellModel							= "models/weapons/arccw/uc_shells/556x45.mdl"
-SWEP.ShellScale							= 1
+SWEP.ShellModel							= "models/weapons/arccw/uc_shells/12g.mdl"
+SWEP.ShellScale							= 0.5
 SWEP.QCA_Case							= 2
 
 SWEP.QCA_Camera							= 3
@@ -90,26 +90,20 @@ SWEP.CameraCorrection					= Angle( 0, -90, -90 )
 --
 -- Functionality
 --
-SWEP.Primary.Ammo			= "smg1"
-SWEP.Primary.ClipSize		= 30
-SWEP.Delay					= ( 60 / 900 )
+SWEP.Primary.Ammo			= "buckshot"
+SWEP.Primary.ClipSize		= 6
+SWEP.Delay					= ( 60 / 120 )
 
 SWEP.Firemodes				= {
-	{
-		Mode = math.huge,
-	},
-	{
-		Mode = 3,
-	},
 	{
 		Mode = 1,
 	},
 }
 SWEP.SwayCorrection = 0.45
 
-SWEP.Accuracy				= 6
+SWEP.Accuracy				= 3
 
-SWEP.Dispersion				= 5
+SWEP.Dispersion				= 0
 SWEP.Dispersion_Air			= 3
 SWEP.Dispersion_Move		= 3
 SWEP.Dispersion_Crouch		= 0.75
@@ -127,6 +121,17 @@ SWEP.RecoilSwing			= 1
 SWEP.RecoilDrift			= .8
 SWEP.RecoilDecay			= 15
 
+--
+-- Damage
+--
+SWEP.DamageNear				= ArcCW.UC.StdDmg["12g_p"].max
+SWEP.RangeNear				= 5
+SWEP.DamageFar				= ArcCW.UC.StdDmg["12g_p"].min
+SWEP.RangeFar				= 50
+SWEP.Force					= 5
+SWEP.Penetration			= ArcCW.UC.StdDmg["12g_p"].pen
+SWEP.Pellets				= ArcCW.UC.StdDmg["12g_p"].num
+
 SWEP.UniversalAnimationInfo = {
 	bone = "m16_parent",
 	pos = Vector( 0, 0, 0 ),
@@ -136,6 +141,13 @@ SWEP.UniversalAnimationInfo = {
 --
 -- Animation
 --
+local shellin = {
+	p1 .. "shell-insert-01.ogg",
+	p1 .. "shell-insert-02.ogg",
+	p1 .. "shell-insert-03.ogg"
+}
+SWEP.ShotgunReloading		= true
+SWEP.ManualAction			= 1
 SWEP.Animations				= {
 	["idle"]	= {
 		Source = "idle",
@@ -163,48 +175,59 @@ SWEP.Animations				= {
 		Time = 0.3,
 		HolsterTime = 0.15,
 	},
+	["cycle"]	= {
+		Source = "cycle",
+		Events = {
+			{s = Ssnd.rottle, t = 0},
+			{s = p1 .. "rack_1.ogg",  t = 0},
+			{s = p1 .. "eject.ogg",  t = 0.1},
+			{s = p1 .. "rack_2.ogg",  t = 0.11},
+		},
+		ShellEjectTime = 0.1,
+		CycleDelayTime = 0.3,
+	},
 	["fire"]	= {
 		Source = "fire",
+		CycleDelayTime = 0.3,
 	},
-	["fire_empty"] = {
-		Source = "fire_empty",
-	},
-	["reload"]	= {
-		Source = "reload",
-		Time = 2.4,
+	["sgreload_start"] = {
+		Source = "sgreload_start",
+		Time = 0.5,
 		Events = {
-			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
-			{ t = 0.3,			s = p1.."magout_empty.ogg" },
-			{ t = 0.95,			s = p1.."magin.ogg" },
-
-			{ t = 0.0,			s = Ssnd.rottle },
-			{ t = 0.25,			s = Ssnd.rattle },
-			{ t = 0.5,			s = Ssnd.rattle },
-			{ t = 1.1,			s = Ssnd.rattle },
-			{ t = 1.39,			s = Ssnd.rottle },
-			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 1.8,
-		LoadIn = 1.6,
+		ShotgunReloadingTime = 0.3,
 	},
-	["reload_empty"] = {
-		Source = "reload_empty",
-		Time = 2.9,
+	["sgreload_insert"] = {
+		Source = "sgreload_insert",
+		Time = 0.6,
 		Events = {
-			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
-			{ t = 0.3,			s = p1.."magout_empty.ogg" },
-			{ t = 0.95,			s = p1.."magin.ogg" },
-			{ t = 1.7,			s = p1.."boltdrop.ogg" },
-
-			{ t = 0.0,			s = Ssnd.rottle },
-			{ t = 0.25,			s = Ssnd.rattle },
-			{ t = 0.5,			s = Ssnd.rattle },
-			{ t = 1.1,			s = Ssnd.rattle },
-			{ t = 1.39,			s = Ssnd.rottle },
-			{ t = 1.9,			s = Ssnd.rattle },
+			{s = Ssnd.rottle, t = 0},
+			{s = shellin, t = 0.05},
 		},
-		ReloadingTime = 2.5,
-		LoadIn = 1.8,
+		LoadIn = 0.3,
+		AmountToLoad = 1,
+		ShotgunReloadingTime = 0.5,
+	},
+	["sgreload_finish"] = {
+		Source = "sgreload_finish",
+		Time = 0.5,
+		Events = {
+			{s = Ssnd.rottle, t = 0},
+			{s = p0 .. "shoulder.ogg",  t = 0.27},
+		},
+		ReloadingTime = 0,
+	},
+	["sgreload_finish_empty"] = {
+		Source = "sgreload_finish_empty",
+		Time = 1.1,
+		Events = {
+			{s = Ssnd.rottle, t = 0.5},
+			{s = p1 .. "rack_1.ogg",  t = 0.3},
+			{s = p1 .. "eject.ogg",  t = 0.4},
+			{s = p1 .. "rack_2.ogg",  t = 0.425},
+			{s = p0 .. "shoulder.ogg",  t = 0.8},
+		},
+		ReloadingTime = 0,
 	},
 }
 
