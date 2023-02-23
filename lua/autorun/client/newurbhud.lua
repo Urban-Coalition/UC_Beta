@@ -393,7 +393,7 @@ moves.test1.func = function( data ) --------------------------------------------
 		local item = {
 			Title = string.upper( v.Name ),
 			Subtitle = "null",
-			Icon = Material("entities/arccw_ud_glock.png", "mips smooth"),
+			Icon = v.Icon or Material("entities/arccw_ud_glock.png", "mips smooth"),
 			oslot = v
 		}
 		table.insert( ifuckinghateyou, i, item )

@@ -214,42 +214,57 @@ SWEP.Attachments = {
 	{
 		Name = "Rear Sight",
 		SortOrder = 1.0,
+		Icon = Material("entities/att/acwatt_ud_m16_rs_kac.png", "mips smooth")
 	},
 	{
 		Name = "Optical Sight",
 		SortOrder = 1.1,
+		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth")
 	},
 	{
 		Name = "Front Sight",
 		SortOrder = 1.2,
+		Icon = Material("entities/att/acwatt_ud_m16_fs_kac.png", "mips smooth")
 	},
 	{
 		Name = "Barrel",
 		SortOrder = 2.0,
+		Icon = Material("entities/att/acwatt_ud_m16_barrel_20.png", "mips smooth")
 	},
 	{
 		Name = "Handguard",
 		SortOrder = 2.1,
+		Icon = Material("entities/att/acwatt_ud_m16_hg_ribbed.png", "mips smooth")
 	},
 	{
 		Name = "Upper Receiver",
 		SortOrder = 2.2,
+		Icon = Material("entities/att/acwatt_ud_m16_receiver_auto.png", "mips smooth")
 	},
 	{
 		Name = "Lower Receiver",
 		SortOrder = 2.3,
+		Icon = Material("entities/att/acwatt_ud_m16_receiver_default.png", "mips smooth")
+	},
+	{
+		Name = "Magazine",
+		SortOrder = 2.4,
+		Icon = Material("entities/att/acwatt_ud_m16_mag_30.png", "mips smooth")
 	},
 	{
 		Name = "Muzzle",
 		SortOrder = 3.0,
+		Icon = Material("entities/att/acwatt_uc_muzzle_fhider1.png", "mips smooth")
 	},
 	{
 		Name = "Tactical",
 		SortOrder = 3.1,
+		Icon = Material("entities/att/acwatt_uc_tac_anpeq16a.png", "mips smooth")
 	},
 	{
 		Name = "Underbarrel",
 		SortOrder = 3.2,
+		Icon = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth")
 	},
 }
 

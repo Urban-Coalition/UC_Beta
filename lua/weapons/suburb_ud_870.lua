@@ -29,8 +29,8 @@ SWEP.CrouchPose = {
 	MidAng = Angle( 0, 0, 0 ),
 }
 SWEP.IronsightPose = {
-	Pos = Vector( -2.81, -6, 1.32 ),
-	Ang = Angle( 0, 0, 0 ),
+	Pos = Vector( -3.66, -3, 2.2 ),
+	Ang = Angle( -0.75, 0, 2.8 ),
 	MidPos = Vector( -1.15, -2, -1 ),
 	MidAng = Angle( -0.5, 0, -6 ),
 	ViewModelFOV = 65,
@@ -43,7 +43,7 @@ SWEP.HoldTypeSprint			= "passive"
 
 local p0 = ")arccw_uc/common/"
 local p1 = ")weapons/arccw_ud/870/"
-local tail = ")/arccw_uc/common/556x45/"
+local tail = ")/arccw_uc/common/12ga/"
 SWEP.Sound_Blast			= {
 	{ s = p1.."fire-01.ogg" },
 	{ s = p1.."fire-02.ogg" },
@@ -61,20 +61,20 @@ SWEP.Sound_Mech				= {
 	{ s = p1.."mech-06.ogg" },
 }
 SWEP.Sound_TailEXT				= {
-	{ s = tail.."fire-dist-556x45-rif-ext-01.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-02.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-03.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-04.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-05.ogg" },
-	{ s = tail.."fire-dist-556x45-rif-ext-06.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-01.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-02.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-03.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-04.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-05.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-ext-06.ogg" },
 }
 SWEP.Sound_TailINT				= {
-	{ s = p0.."fire-dist-int-rifle-01.ogg" },
-	{ s = p0.."fire-dist-int-rifle-02.ogg" },
-	{ s = p0.."fire-dist-int-rifle-03.ogg" },
-	{ s = p0.."fire-dist-int-rifle-04.ogg" },
-	{ s = p0.."fire-dist-int-rifle-05.ogg" },
-	{ s = p0.."fire-dist-int-rifle-06.ogg" },
+	{ s = p0.."fire-dist-int-shotgun-01.ogg" },
+	{ s = p0.."fire-dist-int-shotgun-02.ogg" },
+	{ s = p0.."fire-dist-int-shotgun-03.ogg" },
+	{ s = p0.."fire-dist-int-shotgun-04.ogg" },
+	{ s = p0.."fire-dist-int-shotgun-05.ogg" },
+	{ s = p0.."fire-dist-int-shotgun-06.ogg" },
 }
 
 SWEP.MuzzleEffect						= "muzzleflash_shotgun"
