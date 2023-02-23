@@ -104,7 +104,7 @@ SWEP.SwayCorrection = 0.45
 
 SWEP.Accuracy				= 6
 
-SWEP.Dispersion				= 0
+SWEP.Dispersion				= 6
 SWEP.Dispersion_Air			= 3
 SWEP.Dispersion_Move		= 3
 SWEP.Dispersion_Crouch		= 0.75
@@ -185,12 +185,24 @@ SWEP.Animations				= {
 		Source = "fire_empty",
 		ShellEjectTime = 0,
 	},
+	["sgreload_start_empty"] = {
+		Source = "sgreload_start_empty",
+		Time = 1.33,
+		Events = {
+			{s = Ssnd.rottle, 					t = 0},
+			{s = p1 .. "breechload.ogg",		t = 0.05},
+			{s = p1 .. "breechclose.ogg",		t = 0.75},
+		},
+		ShotgunReloadingTime = 1.2,
+		LoadIn = 0.9,
+		AmountToLoad = 1,
+	},
 	["sgreload_start"] = {
 		Source = "sgreload_start",
-		Time = 0.5,
+		Time = 0.4,
 		Events = {
 		},
-		ShotgunReloadingTime = 0.5,
+		ShotgunReloadingTime = 0.3,
 	},
 	["sgreload_insert"] = {
 		Source = "sgreload_insert",

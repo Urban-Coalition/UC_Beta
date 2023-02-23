@@ -101,9 +101,9 @@ SWEP.Firemodes				= {
 }
 SWEP.SwayCorrection = 0.45
 
-SWEP.Accuracy				= 3
+SWEP.Accuracy				= 4
 
-SWEP.Dispersion				= 0
+SWEP.Dispersion				= 4
 SWEP.Dispersion_Air			= 3
 SWEP.Dispersion_Move		= 3
 SWEP.Dispersion_Crouch		= 0.75
