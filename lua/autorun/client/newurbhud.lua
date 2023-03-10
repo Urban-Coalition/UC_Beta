@@ -583,36 +583,6 @@ local papi2 = {
 		["Font"] = "Solar_A_3",
 		["Spacing"] = 36,
 	},
-	[3] = {
-		["Title"] = "Year",
-		["Font"] = "Solar_A_5",
-		["Spacing"] = 16,
-	},
-	[4] = {
-		["Title"] = "1989",
-		["Font"] = "Solar_A_3",
-		["Spacing"] = 36,
-	},
-	[5] = {
-		["Title"] = "Mechanism",
-		["Font"] = "Solar_A_5",
-		["Spacing"] = 16,
-	},
-	[6] = {
-		["Title"] = "Short-recoil",
-		["Font"] = "Solar_A_3",
-		["Spacing"] = 36,
-	},
-	[7] = {
-		["Title"] = "Country",
-		["Font"] = "Solar_A_5",
-		["Spacing"] = 16,
-	},
-	[8] = {
-		["Title"] = "Austria",
-		["Font"] = "Solar_A_3",
-		["Spacing"] = 36,
-	},
 }
 local chingas = 720
 local selected2 = 1
@@ -645,9 +615,8 @@ moves.test2.func = function( data ) --------------------------------------------
 
 	local gaap = 0
 	for i, v in ipairs( papi2 ) do
-		v.iRaise = math.Approach(v.iRaise or 0, selected2 == i and 1 or 0, FrameTime()/0.2)
 		cam.Start3D2D( data.pos + (weed1*0.5), data.ang, 0.1 )
-			local crack1 = cs2--Color( cs2.r, cs2.g, cs2.b, Lerp( v.iRaise, 127, 255 ) )
+			local crack1 = cs2
 			draw.DrawText(
 				v["Title"],
 				v["Font"],
@@ -659,7 +628,7 @@ moves.test2.func = function( data ) --------------------------------------------
 			)
 		cam.End3D2D()
 		cam.Start3D2D( data.pos + (weed1), data.ang, 0.1 )
-			local crack1 = cw--Color( cw.r, cw.g, cw.b, Lerp( v.iRaise, 127, 255 ) )
+			local crack1 = cw
 			draw.DrawText(
 				v["Title"],
 				v["Font"],
@@ -672,6 +641,37 @@ moves.test2.func = function( data ) --------------------------------------------
 		cam.End3D2D()
 		gaap = gaap + v["Spacing"]
 	end
+	if w.Trivia then
+		local i = 0
+		for _, v in pairs( w.Trivia ) do
+			i = i + 1
+			cam.Start3D2D( data.pos + (weed1*0.5), data.ang, 0.1 )
+				local crack1 = cs2
+				draw.DrawText(
+					v,
+					(i%2 == 1) and "Solar_A_5" or "Solar_A_3",
+					720-159,
+					89+((i-1)+gaap),
+					crack1,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+			cam.End3D2D()
+			cam.Start3D2D( data.pos + (weed1), data.ang, 0.1 )
+				local crack1 = cw
+				draw.DrawText(
+					v,
+					(i%2 == 1) and "Solar_A_5" or "Solar_A_3",
+					720-159,
+					89+((i-1)+gaap),
+					crack1,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+			cam.End3D2D()
+			gaap = gaap + (i%2 == 0 and 36 or 16)
+		end
+		end
 	end
 end ------------------------------------------------
 moves.test2.pos = Vector( -72/2 + 36, 230, 72/2 )
