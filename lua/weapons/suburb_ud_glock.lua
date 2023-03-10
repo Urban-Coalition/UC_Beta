@@ -16,19 +16,19 @@ SWEP.Slot					= 1
 SWEP.ViewModel				= "models/weapons/arccw/c_ud_glock.mdl"
 SWEP.WorldModel				= "models/weapons/arccw/c_ud_glock.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
-SWEP.ViewModelFOV			= 65
+SWEP.ViewModelFOV			= 64
 
 SWEP.ActivePose = {
-	Pos = Vector( 0, -3, 1 ),
+	Pos = Vector( 0, -2, 1 ),
 	Ang = Angle( 0, 0, -3 )
 }
 SWEP.CrouchPose = {
-	Pos = Vector(-3, -2, -1),
+	Pos = Vector(-2.5, -2, -0.5),
 	Ang = Angle(0, 0, -20),
 }
 SWEP.IronsightPose = {
-	Pos = Vector( -2.3, -4, 2.52 ),
-	Ang = Angle( 0.3, 0, 0 ),
+	Pos = Vector( -1.73, -3, 2.35 ),
+	Ang = Angle( 0.7, 0, 0 ),
 	MidPos = Vector( -0.5, -1, -0.3 ),
 	MidAng = Angle( 0, 0, 0 ),
 	ViewModelFOV = 65,
@@ -159,11 +159,11 @@ SWEP.Animations				= {
 	},
 	["reload"]	= {
 		Source = "reload",
-		Time = 1.8,
+		Time = 2.2,
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_pull_small.ogg" },
 			{ t = 0.3,			s = p1.."magout_partial.ogg" },
-			{ t = 0.4,			s = p1.."magin_new.ogg" },
+			{ t = 0.6,			s = p1.."magin_new.ogg" },
 
 			{ t = 0,			s = Ssnd.rottle },
 			{ t = 0.3,			s = Ssnd.rattlepistol },
@@ -175,7 +175,7 @@ SWEP.Animations				= {
 	},
 	["reload_empty"] = {
 		Source = "reload_empty",
-		Time = 2.2,
+		Time = 2.6,
 		Events = {
 			{ t = 0.1,			s = p1.."magout_empty.ogg" },
 			{ t = 0.2,			s = p0.."magpouch_pull_small.ogg" },

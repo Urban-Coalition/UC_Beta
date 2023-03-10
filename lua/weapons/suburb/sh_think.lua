@@ -2,6 +2,8 @@ function SPred()
 	return (game.SinglePlayer() and true) or (!game.SinglePlayer() and !IsFirstTimePredicted())
 end
 
+local emptab = {}
+
 function SWEP:Think()
 	local p = self:GetOwner()
 	if !IsValid(p) then
@@ -10,9 +12,14 @@ function SWEP:Think()
 	if p then
 		local vm = p:GetViewModel()
 		if IsValid(vm) then
+			local bgtab = emptab
+			if self.DefaultBodygroups then
+				bgtab = string.Explode( " ", self.DefaultBodygroups )
+			end
 			for i=1, 32 do
-				vm:SetBodygroup( i-1, 0 )
-				vm:SetSkin(0)
+				local tt = bgtab[i] or 0
+				vm:SetBodygroup( i-1, tt )
+				vm:SetSkin( self.DefaultSkin or 0 )
 			end
 		end
 		local ht = self.HoldTypeHip
@@ -42,7 +49,7 @@ function SWEP:Think()
 			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.5 )
 		end
 
-		local pred = game.SinglePlayer() and SERVER or (!game.SinglePlayer() and CLIENT and IsFirstTimePredicted())
+		local pred = (game.SinglePlayer()) or (!game.SinglePlayer() and CLIENT and IsFirstTimePredicted())
 		if self:GetShotgunReloading() then
 			if self:GetShotgunReloadingTime() <= CurTime() then
 				if trdown or self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then

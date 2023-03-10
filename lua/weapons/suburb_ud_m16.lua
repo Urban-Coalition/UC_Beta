@@ -18,13 +18,16 @@ SWEP.WorldModel				= "models/weapons/arccw/c_ud_m16.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
 SWEP.ViewModelFOV			= 75
 
+SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 0 0 0 1 0 0"
+SWEP.DefaultSkin = 0
+
 SWEP.ActivePose = {
 	Pos = Vector( 0.5, -2, 0.75 ),
 	Ang = Angle( 0, 0, -3 )
 }
 SWEP.CrouchPose = {
-	Pos = Vector(-2.5, -2, -0.6),
-	Ang = Angle(0, 0, -14),
+	Pos = Vector(-2.5, -2, -1.6),
+	Ang = Angle(0, 0, -8),
 	MidPos = Vector( -0.2, 0, -0.5 ),
 	MidAng = Angle( 0, 0, 0 ),
 }
