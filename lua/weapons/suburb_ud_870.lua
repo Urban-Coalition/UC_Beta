@@ -16,11 +16,14 @@ SWEP.Slot					= 2
 SWEP.ViewModel				= "models/weapons/arccw/c_ud_870.mdl"
 SWEP.WorldModel				= "models/weapons/arccw/c_ud_870.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
-SWEP.ViewModelFOV			= 64
+SWEP.ViewModelFOV			= 72
+
+SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 1"
+SWEP.DefaultSkin = 0
 
 SWEP.ActivePose = {
 	Pos = Vector( -0.6, -4, 0.25 ),
-	Ang = Angle( 0, 0, -3 )
+	Ang = Angle( 0, 0, 0 )
 }
 SWEP.CrouchPose = {
 	Pos = Vector(-2.5, -2, -0.6),
@@ -29,12 +32,12 @@ SWEP.CrouchPose = {
 	MidAng = Angle( 0, 0, 0 ),
 }
 SWEP.IronsightPose = {
-	Pos = Vector( -3.66, -3, 2.2 ),
-	Ang = Angle( -0.75, 0, 2.8 ),
+	Pos = Vector( -3.677, -7, 2.2 ),
+	Ang = Angle( -0.65, -0.0, 2.0 ),
 	MidPos = Vector( -1.15, -2, -1 ),
 	MidAng = Angle( -0.5, 0, -6 ),
 	ViewModelFOV = 65,
-	Magnification = 1.3,
+	Magnification = 1.1,
 }
 
 SWEP.HoldTypeHip			= "ar2"
@@ -99,7 +102,7 @@ SWEP.Firemodes				= {
 		Mode = 1,
 	},
 }
-SWEP.SwayCorrection = 0.45
+SWEP.SwayCorrection = 0.56
 
 SWEP.Accuracy				= 4
 
@@ -183,7 +186,7 @@ SWEP.Animations				= {
 			{s = p1 .. "eject.ogg",  t = 0.1},
 			{s = p1 .. "rack_2.ogg",  t = 0.11},
 		},
-		ShellEjectTime = 0.2,
+		ShellEjectTime = 0.1,
 		CycleDelayTime = 0.3,
 	},
 	["fire"]	= {

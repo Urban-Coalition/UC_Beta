@@ -16,7 +16,7 @@ SWEP.Slot					= 2
 SWEP.ViewModel				= "models/weapons/arccw/c_ud_m1014.mdl"
 SWEP.WorldModel				= "models/weapons/arccw/c_ud_m1014.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
-SWEP.ViewModelFOV			= 75
+SWEP.ViewModelFOV			= 72
 
 SWEP.ActivePose = {
 	Pos = Vector( -0.4, -2, -0.2 ),

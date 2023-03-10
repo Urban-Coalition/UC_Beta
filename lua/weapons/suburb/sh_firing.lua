@@ -71,14 +71,14 @@ function SWEP:PrimaryAttack()
 	self:Attack_Effects()
 	self:SendAnimChoose( "fire" )
 
-	local spmp = (SERVER and game.SinglePlayer()) or (CLIENT and IsFirstTimePredicted())
+	local spmp = ( SERVER and game.SinglePlayer() ) or ( !game.SinglePlayer() and CLIENT and IsFirstTimePredicted() )
 	local p = self:GetOwner()
 	if IsValid(p) then
 		if !self.RecoilTable then
 			self.RecoilTable = {}
 		end
 		if spmp then
-			local randy = util.SharedRandom( "Suburb_RecoilSide", -1, 1 )
+			local randy = math.Rand( -1, 1 )
 			local recoil = {}
 			recoil.dir = Angle( self.RecoilUp * (self.RecoilDrift), randy * self.RecoilSide * (self.RecoilDrift) )
 			recoil.speed = self.RecoilDecay
@@ -209,7 +209,7 @@ function SWEP:Attack_Effects_Shell()
 	ed:SetScale(1)
 	ed:SetEntity(self)
 	ed:SetNormal(ang:Forward())
-	ed:SetMagnitude(100)
+	ed:SetMagnitude(50)
 
 	local efov = {}
 	efov.eff = eff

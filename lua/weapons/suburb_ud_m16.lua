@@ -16,9 +16,10 @@ SWEP.Slot					= 2
 SWEP.ViewModel				= "models/weapons/arccw/c_ud_m16.mdl"
 SWEP.WorldModel				= "models/weapons/arccw/c_ud_m16.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
-SWEP.ViewModelFOV			= 75
+SWEP.ViewModelFOV			= 72
 
-SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 0 0 0 1 0 0"
+SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 0 0 0 1"
+-- SWEP.DefaultBodygroups = "0 1 0 2 1 5 2 7 0 0 0 2"
 SWEP.DefaultSkin = 0
 
 SWEP.ActivePose = {

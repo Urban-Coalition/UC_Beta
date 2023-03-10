@@ -26,7 +26,7 @@ SWEP.Slot					= 1
 SWEP.ViewModel				= "models/weapons/arccw/c_ud_glock.mdl"
 SWEP.WorldModel				= "models/weapons/arccw/c_ud_glock.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
-SWEP.ViewModelFOV			= 64
+SWEP.ViewModelFOV			= 72
 
 SWEP.ActivePose = {
 	Pos = Vector( 0, -2, 1 ),
@@ -42,7 +42,7 @@ SWEP.IronsightPose = {
 	MidPos = Vector( -0.5, -1, -0.3 ),
 	MidAng = Angle( 0, 0, 0 ),
 	ViewModelFOV = 65,
-	Magnification = 1.1,
+	Magnification = 1.05,
 }
 SWEP.SwayCorrection = 0.33
 

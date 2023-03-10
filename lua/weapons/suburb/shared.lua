@@ -162,7 +162,6 @@ local yep = {
 		"DISP_Move",
 		"DISP_Crouch",
 		"ShotgunReloadingTime",
-		"ShellEjectTime",
 		"CycleDelayTime",
 	},
 	["Entity"] = {
@@ -364,17 +363,19 @@ function SWEP:GetViewModelPosition(pos, ang)
 		b_pos.z = b_pos.z + oy*-correct
 		b_ang.x = b_ang.x + oy*1
 
-		b_ang.z = b_ang.z - ox * Lerp( sii, 1, 5 )
+		if test == 0 then
+			b_ang.z = b_ang.z - ox * Lerp( sii, 1, 5 )
 
-		-- Wobble while swaying
-		local joink = (math.abs( ox + oy ) ^ 2) * 0.01
-		b_pos.x = b_pos.x + ( math.sin( CurTime() * 1.0 * 16 ) * joink * 0.1 )
-		b_pos.y = b_pos.y + ( math.sin( CurTime() * 0.6 * 16 ) * joink * 0.1 )
-		b_pos.z = b_pos.z + ( math.sin( CurTime() * 0.3 * 16 ) * joink * 0.1 )
+			-- Wobble while swaying
+			local joink = (math.abs( ox + oy ) ^ 2) * 0.01
+			b_pos.x = b_pos.x + ( math.sin( CurTime() * 1.0 * 16 ) * joink * 0.1 )
+			b_pos.y = b_pos.y + ( math.sin( CurTime() * 0.6 * 16 ) * joink * 0.1 )
+			b_pos.z = b_pos.z + ( math.sin( CurTime() * 0.3 * 16 ) * joink * 0.1 )
 
-		b_ang.x = b_ang.x + ( math.sin( CurTime() * 1.0 * 16 ) * joink * 0.2 )
-		b_ang.y = b_ang.y + ( math.sin( CurTime() * 0.6 * 16 ) * joink * 0.2 )
-		b_ang.z = b_ang.z + ( math.sin( CurTime() * 0.3 * 16 ) * joink * 0.2 )
+			b_ang.x = b_ang.x + ( math.sin( CurTime() * 1.0 * 16 ) * joink * 0.2 )
+			b_ang.y = b_ang.y + ( math.sin( CurTime() * 0.6 * 16 ) * joink * 0.2 )
+			b_ang.z = b_ang.z + ( math.sin( CurTime() * 0.3 * 16 ) * joink * 0.2 )
+		end
 
 		mult = mult * Lerp( sii, 1, mult_aim )
 		b_pos:Mul( mult )
@@ -630,8 +631,8 @@ function SWEP:SendAnim( act, hold )
 	if holstertime then
 		self:SetHolster_Time( CurTime() + (anim.HolsterTime or seqdur) )
 	end
-	if shelleject then
-		self:SetShellEjectTime( CurTime() + anim.ShellEjectTime )
+	if shelleject and CLIENT and IsFirstTimePredicted() then
+		self.ShellEjectTime = ( CurTime() + anim.ShellEjectTime )
 	end
 	self:SetLoadAmount( anim.AmountToLoad or 300 )
 
@@ -646,14 +647,38 @@ function SWEP:SendAnim( act, hold )
 	return seqdur
 end
 
+function SWEP:Think_Shell()
+	if !self.ShellEjectTime then return end
+	if (CLIENT and IsFirstTimePredicted()) and self.ShellEjectTime != -1 and self.ShellEjectTime <= CurTime() then
+		self:Attack_Effects_Shell()
+		self.ShellEjectTime = -1
+	end
+end
+
+local emptab = {}
 function SWEP:PreDrawViewModel( vm, weapon, ply )
+	if IsValid(vm) then
+		local bgtab = emptab
+		if self.DefaultBodygroups then
+			bgtab = string.Explode( " ", self.DefaultBodygroups )
+		end
+		for i=1, 32 do
+			local tt = bgtab[i] or 0
+			vm:SetBodygroup( i-1, tt )
+		end
+		vm:SetSkin( self.DefaultSkin or 0 )
+	end
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ) )
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
 	cam.IgnoreZ(true)
 end
 
 function SWEP:PostDrawViewModel( vm, weapon, ply )
 	cam.End3D()
+end
+
+function SWEP:GetAimAlt()
+	return math.Clamp( math.TimeFraction( 0.5, 1, self:GetAim() ), 0, 1 )
 end
 
 function SWEP:TranslateFOV(fov)
@@ -662,7 +687,7 @@ function SWEP:TranslateFOV(fov)
 	if self.IronsightPose and self.IronsightPose.Magnification then
 		mag = self.IronsightPose.Magnification
 	end
-	return Lerp( self:GetAim(), fov, fov or 75 ) / Lerp( math.ease.InQuad( self:GetAim() * device ), 1, mag )
+	return Lerp( self:GetAim(), fov, fov or 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
 end
 
 function SWEP:AdjustMouseSensitivity()
