@@ -69,10 +69,9 @@ function SWEP:Think()
 			end
 		end
 
-		if self:GetShellEjectTime() > 0 and self:GetShellEjectTime() > CurTime() then
-			self:SetShellEjectTime( -1 )
+		if SERVER and self:GetShellEjectTime() > 0 and self:GetShellEjectTime() < CurTime() then
 			self:Attack_Effects_Shell()
-			print(self:GetShellEjectTime())
+			self:SetShellEjectTime( -1 )
 		end
 
 		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
