@@ -1,8 +1,6 @@
 
 -- Made by Fesiug!
 
-CreateClientConVar("newurb_enabled", 0)
-
 local grad_up = Material( "solar/gradient_up.png", "")
 local grad_down = Material( "solar/gradient_down.png", "")
 local grad_left = Material( "solar/gradient_left.png", "")

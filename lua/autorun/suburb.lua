@@ -1,11 +1,4 @@
 
-if CLIENT then
-	CreateClientConVar("uc_dev_aimcorrect", 0, false, false)
-	CreateClientConVar("uc_cl_aimtoggle", 0, true, true)
-end
-
-CreateConVar( "uc_dev_debug", 0, FCVAR_REPLICATED, "Spit debug information" )
-
 Suburb = {}
 
 for _, v in pairs(file.Find("suburb/sh_*", "LUA")) do

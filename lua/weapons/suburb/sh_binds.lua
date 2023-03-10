@@ -1,4 +1,6 @@
 
+local fmdebounce = false
+
 hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 	if ply and IsValid(ply) then
 		if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().Suburb then
@@ -12,12 +14,12 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 			if !cmd:KeyDown(IN_USE) then
 				ply:SetCanZoom( false )
 				if cmd:KeyDown(IN_ZOOM) then
-					if !wep:GetFiremodeDebounce() then
+					if !fmdebounce then
 						cmd:SetImpulse(150)
-						wep:SetFiremodeDebounce(true)
+						fmdebounce = true
 					end
 				else
-					wep:SetFiremodeDebounce(false)
+					fmdebounce = false
 				end
 
 				if cmd:GetImpulse() == 100 then

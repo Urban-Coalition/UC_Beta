@@ -16,7 +16,7 @@ SWEP.Trivia = {
 	"Country",
 	"Austria",
 	"Manufacturer",
-	"Glock GMB",
+	"Glock Ges.m.b.H.",
 }
 SWEP.Slot					= 1
 

@@ -144,7 +144,7 @@ local yep = {
 	},
 	["Int"] = {
 		"BurstCount",
-		"Firemode",
+		"NWFiremode",
 		"CycleCount",
 		"TotalShotCount",
 		"LoadAmount",
@@ -171,6 +171,18 @@ local yep = {
 		"CurrentAnim",
 	},
 }
+
+SWEP.CL_Firemode = 1
+function SWEP:SetFiremode(x)
+	if (!game.SinglePlayer() and CLIENT) then self.CL_Firemode = x end
+	self:SetNWFiremode(x)
+end
+
+function SWEP:GetFiremode()
+	if (!game.SinglePlayer() and CLIENT) then return self.CL_Firemode end
+	return self:GetNWFiremode()
+end
+
 
 SWEP.Animations = {}
 SWEP.Attachments = {}
@@ -312,7 +324,9 @@ function SWEP:GetViewModelPosition(pos, ang)
 	do -- temporary customize
 		local b_pos, b_ang = Vector(), Angle()
 		local si = math.ease.InOutSine( custtemp or 0 )
-		custtemp = math.Approach( custtemp, self:GetCustomizing() and 1 or 0, FrameTime() / 0.5 )
+		if game.SinglePlayer() or (!game.SinglePlayer() and CLIENT and IsFirstTimePredicted()) then
+			custtemp = math.Approach( custtemp, self:GetCustomizing() and 1 or 0, FrameTime() / 0.5 )
+		end
 
 		b_pos:Add( tempcustpos )
 		b_ang:Add( tempcustang )
