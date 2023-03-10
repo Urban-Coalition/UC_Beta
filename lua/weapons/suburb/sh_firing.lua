@@ -177,7 +177,7 @@ function SWEP:Attack_Sound()
 end
 
 function SWEP:Attack_Effects()
-	if SPred() then return end
+	if !((game.SinglePlayer() and SERVER) or (!game.SinglePlayer() and !IsFirstTimePredicted())) then return end
 
 	local ed = EffectData()
 	ed:SetEntity(self)

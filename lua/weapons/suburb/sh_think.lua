@@ -1,7 +1,3 @@
-function SPred()
-	return (game.SinglePlayer() and true) or (!game.SinglePlayer() and !IsFirstTimePredicted())
-end
-
 local emptab = {}
 
 function SWEP:Think()
@@ -49,37 +45,40 @@ function SWEP:Think()
 			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.5 )
 		end
 
-		local pred = (game.SinglePlayer()) or (!game.SinglePlayer() and CLIENT and IsFirstTimePredicted())
-		if self:GetShotgunReloading() then
-			if self:GetShotgunReloadingTime() <= CurTime() then
-				if trdown or self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
-					self:SetReloadingTime( CurTime() )
-					self:SetLoadIn( 0 )
-					if self.ManualAction and self:GetCycleCount() >= self.ManualAction then
-						self:SendAnimChoose("sgreload_finish_empty", "sgfinish")
-						self:SetCycleCount( 0 )
+		local pred = (game.SinglePlayer() and SERVER) or (!game.SinglePlayer() and CLIENT and IsFirstTimePredicted())
+		if pred then
+			if self:GetShotgunReloading() then
+				if self:GetShotgunReloadingTime() <= CurTime() then
+					if trdown or self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
+						self:SetReloadingTime( CurTime() )
+						self:SetLoadIn( 0 )
+						if self.ManualAction and self:GetCycleCount() >= self.ManualAction then
+							self:SendAnimChoose("sgreload_finish_empty", "sgfinish")
+							self:SetCycleCount( 0 )
+						else
+							self:SendAnimChoose("sgreload_finish", "sgfinish")
+						end
+						self:SetShotgunReloading(false)
 					else
-						self:SendAnimChoose("sgreload_finish", "sgfinish")
+						self:SendAnimChoose("sgreload_insert", "sginsert")
 					end
-					self:SetShotgunReloading(false)
-				else
-					self:SendAnimChoose("sgreload_insert", "sginsert")
 				end
+			elseif self.ManualAction and self:GetCycleDelayTime() <= CurTime() and self:GetCycleCount() >= self.ManualAction and self:Clip1() > 0 and !trdown then
+				self:SetCycleCount(0)
+				self:SendAnimChoose("cycle", "cycle")
 			end
-		elseif self.ManualAction and self:GetCycleDelayTime() <= CurTime() and self:GetCycleCount() >= self.ManualAction and self:Clip1() > 0 and !trdown then
-			self:SetCycleCount(0)
-			self:SendAnimChoose("cycle", "cycle")
 		end
 
-		if self:GetShellEjectTime() != 0 and self:GetShellEjectTime() <= CurTime() then
+		if self:GetShellEjectTime() > 0 and self:GetShellEjectTime() > CurTime() then
+			self:SetShellEjectTime( -1 )
 			self:Attack_Effects_Shell()
-			self:SetShellEjectTime( 0 )
+			print(self:GetShellEjectTime())
 		end
 
 		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
 			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:GetLoadAmount(), self:Ammo1() )
 			self:SetLoadIn( 0 )
-			assert( (self:Clip1() + needtoload) > 0, "What the fuck?? Why are you loading under 0 rounds??" .. (self:Clip1() + needtoload) )
+			assert( (self:Clip1() + needtoload) > 0, "loading under 0 rounds??" .. (self:Clip1() + needtoload) )
 			self:SetClip1(self:Clip1() + needtoload)
 			self:GetOwner():RemoveAmmo( needtoload, self.Primary.Ammo )
 		end

@@ -183,7 +183,7 @@ SWEP.Animations				= {
 			{s = p1 .. "eject.ogg",  t = 0.1},
 			{s = p1 .. "rack_2.ogg",  t = 0.11},
 		},
-		ShellEjectTime = 0.1,
+		ShellEjectTime = 0.2,
 		CycleDelayTime = 0.3,
 	},
 	["fire"]	= {
