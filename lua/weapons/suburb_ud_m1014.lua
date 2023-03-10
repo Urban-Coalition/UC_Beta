@@ -5,7 +5,7 @@ SWEP.Spawnable				= true
 --
 -- Description
 --
-SWEP.PrintName				= "Benelli M1014"
+SWEP.PrintName				= "Benelli M4"
 SWEP.Category				= "Urban Coalition"
 SWEP.Description			= [[Iconic 12 gauge shotgun.]]
 SWEP.Slot					= 2
