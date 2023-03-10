@@ -12,38 +12,38 @@ EFFECT.ShellTime = 2
 EFFECT.SpawnTime = 0
 
 local ShellSoundsTable = {
-	"suburb/casings/casing_556_1.wav",
-	"suburb/casings/casing_556_2.wav",
-	"suburb/casings/casing_556_3.wav",
-	"suburb/casings/casing_556_4.wav"
+	"suburb/casings/casing_556_1.ogg",
+	"suburb/casings/casing_556_2.ogg",
+	"suburb/casings/casing_556_3.ogg",
+	"suburb/casings/casing_556_4.ogg"
 }
 
 local MediumShellSoundsTable = {
-	"suburb/casings/casing_308_1.wav",
-	"suburb/casings/casing_308_2.wav",
-	"suburb/casings/casing_308_3.wav",
-	"suburb/casings/casing_308_4.wav"
+	"suburb/casings/casing_308_1.ogg",
+	"suburb/casings/casing_308_2.ogg",
+	"suburb/casings/casing_308_3.ogg",
+	"suburb/casings/casing_308_4.ogg"
 }
 
 local PlinkShellSoundsTable = {
-	"suburb/casings/casing_22_1.wav",
-	"suburb/casings/casing_22_2.wav",
-	"suburb/casings/casing_22_3.wav",
-	"suburb/casings/casing_22_4.wav"
+	"suburb/casings/casing_22_1.ogg",
+	"suburb/casings/casing_22_2.ogg",
+	"suburb/casings/casing_22_3.ogg",
+	"suburb/casings/casing_22_4.ogg"
 }
 
 local PistolShellSoundsTable = {
-	"suburb/casings/casing_9mm_1.wav",
-	"suburb/casings/casing_9mm_2.wav",
-	"suburb/casings/casing_9mm_3.wav",
-	"suburb/casings/casing_9mm_4.wav"
+	"suburb/casings/casing_9mm_1.ogg",
+	"suburb/casings/casing_9mm_2.ogg",
+	"suburb/casings/casing_9mm_3.ogg",
+	"suburb/casings/casing_9mm_4.ogg"
 }
 
 local ShotgunShellSoundsTable = {
-	"suburb/casings/casing_12ga_1.wav",
-	"suburb/casings/casing_12ga_2.wav",
-	"suburb/casings/casing_12ga_3.wav",
-	"suburb/casings/casing_12ga_4.wav"
+	"suburb/casings/casing_12ga_1.ogg",
+	"suburb/casings/casing_12ga_2.ogg",
+	"suburb/casings/casing_12ga_3.ogg",
+	"suburb/casings/casing_12ga_4.ogg"
 }
 
 function EFFECT:Init(data)
