@@ -648,7 +648,7 @@ end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 0.05, 1000)
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ) )
 	cam.IgnoreZ(true)
 end
 
