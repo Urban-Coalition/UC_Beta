@@ -614,9 +614,15 @@ moves.test2.func = function( data ) --------------------------------------------
 	local gaap = 0
 	for i, v in ipairs( papi2 ) do
 		cam.Start3D2D( data.pos + (weed1*0.5), data.ang, 0.1 )
+			local name = "" -- fix this some time in the future maybe LOL holy shit
+			if i == 1 then
+				name = w:GetPrintName()
+			else
+				name = w.Description
+			end
 			local crack1 = cs2
 			draw.DrawText(
-				v["Title"],
+				name,
 				v["Font"],
 				720-159,
 				89+((i-1)+gaap),
@@ -628,7 +634,7 @@ moves.test2.func = function( data ) --------------------------------------------
 		cam.Start3D2D( data.pos + (weed1), data.ang, 0.1 )
 			local crack1 = cw
 			draw.DrawText(
-				v["Title"],
+				name,
 				v["Font"],
 				720-159,
 				89+((i-1)+gaap),

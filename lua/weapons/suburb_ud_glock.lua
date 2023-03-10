@@ -90,7 +90,7 @@ SWEP.MuzzleEffect						= "muzzleflash_1"
 SWEP.QCA_Muzzle							= 1
 
 SWEP.ShellModel							= "models/weapons/arccw/uc_shells/9x19.mdl"
-SWEP.ShellScale							= 1
+SWEP.ShellScale							= .666
 SWEP.QCA_Case							= 2
 
 SWEP.QCA_Camera							= 3
@@ -185,12 +185,12 @@ SWEP.Animations				= {
 	},
 	["reload_empty"] = {
 		Source = "reload_empty",
-		Time = 2.6,
+		Time = 2.4,
 		Events = {
 			{ t = 0.1,			s = p1.."magout_empty.ogg" },
 			{ t = 0.4,			s = p0.."magpouch_pull_small.ogg" },
-			{ t = 0.6,			s = p1.."magin_new.ogg" },
-			{ t = 1.6,			s = p1.."chamber.ogg" },
+			{ t = 0.55,			s = p1.."magin_new.ogg" },
+			{ t = 1.5,			s = p1.."chamber.ogg" },
 
 			{ t = 0,			s = Ssnd.rattlepistol },
 			{ t = 0.5,			s = Ssnd.rattlepistol },

@@ -7,7 +7,7 @@ SWEP.Spawnable				= true
 --
 SWEP.PrintName				= "Uzi"
 SWEP.Category				= "Urban Coalition"
-SWEP.Description			= [[Iconic 9x19mm sub-machine gun.]]
+SWEP.Description			= [[9x19mm submachine gun]]
 SWEP.Slot					= 2
 
 --

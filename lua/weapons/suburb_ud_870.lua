@@ -7,7 +7,17 @@ SWEP.Spawnable				= true
 --
 SWEP.PrintName				= "Remington 870"
 SWEP.Category				= "Urban Coalition"
-SWEP.Description			= [[Iconic 12 gauge shotgun.]]
+SWEP.Description			= [[12 gauge shotgun]]
+SWEP.Trivia = {
+	"Year",
+	"1950",
+	"Mechanism",
+	"Pump-action",
+	"Country",
+	"United States of America",
+	"Manufacturer",
+	"Remington Arms",
+}
 SWEP.Slot					= 2
 
 --

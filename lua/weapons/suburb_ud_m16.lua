@@ -7,7 +7,7 @@ SWEP.Spawnable				= true
 --
 SWEP.PrintName				= "M16A2"
 SWEP.Category				= "Urban Coalition"
-SWEP.Description			= [[Iconic 5.56x45mm assault rifle.]]
+SWEP.Description			= [[5.56x45mm assault rifle]]
 SWEP.Slot					= 2
 
 --

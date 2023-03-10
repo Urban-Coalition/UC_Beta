@@ -209,7 +209,7 @@ function SWEP:Attack_Effects_Shell()
 	ed:SetScale(1)
 	ed:SetEntity(self)
 	ed:SetNormal(ang:Forward())
-	ed:SetMagnitude(50)
+	ed:SetMagnitude(70)
 
 	local efov = {}
 	efov.eff = eff
