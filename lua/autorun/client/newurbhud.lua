@@ -84,17 +84,17 @@ local globalweed = 3
 local globalweed2 = 2
 local globalweed3 = 5
 
-surface.CreateFont( "Solar_A_1", { font = "Consolas", size = 30, weight = 1000 } )
-surface.CreateFont( "Solar_A_2", { font = "FOT-Rodin Pro DB", size = 43, weight = 0 } )
-surface.CreateFont( "Solar_A_3", { font = "FOT-Rodin Pro DB", size = 26, weight = 0 } )
-surface.CreateFont( "Solar_A_4", { font = "FOT-Rodin Pro DB", size = 60, weight = 0 } )
-surface.CreateFont( "Solar_A_5", { font = "FOT-Rodin Pro DB", size = 22, weight = 0 } )
-surface.CreateFont( "Solar_B_1", { font = "Carbon Bold", size = 120, weight = 0 } )
-surface.CreateFont( "Solar_B_2", { font = "Carbon Bold", size = 70, weight = 0 } )
-surface.CreateFont( "Solar_B2_1", { font = "Carbon Bold", size = 100, weight = 0 } )
-surface.CreateFont( "Solar_B2_2", { font = "Carbon Bold", size = 50, weight = 0 } )
-surface.CreateFont( "Solar_C_1", { font = "Consolas", size = 32, weight = 0 } )
-surface.CreateFont( "Solar_C_2", { font = "Consolas", size = 20, weight = 0 } )
+surface.CreateFont( "Solar_A_1", { font = "Arial ", size = 000030, weight = 1000 } )
+surface.CreateFont( "Solar_A_2", { font = "Arial", size = 000043, weight = 0 } )
+surface.CreateFont( "Solar_A_3", { font = "Arial", size = 000026, weight = 0 } )
+surface.CreateFont( "Solar_A_4", { font = "Arial", size = 000060, weight = 0 } )
+surface.CreateFont( "Solar_A_5", { font = "Arial", size = 000022, weight = 0 } )
+surface.CreateFont( "Solar_B_1", { font = "Arial", size = 0000120, weight = 0 } )
+surface.CreateFont( "Solar_B_2", { font = "Arial", size = 000070, weight = 0 } )
+surface.CreateFont( "Solar_B2_1", { font = "Arial", size = 0000100, weight = 0 } )
+surface.CreateFont( "Solar_B2_2", { font = "Arial", size = 000050, weight = 0 } )
+surface.CreateFont( "Solar_C_1", { font = "Arial ", size = 000032, weight = 0 } )
+surface.CreateFont( "Solar_C_2", { font = "Arial ", size = 000020, weight = 0 } )
 
 local genfonts = {
 }
@@ -441,72 +441,6 @@ moves.ammo2.func = function( data ) --------------------------------------------
 end ------------------------------------------------
 moves.ammo2.pos = Vector( 95 - (200*0.1), 510, -35 )
 moves.ammo2.ang = Angle( -20, 0, 0 )
-
-local papi1 = {
-	--[[{
-		["Title"] = "REAR SIGHT",
-		["Subtitle"] = "Optical device that draws the user's sight.",
-		["Subtitle2"] = "Integrated Carry Handle",
-		["SortOrder"] = 1,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_rs_kac.png", "mips smooth")
-	},
-	{
-		["Title"] = "OPTICAL SIGHT",
-		["Subtitle"] = "Optical device that draws the user's sight.",
-		["Subtitle2"] = "Integrated Carry Handle",
-		["SortOrder"] = 1.5,
-		["Icon"] = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth")
-	},
-	{
-		["Title"] = "FRONT SIGHT",
-		["Subtitle"] = "Post used to create a line of aim and align the weapon.",
-		["Subtitle2"] = "Integrated Front Sight",
-		["SortOrder"] = 2,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_fs_kac.png", "mips smooth")
-	},
-	{
-		["Title"] = "BARREL",
-		["Subtitle"] = "The length of the barrel enhances the range of the projectile.",
-		["Subtitle2"] = "20\" Standard Barrel",
-		["SortOrder"] = 3,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_barrel_20.png", "mips smooth")
-	},
-	{
-		["Title"] = "HANDGUARD",
-		["Subtitle"] = "The part you hold on to.",
-		["Subtitle2"] = "Standard Ribbed Handguard",
-		["SortOrder"] = 4,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_hg_ribbed.png", "mips smooth")
-	},
-	{
-		["Title"] = "MUZZLE",
-		["Subtitle"] = "Attach a variety of brakes, flash hiders and suppressors.",
-		["Subtitle2"] = "Standard Flash Hider",
-		["SortOrder"] = 5,
-		["Icon"] = Material("entities/att/acwatt_uc_muzzle_fhider1.png", "mips smooth")
-	},
-	{
-		["Title"] = "UPPER RECEIVER",
-		["Subtitle"] = "Contains the bolt carrier group.",
-		["Subtitle2"] = "Standard 5.56mm Upper",
-		["SortOrder"] = 6,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_receiver_auto.png", "mips smooth")
-	},
-	{
-		["Title"] = "LOWER RECEIVER",
-		["Subtitle"] = "Contains the trigger group and hammer.",
-		["Subtitle2"] = "Standard Burst Lower",
-		["SortOrder"] = 7,
-		["Icon"] = Material("entities/att/acwatt_ud_m16_receiver_default.png", "mips smooth")
-	},
-	{
-		["Title"] = "UNDERBARREL",
-		["Subtitle"] = "Attach a variety of foregrips and underslung weapons.",
-		["Subtitle2"] = "None",
-		["SortOrder"] = 8,
-		["Icon"] = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth")
-	},]]
-}
 
 local test_attachments = {
 	{
