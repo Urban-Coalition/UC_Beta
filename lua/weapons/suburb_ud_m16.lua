@@ -180,7 +180,7 @@ SWEP.Animations				= {
 		Time = 2.4,
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
-			{ t = 0.3,			s = p1.."magout_empty.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
 			{ t = 1.0,			s = p1.."struggle.ogg" },
 			{ t = 0.95,			s = p1.."magin.ogg" },
 			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
