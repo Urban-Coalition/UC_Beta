@@ -729,6 +729,7 @@ function SWEP:CalcView( ply, pos, ang, fov )
 		local addy = Angle()
 		addy:Set( result.Ang )
 		addy:Add( self.CameraCorrection or angle_zero )
+		addy:Mul( GetConVar("uc_cl_cammult"):GetFloat() )
 		ang:Add( addy )
 	end
 	return pos, ang, fov
