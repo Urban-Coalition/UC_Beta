@@ -143,6 +143,10 @@ SWEP.Animations				= {
 		Source = "draw",
 		ReloadingTime = 0.3,
 		StopSightTime = 0.1,
+		Events = {
+			{ t = 0,			s = Ssnd.draw_pistol },
+			{ t = 0.1,			s = p0.."raise.ogg", },
+		},
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
@@ -151,13 +155,13 @@ SWEP.Animations				= {
 	},
 	["holster"]	= {
 		Source = "holster",
-		Time = 0.2,
-		HolsterTime = 0.15,
+		Time = 0.3,
+		HolsterTime = 0.1,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
-		Time = 0.2,
-		HolsterTime = 0.15,
+		Time = 0.3,
+		HolsterTime = 0.1,
 	},
 	["fire"]	= {
 		Source = "fire",

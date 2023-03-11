@@ -6,6 +6,7 @@ UC.sounds = {}
 Ssnd = UC.sounds
 
 local p0 = ")arccw_uc/common/"
+local p1 = ")weapons/arccw_ud/glock/"
 UC.sounds.rottle = {
 	p0.."cloth_1.ogg",
 	p0.."cloth_2.ogg",
@@ -24,4 +25,21 @@ UC.sounds.rattlepistol = {
 	p0.."pistol_rattle_1.ogg",
 	p0.."pistol_rattle_2.ogg",
 	p0.."pistol_rattle_3.ogg",
+}
+UC.sounds.draw_pistol = {
+	p1 .. "draw.ogg",
+}
+UC.sounds.draw_rifle = {
+}
+UC.sounds.draw_shotgun = {
+}
+UC.sounds.draw_heavy = {
+}
+UC.sounds.holster_pistol = {
+}
+UC.sounds.holster_rifle = {
+}
+UC.sounds.holster_shotgun = {
+}
+UC.sounds.holster_heavy = {
 }
