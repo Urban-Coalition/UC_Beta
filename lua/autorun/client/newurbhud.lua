@@ -17,6 +17,7 @@ local S_WHITE = Color( 255, 255, 255, 255 )
 local S_SHADOW = Color( 30, 30, 30, 160 )
 local S_GRAY = Color( 60, 60, 60, 255 )
 local S_BLACK = Color( 0, 0, 0, 255 )
+local S_NO = Color( 0, 0, 0, 0 )
 
 local S_ARMOR = color_white
 
@@ -24,6 +25,44 @@ local S_ARMOR_BLUE = Color( 0, 202, 255, 255 )
 local S_ARMOR_YELLOW = Color( 255, 210, 0, 255 )
 local S_ARMOR_BLUE_MAT = Material( "solar/armor2.png", "smooth" )
 local S_ARMOR_YELLOW_MAT = Material( "solar/armor.png", "smooth" )
+
+local S_AMMO = {
+	["pistol"] = {
+		mat = Material( "solar/ammo/pistol.png", "smooth" ),
+		gap = 8,
+		width = 18,
+		height = 18,
+		start = 7,
+	},
+	["ar2"] = {
+		mat = Material( "solar/ammo/rifle.png", "smooth" ),
+		gap = 5,
+		width = 18,
+		height = 18,
+		start = 9,
+	},
+	["smg1"] = {
+		mat = Material( "solar/ammo/rifle.png", "smooth" ),
+		gap = 5,
+		width = 18,
+		height = 18,
+		start = 9,
+	},
+	["smg1_mg"] = {
+		mat = Material( "solar/ammo/rifle.png", "smooth" ),
+		gap = 5,
+		width = 18,
+		height = 9,
+		start = 0,
+	},
+	["buckshot"] = {
+		mat = Material( "solar/ammo/shotgun.png", "smooth" ),
+		gap = 8,
+		width = 22,
+		height = 22,
+		start = 9,
+	},
+}
 
 local globalweed = 3
 local globalweed2 = 2
@@ -41,12 +80,7 @@ surface.CreateFont( "Solar_B2_2", { font = "Carbon Bold", size = 50, weight = 0 
 surface.CreateFont( "Solar_C_1", { font = "Consolas", size = 32, weight = 0 } )
 surface.CreateFont( "Solar_C_2", { font = "Consolas", size = 20, weight = 0 } )
 
-local CF_NUM = "Carbon Bold"
-
 local genfonts = {
-	["Consolas"] = {
-		12,
-	}
 }
 
 function cf_get( name, size )
@@ -80,7 +114,7 @@ local function SolarEnabled()
 	if IsValid(p) and IsValid(p:GetActiveWeapon()) and p:GetActiveWeapon().Suburb then
 		s_wep = true
 	end
-	return ((s_wep and true) or (!s_wep and C_SOLARALL:GetBool())) and C_SOLAR:GetBool()
+	return (s_wep and true or C_SOLARALL:GetBool()) and C_SOLAR:GetBool()
 end
 
 local moves = {}
@@ -93,6 +127,7 @@ moves.health.func = function( data ) -------------------------------------------
 	local i_a = data.p:Armor()/data.p:GetMaxArmor()
 	local extra = -5
 	local agap = (i_a > 0) and agapa or 0
+	local wid = 340
 
 	local potal = Vector()
 	potal:Add( moves.health.pos )
@@ -111,18 +146,19 @@ moves.health.func = function( data ) -------------------------------------------
 		local he = 110
 		surface.SetMaterial( grad_corn_bl )
 		surface.SetDrawColor( Color( 60, 60, 60, 255 ))
-		surface.DrawTexturedRect( 0, 0, 280, he )
+		surface.DrawTexturedRect( 4, 0, wid, he )
 		surface.SetDrawColor( Color( 40, 40, 40, 255 ))
-		surface.DrawTexturedRect( 0, he*0.5, 280*0.5, he*0.5 )
+		surface.DrawTexturedRect( 4, he*0.5, wid*0.5, he*0.5 )
 
 		surface.SetMaterial( grad_right )
 		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-		surface.DrawTexturedRect( 0, he+0, 280, 2 )
-		surface.DrawTexturedRect( 0, he+0, 280, 2 )
+		surface.DrawTexturedRect( 0, he+2, wid, 2 )
+		surface.DrawTexturedRect( 0, he+2, wid, 2 )
 
 		surface.SetMaterial( grad_up )
 		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-		surface.DrawTexturedRect( 0, 0, 2, he )
+		surface.DrawTexturedRect( 0, 2, 2, he+2 )
+		surface.DrawTexturedRect( 0, 2, 2, he+2 )
 	cam.End3D2D()
 
 	for i=1, 2 do
@@ -139,7 +175,7 @@ moves.health.func = function( data ) -------------------------------------------
 				draw.DrawText(
 					data.p:Armor(),
 					cf_get( "Carbon Bold", 30 ),
-					(280*(1/8)),
+					(wid*(1/8)),
 					(65)+extra+agap,
 					i==1 and S_SHADOW or S_ARMOR,
 					TEXT_ALIGN_LEFT,
@@ -147,143 +183,163 @@ moves.health.func = function( data ) -------------------------------------------
 				)
 				surface.SetDrawColor( i==1 and S_SHADOW or S_ARMOR )
 				sumshit = (i==1 and 1 or i_a)
-				surface.DrawRect( (280*.125), 100 - 15 + extra, (280*.75) * sumshit, 10 )
+				surface.DrawRect( (wid*.125), 100 - 15 + extra, (wid*.75) * sumshit, 10 )
 
 				-- Armor icon
 				surface.SetFont( cf_get( "Carbon Bold", 30 ) )
 				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Armor())
-				surface.DrawTexturedRect( (280*(1/8)) + blah + 4, 69+agap, 12, 12 )
-				
-				surface.SetFont( cf_get( "Carbon Bold", 80 ) )
-				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
-				draw.DrawText(
-					"+",
-					cf_get( "Carbon Bold", 50 ),
-					(280*(7/8) - blah - 10),
-					(30)+extra+agap,
-					col,
-					TEXT_ALIGN_RIGHT,
-					TEXT_ALIGN_TOP
-				)
-				draw.DrawText(
-					data.p:Health(),
-					cf_get( "Carbon Bold", 80 ),
-					(280*(7/8)),
-					(25)+extra+agap,
-					col,
-					TEXT_ALIGN_RIGHT,
-					TEXT_ALIGN_TOP
-				)
-			else
-				surface.SetFont( cf_get( "Carbon Bold", 80 ) )
-				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
-				draw.DrawText(
-					"+",
-					cf_get( "Carbon Bold", 50 ),
-					(280*(7/8) - blah - 10),
-					(30)+extra+agap,
-					col,
-					TEXT_ALIGN_RIGHT,
-					TEXT_ALIGN_TOP
-				)
-				draw.DrawText(
-					data.p:Health(),
-					cf_get( "Carbon Bold", 80 ),
-					(280*(7/8)),
-					(25)+extra+agap,
-					col,
-					TEXT_ALIGN_RIGHT,
-					TEXT_ALIGN_TOP
-				)
+				surface.DrawTexturedRect( (wid*(1/8)) + blah + 4, 69+agap, 12, 12 )
 			end
+			surface.SetFont( cf_get( "Carbon Bold", 80 ) )
+			local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
+			draw.DrawText(
+				"+",
+				cf_get( "Carbon Bold", 50 ),
+				(wid*(7/8) - blah - 10),
+				(30)+extra+agap,
+				col,
+				TEXT_ALIGN_RIGHT,
+				TEXT_ALIGN_TOP
+			)
+			draw.DrawText(
+				data.p:Health(),
+				cf_get( "Carbon Bold", 80 ),
+				(wid*(7/8)),
+				(25)+extra+agap,
+				col,
+				TEXT_ALIGN_RIGHT,
+				TEXT_ALIGN_TOP
+			)
 			
 			-- Health bar
 			surface.SetDrawColor( i==1 and S_SHADOW or S_WHITE )
 			local sumshit = (i==1 and 1 or i_h)
-			surface.DrawRect( (280*.125), 100 + extra, (280*.75) * sumshit, 10 )
+			surface.DrawRect( (wid*.125), 100 + extra, (wid*.75) * sumshit, 10 )
 		cam.End3D2D()
 	end
 	end
 end ------------------------------------------------
-moves.health.pos = Vector( -14 + ((ScrW()/ScrH()) * -32), 300, -32 )
+moves.health.pos = Vector( -17 + ((ScrW()/ScrH()) * -32), 300, -32 )
+-- moves.health.pos = Vector( -14, 300, -32 )
 moves.health.ang = Angle( -20, 0, 0 )
 
 moves.ammo = {}
 moves.ammo.func = function( data ) ------------------------------------------------
 	if SolarEnabled() then
-	local w_clip = false
-	local w_ammo = false
-	local extra = 20
+		local w_clip = false
+		local w_clipm = false
+		local w_ammo = false
+		local extra = 0
+		local wid = 340
 
-	local w = data.p:GetActiveWeapon()
-	if IsValid(w) then
-		if w:Clip1() >= 0 then
-			w_clip = w:Clip1()
+		local w = data.p:GetActiveWeapon()
+		if IsValid(w) then
+			if w:Clip1() >= 0 then
+				w_clip = w:Clip1()
+			end
+			if w:GetMaxClip1() >= 0 then
+				w_clipm = w:GetMaxClip1()
+			end
+			if w:GetPrimaryAmmoType() >= 0 then
+				w_ammo = data.p:GetAmmoCount( w:GetPrimaryAmmoType() )
+			end
+		else
+			w = false
 		end
-		if w:GetPrimaryAmmoType() >= 0 then
-			w_ammo = data.p:GetAmmoCount( w:GetPrimaryAmmoType() )
-		end
-	else
-		w = false
-	end
 
-	if w and w_clip then
-		local potal = Vector()
-		potal:Add( moves.ammo.pos )
-		data.pos:Add( potal.x * ( data.eang:Right() ) )
-		data.pos:Add( potal.y * ( data.eang:Forward() ) )
-		data.pos:Add( potal.z * ( data.eang:Up() ) )
-	
-		local total = Angle()
-		total:Set( moves.ammo.ang )
-		data.ang:RotateAroundAxis( data.ang:Up(), total.y )
-		data.ang:RotateAroundAxis( data.ang:Right(), total.r )
-		data.ang:RotateAroundAxis( data.ang:Forward(), total.p )
-	
-		local weed = (data.ang:Up() * globalweed)
+		if w and w_clip then
+			local potal = Vector()
+			potal:Add( moves.ammo.pos )
+			data.pos:Add( potal.x * ( data.eang:Right() ) )
+			data.pos:Add( potal.y * ( data.eang:Forward() ) )
+			data.pos:Add( potal.z * ( data.eang:Up() ) )
+		
+			local total = Angle()
+			total:Set( moves.ammo.ang )
+			data.ang:RotateAroundAxis( data.ang:Up(), total.y )
+			data.ang:RotateAroundAxis( data.ang:Right(), total.r )
+			data.ang:RotateAroundAxis( data.ang:Forward(), total.p )
+		
+			local weed = (data.ang:Up() * globalweed)
 
-		cam.Start3D2D( data.pos, data.ang, 0.1 )
-			surface.SetMaterial( grad_down )
-			surface.SetDrawColor( cs2 )
-			surface.DrawTexturedRect( 0, 0, 450, 180 )
-		cam.End3D2D()
-
-		for i=1, 2 do
-			local col = i == 1 and cs or cw
-			cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
-				draw.DrawText(
-					w_clip,
-					"Solar_B_1",
-					220,
-					10+extra,
-					col,
-					TEXT_ALIGN_RIGHT,
-					TEXT_ALIGN_TOP
-				)
-				draw.DrawText(
-					string.upper( w.GetFiremodeName and w:GetFiremodeName() or "" ),
-					"Solar_A_1",
-					224,
-					80+extra,
-					col,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_TOP
-				)
-				draw.DrawText(
-					w_ammo,
-					"Solar_B_2",
-					220,
-					18+extra,
-					col,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_TOP
-				)
+			cam.Start3D2D( data.pos, data.ang, 0.1 )
+				local he = 110
+				surface.SetMaterial( grad_corn_br )
+				surface.SetDrawColor( Color( 60, 60, 60, 255 ))
+				surface.DrawTexturedRect( 0, 0, wid, he )
+				surface.SetDrawColor( Color( 40, 40, 40, 255 ))
+				surface.DrawTexturedRect( wid*0.5, he*0.5, wid*0.5, he*0.5 )
+		
+				surface.SetMaterial( grad_left )
+				surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+				surface.DrawTexturedRect( 0, he+2, wid+4, 2 )
+				surface.DrawTexturedRect( 0, he+2, wid+4, 2 )
+		
+				surface.SetMaterial( grad_up )
+				surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+				surface.DrawTexturedRect( wid+2, 0, 2, he+2 )
+				surface.DrawTexturedRect( wid+2, 0, 2, he+2 )
 			cam.End3D2D()
+			
+			local wah = S_AMMO["pistol"]
+			if S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))] then
+				wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))]
+				if w_clipm > 40 and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"] then
+					wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"]
+				end
+			end
+			local nw, nh, ns, ng = wah.width, wah.height, wah.start, wah.gap--2, 16
+			surface.SetMaterial(wah.mat)
+			surface.SetFont( cf_get( "Carbon Bold", 60 ) )
+			local adsp = w_ammo
+			if adsp >= 1000 then
+				adsp = adsp / 1000
+				adsp = math.floor( adsp )
+				adsp = adsp .. "k"
+			end
+			local ts = surface.GetTextSize( "0" ) * #tostring(adsp)
+			for i=1, 2 do
+				local col = i == 1 and S_SHADOW or S_WHITE
+				cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
+					if w_clipm > 40 then
+						for c=1, 40 do
+							surface.SetDrawColor( i==1 and S_SHADOW or (c<=w_clip) and S_WHITE or S_NO )
+							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - (((c%40)-0.5) * ng), 84 - (ns) - (10*math.floor(c/40)), nw, nh )
+						end
+						for c=1, w_clipm do
+							print( c, math.floor(c/40), c%40 )
+						end
+					else
+						for c=1, w_clipm do
+							surface.SetDrawColor( i==1 and S_SHADOW or (c<=w_clip) and S_WHITE or S_NO )
+							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((c-0.5) * ng), 84 - (ns), nw, nh )
+						end
+					end
+					draw.DrawText(
+						string.upper( w.GetFiremodeName and w:GetFiremodeName() or "" ),
+						cf_get( "Carbon Bold", 20 ),
+						320 - ts,
+						55+extra,
+						col,
+						TEXT_ALIGN_RIGHT,
+						TEXT_ALIGN_BOTTOM
+					)
+					draw.DrawText(
+						adsp,
+						cf_get( "Carbon Bold", 60 ),
+						320,
+						45+extra,
+						col,
+						TEXT_ALIGN_RIGHT,
+						TEXT_ALIGN_TOP
+					)
+				cam.End3D2D()
+			end
 		end
-	end
 	end
 end ------------------------------------------------
-moves.ammo.pos = Vector( 95 - (350*0.1), 300, -45 )
+moves.ammo.pos = Vector( -17 + (ScrW()/ScrH() * 32), 300, -32 )
+--moves.ammo.pos = Vector( -28, 300, -32 )
 moves.ammo.ang = Angle( -20, 0, 0 )
 
 moves.ammo2 = {}
@@ -361,7 +417,7 @@ moves.ammo2.func = function( data ) --------------------------------------------
 	end
 	end
 end ------------------------------------------------
-moves.ammo2.pos = Vector( 95 - (200*0.1), 310, -35 )
+moves.ammo2.pos = Vector( 95 - (200*0.1), 510, -35 )
 moves.ammo2.ang = Angle( -20, 0, 0 )
 
 local papi1 = {
@@ -682,7 +738,7 @@ moves.test1.func = function( data ) --------------------------------------------
 
 	end
 end ------------------------------------------------
-moves.test1.pos = Vector( -72/2 - 36, 230, 72/2 )
+moves.test1.pos = Vector( -72/2 - 36, 330, 72/2 )
 moves.test1.ang = Angle( -10, 0, 0 )
 
 --moves.test1.pos = Vector( -72/2 - 36, 230, 72/2 )
@@ -796,7 +852,7 @@ moves.test2.func = function( data ) --------------------------------------------
 		end
 	end
 end ------------------------------------------------
-moves.test2.pos = Vector( -72/2 + 36, 230, 72/2 )
+moves.test2.pos = Vector( -72/2 + 36, 330, 72/2 )
 moves.test2.ang = Angle( -10, 0, 0 )
 
 hook.Add("HUDPaint", "Solar", function()

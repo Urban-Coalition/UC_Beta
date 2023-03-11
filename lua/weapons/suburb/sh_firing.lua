@@ -23,9 +23,9 @@ function SWEP:GetFiremodeName(cust)
 	elseif ftn.Mode == math.huge then
 		ftn = "Automatic"
 	elseif ftn.Mode == 1 then
-		ftn = "Semi-automatic"
+		ftn = "Semi-auto"
 	else
-		ftn = ftn.Mode .. "-round burst"
+		ftn = ftn.Mode .. "-burst"
 	end
 
 	return ftn

@@ -18,6 +18,9 @@ SWEP.WorldModel				= "models/weapons/arccw/c_ud_uzi.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
 SWEP.ViewModelFOV			= 72
 
+SWEP.DefaultBodygroups = "0 0 0 1"
+SWEP.DefaultSkin = 0
+
 SWEP.ActivePose = {
 	Pos = Vector( 0.4, -3, 0.7 ),
 	Ang = Angle( 0, 0, -3 )

@@ -174,12 +174,12 @@ local yep = {
 
 SWEP.CL_Firemode = 1
 function SWEP:SetFiremode(x)
-	if (!game.SinglePlayer() and CLIENT) then self.CL_Firemode = x end
+	--if (!game.SinglePlayer() and CLIENT) then self.CL_Firemode = x end
 	self:SetNWFiremode(x)
 end
 
 function SWEP:GetFiremode()
-	if (!game.SinglePlayer() and CLIENT) then return self.CL_Firemode end
+	--if (!game.SinglePlayer() and CLIENT) then return self.CL_Firemode end
 	return self:GetNWFiremode()
 end
 
