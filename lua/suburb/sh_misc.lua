@@ -11,6 +11,7 @@ UC.sounds.rottle = {
 	p0.."cloth_2.ogg",
 	p0.."cloth_3.ogg",
 	p0.."cloth_4.ogg",
+	p0.."cloth_5.ogg",
 	p0.."cloth_6.ogg",
 	p0.."rattle.ogg",
 }
