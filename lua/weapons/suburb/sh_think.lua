@@ -69,7 +69,7 @@ function SWEP:Think()
 		movem = math.TimeFraction( 110, 170, movem )
 		movem = math.Clamp( movem, 0, 1 )
 		self:SetDISP_Air( math.Approach( self:GetDISP_Air(), p:OnGround() and 0 or 1, FrameTime() / 0.15 ) )
-		self:SetDISP_Move( math.Approach( self:GetDISP_Move(), movem, FrameTime() / 0.15 ) )
+		self:SetDISP_Move( math.Approach( self:GetDISP_Move(), movem, FrameTime() / 0.33 ) )
 		self:SetDISP_Crouch( math.Approach( self:GetDISP_Crouch(), p:Crouching() and 1 or 0, FrameTime() / 0.4 ) )
 		
 		local spmp = (SERVER and game.SinglePlayer()) or ( !game.SinglePlayer() and CLIENT and IsFirstTimePredicted() )

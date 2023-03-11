@@ -221,11 +221,11 @@ end
 function SWEP:GetDispersion()
 	local disp = self.Dispersion
 
-	disp = disp + ( self:GetDISP_Air() * self.Dispersion_Air )
-	disp = disp + ( self:GetDISP_Move() * self.Dispersion_Move )
+	disp = Lerp( self:GetAim(), disp, disp * self.Dispersion_Sights )
 
 	disp = Lerp( self:GetDISP_Crouch(), disp, disp * self.Dispersion_Crouch )
-	disp = Lerp( self:GetAim(), disp, disp * self.Dispersion_Sights )
+	disp = disp + ( self:GetDISP_Move() * self.Dispersion_Move )
+	disp = disp + ( self:GetDISP_Air() * self.Dispersion_Air )
 
 	return disp
 end

@@ -19,17 +19,39 @@ function SWEP:DoDrawCrosshair()
 	local ply = self:GetOwner()
 	
 	local s, w, h = ss, ScrW(), ScrH()
-	local pl_x, pl_y = w/2, h/2
+
+	local tr = util.TraceLine({
+		start = LocalPlayer():EyePos(),
+		endpos = LocalPlayer():EyePos() + (LocalPlayer():EyeAngles():Forward() * 8192 * 4),
+		filter = LocalPlayer(),
+		ignoreworld = true,
+	})
+	tr = tr.HitPos:ToScreen()
+	local tw, th = tr.x, tr.y
+
+	local pl_x, pl_y = tw, th--w/2, h/2
 	local ps_x, ps_y = pl_x, pl_y
 
 	local dispersion = math.rad(self:GetDispersion())
+	local accuracy = math.rad(self.Accuracy)
 	cam.Start3D()
 		local lool = ( EyePos() + ( EyeAngles():Forward() ) + ( dispersion * EyeAngles():Up() ) ):ToScreen()
+		local lool2 = ( EyePos() + ( EyeAngles():Forward() ) + ( accuracy * EyeAngles():Up() ) ):ToScreen()
 	cam.End3D()
 
-	local gau = (ScrH()/2)
-	gau = ( gau - lool.y )
-	gap = gau
+	local gap = (ScrH()/2)
+	gap = ( gap - lool.y )
+
+	local gap_a = (ScrH()/2)
+	gap_a = ( gap_a - lool2.y )
+
+	if GetConVar("developer"):GetInt() > 0 then
+		surface.SetDrawColor( 255, 0, 0 )
+		surface.DrawLine( 0, th, w, th )
+		surface.DrawLine( tw, 0, tw, h )
+		surface.DrawCircle( tw, th, gap, 255, 255, 255, 255 )
+		surface.DrawCircle( tw, th, gap_a, 0, 255, 255, 255 )
+	end
 
 	local touse1 = col_1
 	local touse2 = col_2
