@@ -70,12 +70,12 @@ SWEP.Sound_TailEXT				= {
 	{ s = tail.."fire-dist-12ga-pasg-ext-06.ogg" },
 }
 SWEP.Sound_TailINT				= {
-	{ s = p0.."fire-dist-int-rifle-01.ogg" },
-	{ s = p0.."fire-dist-int-rifle-02.ogg" },
-	{ s = p0.."fire-dist-int-rifle-03.ogg" },
-	{ s = p0.."fire-dist-int-rifle-04.ogg" },
-	{ s = p0.."fire-dist-int-rifle-05.ogg" },
-	{ s = p0.."fire-dist-int-rifle-06.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-int-01.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-int-02.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-int-03.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-int-04.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-int-05.ogg" },
+	{ s = tail.."fire-dist-12ga-pasg-int-06.ogg" },
 }
 
 SWEP.MuzzleEffect						= "muzzleflash_shotgun"
