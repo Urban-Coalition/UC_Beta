@@ -226,7 +226,7 @@ function SWEP:DrawHUD()
 		end
 	end
 
-	if true then -- Hint system
+	if false then -- Hint system
 		local bx, by = s( 180 ), s( 18 )
 		local shad = s( 1 )
 		local cx = s( 4 )

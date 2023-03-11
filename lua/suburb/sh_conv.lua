@@ -8,4 +8,7 @@ if CLIENT then
 	CreateClientConVar("uc_dev_aimcorrect", 0, false, false)
 	CreateClientConVar("uc_cl_aimtoggle", 0, true, true)
 	CreateClientConVar("newurb_enabled", 0)
+	CreateClientConVar("solar", 1)
+	CreateClientConVar("solar_all", 0)
+	CreateClientConVar("solar_armor", 0) -- Power or shield
 end

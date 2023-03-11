@@ -29,7 +29,7 @@ SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
 SWEP.ViewModelFOV			= 72
 
 SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 1"
-SWEP.DefaultSkin = 0
+SWEP.DefaultSkin = 1
 
 SWEP.ActivePose = {
 	Pos = Vector( -0.6, -4, 0.25 ),

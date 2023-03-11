@@ -7,7 +7,7 @@ SWEP.Spawnable				= true
 --
 SWEP.PrintName				= "Glock 17"
 SWEP.Category				= "Urban Coalition"
-SWEP.Description			= [[Iconic 9x19mm pistol.]]
+SWEP.Description			= [[9x19mm pistol]]
 SWEP.Trivia = {
 	"Year",
 	"1989",

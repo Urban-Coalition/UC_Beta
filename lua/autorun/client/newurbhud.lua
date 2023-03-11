@@ -7,11 +7,23 @@ local grad_left = Material( "solar/gradient_left.png", "")
 local grad_right = Material( "solar/gradient_right.png", "")
 local test3 = Material( "gui/center_gradient", "")
 
-local cw = Color( 224, 240, 245, 255 )
-local cs = Color( 25, 62, 77, 127 )
-local cs2 = Color( 39, 73, 85, 255 )
+local cw = Color( 224, 0, 0, 255 )
+local cs = Color( 25, 0, 0, 127 )
+local cs2 = Color( 39, 0, 0, 255 )
 
-local globalweed = 7
+local S_WHITE = Color( 255, 255, 255, 255 )
+local S_SHADOW = Color( 30, 30, 30, 160 )
+local S_GRAY = Color( 60, 60, 60, 255 )
+local S_BLACK = Color( 0, 0, 0, 255 )
+
+local S_ARMOR = color_white
+
+local S_ARMOR_BLUE = Color( 0, 202, 255, 255 )
+local S_ARMOR_YELLOW = Color( 255, 210, 0, 255 )
+local S_ARMOR_BLUE_MAT = Material( "solar/armor2.png", "smooth" )
+local S_ARMOR_YELLOW_MAT = Material( "solar/armor.png", "smooth" )
+
+local globalweed = 3
 local globalweed2 = 2
 local globalweed3 = 5
 
@@ -27,13 +39,58 @@ surface.CreateFont( "Solar_B2_2", { font = "Carbon Bold", size = 50, weight = 0 
 surface.CreateFont( "Solar_C_1", { font = "Consolas", size = 32, weight = 0 } )
 surface.CreateFont( "Solar_C_2", { font = "Consolas", size = 20, weight = 0 } )
 
+local CF_NUM = "Carbon Bold"
+
+local genfonts = {
+	["Consolas"] = {
+		12,
+	}
+}
+
+function cf_get( name, size )
+	local this = "Solar_" .. name .. "_" .. size
+	if genfonts[name] then
+		-- print("Font " .. name .. " exists, checking for size " .. size)
+		if genfonts[name][size] then
+			-- print("Font " .. name .. " at size " .. size .. " exists")
+			return this
+		end
+	else
+		genfonts[name] = {}
+	end
+	surface.CreateFont( this, {
+		font = name,
+		size = size,
+		weight = 0,
+		antialias = true,
+	})
+	genfonts[name][size] = true
+	return this
+end
+
+local C_SOLAR = GetConVar("solar")
+local C_SOLARALL = GetConVar("solar_all")
+local C_ARMOR_CONV = GetConVar( "solar_armor" )
+
+local function SolarEnabled()
+	local p = LocalPlayer()
+	local s_wep = false
+	if IsValid(p) and IsValid(p:GetActiveWeapon()) and p:GetActiveWeapon().Suburb then
+		s_wep = true
+	end
+	return ((s_wep and true) or (!s_wep and C_SOLARALL:GetBool())) and C_SOLAR:GetBool()
+end
+
 local moves = {}
 moves.fix = Angle( 90, -90, 0 )
 moves.health = {}
-local agap = (280+50)
+local agapa = -15
 moves.health.func = function( data ) ------------------------------------------------
-	if GetConVar("newurb_enabled"):GetBool() then
-	local extra = 20
+	if SolarEnabled() then
+	local i_h = data.p:Health()/data.p:GetMaxHealth()
+	local i_a = data.p:Armor()/data.p:GetMaxArmor()
+	local extra = -5
+	local agap = (i_a > 0) and agapa or 0
 
 	local potal = Vector()
 	potal:Add( moves.health.pos )
@@ -48,51 +105,111 @@ moves.health.func = function( data ) -------------------------------------------
 	data.ang:RotateAroundAxis( data.ang:Forward(), total.p )
 
 	local weed = (data.ang:Up() * globalweed)
+	cam.Start3D2D( data.pos, data.ang, 0.1 )
+		local he = 110
+		surface.SetMaterial( grad_up )
+		surface.SetDrawColor( Color( 60, 60, 60, 255 ))
+		surface.DrawTexturedRect( 0, 0, 280, he )
+		
+		surface.SetDrawColor( Color( 30, 30, 30, 255 ))
+		surface.DrawTexturedRect( 0, math.Round(he*(1/3)), 280, math.Round(he*(2/3)) )
 
-	for b=1, 2 do
-		if data.p:Armor() == 0 and b==2 then continue end
-		cam.Start3D2D( data.pos, data.ang, 0.1 )
-			surface.SetMaterial( grad_down )
-			surface.SetDrawColor( cs2 )
-			surface.DrawTexturedRect( (b==2 and agap or 0), 0, 280, 180 )
+		surface.SetDrawColor( Color( 0, 0, 0, 127 ) )
+		surface.DrawTexturedRect( 0, he, 280, 5 )
+
+		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
+		surface.DrawOutlinedRect( 0, he, 280, 5, 2 )
+
+		surface.DrawTexturedRect( 0, 0, 2, he )
+		surface.DrawTexturedRect( 0 + (280-2), 0, 2, he )
+	cam.End3D2D()
+
+	for i=1, 2 do
+		cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
+			local col = i == 1 and S_SHADOW or S_WHITE
+			if (i_a > 0) then
+				if C_ARMOR_CONV:GetBool() then
+					surface.SetMaterial( S_ARMOR_YELLOW_MAT )
+					S_ARMOR = S_ARMOR_YELLOW
+				else
+					surface.SetMaterial( S_ARMOR_BLUE_MAT )
+					S_ARMOR = S_ARMOR_BLUE
+				end
+				draw.DrawText(
+					data.p:Armor(),
+					cf_get( "Carbon Bold", 30 ),
+					(280*(1/8)),
+					(70)+extra+agap,
+					i==1 and S_SHADOW or S_ARMOR,
+					TEXT_ALIGN_LEFT,
+					TEXT_ALIGN_TOP
+				)
+				surface.SetDrawColor( i==1 and S_SHADOW or S_ARMOR )
+				sumshit = (i==1 and 1 or i_a)
+				surface.DrawRect( (280*.125), 100 - 15 + extra, (280*.75) * sumshit, 10 )
+
+				-- Armor icon
+				surface.SetFont( cf_get( "Carbon Bold", 30 ) )
+				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Armor())
+				surface.DrawTexturedRect( (280*(1/8)) + blah + 4, 74+agap, 12, 12 )
+				
+				surface.SetFont( cf_get( "Carbon Bold", 80 ) )
+				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
+				draw.DrawText(
+					"+",
+					cf_get( "Carbon Bold", 50 ),
+					(280*(7/8) - blah - 10),
+					(30)+extra+agap,
+					col,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+				draw.DrawText(
+					data.p:Health(),
+					cf_get( "Carbon Bold", 80 ),
+					(280*(7/8)),
+					(25)+extra+agap,
+					col,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+			else
+				surface.SetFont( cf_get( "Carbon Bold", 80 ) )
+				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
+				draw.DrawText(
+					"+",
+					cf_get( "Carbon Bold", 50 ),
+					(280*(7/8) - blah - 10),
+					(30)+extra+agap,
+					col,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+				draw.DrawText(
+					data.p:Health(),
+					cf_get( "Carbon Bold", 80 ),
+					(280*(7/8)),
+					(25)+extra+agap,
+					col,
+					TEXT_ALIGN_RIGHT,
+					TEXT_ALIGN_TOP
+				)
+			end
+			
+			-- Health bar
+			surface.SetDrawColor( i==1 and S_SHADOW or S_WHITE )
+			local sumshit = (i==1 and 1 or i_h)
+			surface.DrawRect( (280*.125), 100 + extra, (280*.75) * sumshit, 10 )
 		cam.End3D2D()
-
-		for i=1, 2 do
-			cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
-				local col = i == 1 and cs or cw
-				draw.DrawText(
-					b==2 and "AP" or "HP",
-					"Solar_A_1",
-					65 + (b==2 and agap or 0),
-					4+extra,
-					col,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_TOP
-				)
-				draw.DrawText(
-					b==2 and data.p:Armor() or data.p:Health(),
-					"Solar_B_1",
-					55 + (b==2 and agap or 0),
-					10+extra,
-					col,
-					TEXT_ALIGN_LEFT,
-					TEXT_ALIGN_TOP
-				)
-				surface.SetDrawColor( col )
-				surface.DrawRect( 10 + (b==2 and agap or 0) + 40, 140, 200 * (i==1 and 1 or (b==2 and (data.p:Armor()/data.p:GetMaxArmor()) or (data.p:Health()/data.p:GetMaxHealth()))), 10 )
-				surface.DrawRect( 10 + (b==2 and agap or 0) - 6 + 40, 140, 3, 10 )
-				surface.DrawRect( 10 + (b==2 and agap or 0) + 200 + 3 + 40, 140, 3, 10 )
-			cam.End3D2D()
-		end
-		end
+	end
 	end
 end ------------------------------------------------
-moves.health.pos = Vector( -105, 300, -45 )
+moves.health.pos = Vector( -14 + ((16/9) * -32), 300, -32 )
 moves.health.ang = Angle( -20, 0, 0 )
 
 moves.ammo = {}
 moves.ammo.func = function( data ) ------------------------------------------------
-	if GetConVar("newurb_enabled"):GetBool() then
+	if SolarEnabled() then
 	local w_clip = false
 	local w_ammo = false
 	local extra = 20
@@ -170,7 +287,7 @@ moves.ammo.ang = Angle( -20, 0, 0 )
 
 moves.ammo2 = {}
 moves.ammo2.func = function( data ) ------------------------------------------------
-	if GetConVar("newurb_enabled"):GetBool() then
+	if SolarEnabled() then
 	local w_clip = false
 	local w_ammo = false
 	local extra = 20
@@ -709,7 +826,7 @@ hook.Add("HUDPaint", "Solar", function()
 	-- ang = Angle()
 
 	cam.IgnoreZ(true)
-	cam.Start3D( nil, nil, 40 )
+	cam.Start3D( nil, nil, 30 )
 		local sheet = { p = p, pos = pos, ang = ang, eang = eang, pre_pos = pre_pos, pre_ang = pre_ang }
 		for i, v in pairs( moves ) do
 			if !v.func then continue end
@@ -810,5 +927,5 @@ local hide = {
 }
 
 hook.Add( "HUDShouldDraw", "SolarHUD", function( name )
-	if GetConVar("newurb_enabled"):GetBool() and ( hide[ name ] ) then return false end
+	if SolarEnabled() and ( hide[ name ] ) then return false end
 end )
