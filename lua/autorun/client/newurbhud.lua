@@ -18,6 +18,7 @@ local S_SHADOW = Color( 30, 30, 30, 160 )
 local S_GRAY = Color( 60, 60, 60, 255 )
 local S_BLACK = Color( 0, 0, 0, 255 )
 local S_NO = Color( 0, 0, 0, 0 )
+local S_RED = Color( 255, 120, 120, 255 )
 
 local S_ARMOR = color_white
 
@@ -29,10 +30,21 @@ local S_ARMOR_YELLOW_MAT = Material( "solar/armor.png", "smooth" )
 local S_AMMO = {
 	["pistol"] = {
 		mat = Material( "solar/ammo/pistol.png", "smooth" ),
-		gap = 8,
-		width = 18,
+		gap = 6,
+		width = 14,
 		height = 18,
-		start = 7,
+		start = 8,
+		mg_at = 30,
+	},
+	["pistol_mg"] = {
+		mat = Material( "solar/ammo/pistol.png", "smooth" ),
+		gap = 6,
+		width = 14,
+		height = 6,
+		start = -4,
+		mg = true,
+		mg_max = 30,
+		mg_jump = 6,
 	},
 	["ar2"] = {
 		mat = Material( "solar/ammo/rifle.png", "smooth" ),
@@ -46,14 +58,18 @@ local S_AMMO = {
 		gap = 5,
 		width = 18,
 		height = 18,
-		start = 9,
+		start = 8,
+		mg_at = 50,
 	},
 	["smg1_mg"] = {
 		mat = Material( "solar/ammo/rifle.png", "smooth" ),
-		gap = 5,
-		width = 18,
-		height = 9,
-		start = 0,
+		gap = 8,
+		width = 32,
+		height = 4,
+		mg = true,
+		mg_max = 25,
+		mg_jump = 5,
+		start = -6,
 	},
 	["buckshot"] = {
 		mat = Material( "solar/ammo/shotgun.png", "smooth" ),
@@ -282,12 +298,17 @@ moves.ammo.func = function( data ) ---------------------------------------------
 			cam.End3D2D()
 			
 			local wah = S_AMMO["pistol"]
+			local mg = false
 			if S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))] then
 				wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))]
-				if w_clipm > 40 and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"] then
+				if w_clipm > (wah.mg_at or math.huge) and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"] then
 					wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"]
+					mg = wah.mg
+				elseif wah.mg then
+					mg = wah.mg
 				end
 			end
+			local mgmax = wah.mg_max
 			local nw, nh, ns, ng = wah.width, wah.height, wah.start, wah.gap--2, 16
 			surface.SetMaterial(wah.mat)
 			surface.SetFont( cf_get( "Carbon Bold", 60 ) )
@@ -301,17 +322,18 @@ moves.ammo.func = function( data ) ---------------------------------------------
 			for i=1, 2 do
 				local col = i == 1 and S_SHADOW or S_WHITE
 				cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
-					if w_clipm > 40 then
-						for c=1, 40 do
-							surface.SetDrawColor( i==1 and S_SHADOW or (c<=w_clip) and S_WHITE or S_NO )
-							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - (((c%40)-0.5) * ng), 84 - (ns) - (10*math.floor(c/40)), nw, nh )
+					if mg then
+						for c=0, math.max(w_clip, w_clipm)-1 do
+							local m1, m2 = c%mgmax, math.floor(c/mgmax)
+							surface.SetDrawColor( i==1 and S_SHADOW or (c+1>w_clipm) and S_RED or (c+1<=w_clip) and S_WHITE or S_NO )
+							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((m1+0.5) * ng), 84 - (ns) - (wah.mg_jump*m2), nw, nh )
 						end
-						for c=1, w_clipm do
-							print( c, math.floor(c/40), c%40 )
+						for c=0, w_clipm do
+							print( c, c/mgmax, math.floor(c/mgmax), c%mgmax )
 						end
 					else
-						for c=1, w_clipm do
-							surface.SetDrawColor( i==1 and S_SHADOW or (c<=w_clip) and S_WHITE or S_NO )
+						for c=1, math.max(w_clip, w_clipm) do
+							surface.SetDrawColor( i==1 and S_SHADOW or (c>w_clipm) and S_RED or (c<=w_clip) and S_WHITE or S_NO )
 							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((c-0.5) * ng), 84 - (ns), nw, nh )
 						end
 					end
