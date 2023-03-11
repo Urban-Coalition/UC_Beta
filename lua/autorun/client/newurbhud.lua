@@ -27,6 +27,8 @@ local S_ARMOR_YELLOW = Color( 255, 210, 0, 255 )
 local S_ARMOR_BLUE_MAT = Material( "solar/armor2.png", "smooth" )
 local S_ARMOR_YELLOW_MAT = Material( "solar/armor.png", "smooth" )
 
+local F_MAIN = "Carbon Bold"
+
 local S_AMMO = {
 	["pistol"] = {
 		mat = Material( "solar/ammo/pistol.png", "smooth" ),
@@ -59,7 +61,7 @@ local S_AMMO = {
 		width = 18,
 		height = 18,
 		start = 8,
-		mg_at = 50,
+		mg_at = 40,
 	},
 	["smg1_mg"] = {
 		mat = Material( "solar/ammo/rifle.png", "smooth" ),
@@ -84,7 +86,7 @@ local globalweed = 3
 local globalweed2 = 2
 local globalweed3 = 5
 
-surface.CreateFont( "Solar_A_1", { font = "Arial ", size = 000030, weight = 1000 } )
+surface.CreateFont( "Solar_A_1", { font = "Arial", size = 000030, weight = 1000 } )
 surface.CreateFont( "Solar_A_2", { font = "Arial", size = 000043, weight = 0 } )
 surface.CreateFont( "Solar_A_3", { font = "Arial", size = 000026, weight = 0 } )
 surface.CreateFont( "Solar_A_4", { font = "Arial", size = 000060, weight = 0 } )
@@ -190,7 +192,7 @@ moves.health.func = function( data ) -------------------------------------------
 				end
 				draw.DrawText(
 					data.p:Armor(),
-					cf_get( "Carbon Bold", 30 ),
+					cf_get( F_MAIN, 30 ),
 					(wid*(1/8)),
 					(65)+extra+agap,
 					i==1 and S_SHADOW or S_ARMOR,
@@ -202,15 +204,15 @@ moves.health.func = function( data ) -------------------------------------------
 				surface.DrawRect( (wid*.125), 100 - 15 + extra, (wid*.75) * sumshit, 10 )
 
 				-- Armor icon
-				surface.SetFont( cf_get( "Carbon Bold", 30 ) )
+				surface.SetFont( cf_get( F_MAIN, 30 ) )
 				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Armor())
 				surface.DrawTexturedRect( (wid*(1/8)) + blah + 4, 69+agap, 12, 12 )
 			end
-			surface.SetFont( cf_get( "Carbon Bold", 80 ) )
+			surface.SetFont( cf_get( F_MAIN, 80 ) )
 			local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
 			draw.DrawText(
 				"+",
-				cf_get( "Carbon Bold", 50 ),
+				cf_get( F_MAIN, 50 ),
 				(wid*(7/8) - blah - 10),
 				(30)+extra+agap,
 				col,
@@ -219,7 +221,7 @@ moves.health.func = function( data ) -------------------------------------------
 			)
 			draw.DrawText(
 				data.p:Health(),
-				cf_get( "Carbon Bold", 80 ),
+				cf_get( F_MAIN, 80 ),
 				(wid*(7/8)),
 				(25)+extra+agap,
 				col,
@@ -256,7 +258,9 @@ moves.ammo.func = function( data ) ---------------------------------------------
 			if w:GetMaxClip1() >= 0 then
 				w_clipm = w:GetMaxClip1()
 			end
-			if w:GetPrimaryAmmoType() >= 0 then
+			if w.HasInfiniteAmmo and w:HasInfiniteAmmo() then
+				w_ammo = "∞"
+			elseif w:GetPrimaryAmmoType() >= 0 then
 				w_ammo = data.p:GetAmmoCount( w:GetPrimaryAmmoType() )
 			end
 		else
@@ -299,21 +303,21 @@ moves.ammo.func = function( data ) ---------------------------------------------
 			
 			local wah = S_AMMO["pistol"]
 			local mg = false
-			if S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))] then
+			if w:GetPrimaryAmmoType() >= 0 and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))] then
 				wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))]
-				if w_clipm > (wah.mg_at or math.huge) and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"] then
-					wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"]
+				if wah.mg then
 					mg = wah.mg
-				elseif wah.mg then
+				elseif w_clipm > (wah.mg_at or math.huge) and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"] then
+					wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"]
 					mg = wah.mg
 				end
 			end
 			local mgmax = wah.mg_max
 			local nw, nh, ns, ng = wah.width, wah.height, wah.start, wah.gap--2, 16
 			surface.SetMaterial(wah.mat)
-			surface.SetFont( cf_get( "Carbon Bold", 60 ) )
+			surface.SetFont( cf_get( F_MAIN, 60 ) )
 			local adsp = w_ammo
-			if adsp >= 1000 then
+			if isnumber(adsp) and adsp >= 1000 then
 				adsp = adsp / 1000
 				adsp = math.floor( adsp )
 				adsp = adsp .. "k"
@@ -323,23 +327,20 @@ moves.ammo.func = function( data ) ---------------------------------------------
 				local col = i == 1 and S_SHADOW or S_WHITE
 				cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
 					if mg then
-						for c=0, math.max(w_clip, w_clipm)-1 do
+						for c=0, math.Clamp( math.max(w_clip, w_clipm)-1, 0, 500 ) do
 							local m1, m2 = c%mgmax, math.floor(c/mgmax)
 							surface.SetDrawColor( i==1 and S_SHADOW or (c+1>w_clipm) and S_RED or (c+1<=w_clip) and S_WHITE or S_NO )
 							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((m1+0.5) * ng), 84 - (ns) - (wah.mg_jump*m2), nw, nh )
 						end
-						for c=0, w_clipm do
-							print( c, c/mgmax, math.floor(c/mgmax), c%mgmax )
-						end
 					else
-						for c=1, math.max(w_clip, w_clipm) do
+						for c=1, math.Clamp( math.max(w_clip, w_clipm), 0, 500 ) do
 							surface.SetDrawColor( i==1 and S_SHADOW or (c>w_clipm) and S_RED or (c<=w_clip) and S_WHITE or S_NO )
 							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((c-0.5) * ng), 84 - (ns), nw, nh )
 						end
 					end
 					draw.DrawText(
 						string.upper( w.GetFiremodeName and w:GetFiremodeName() or "" ),
-						cf_get( "Carbon Bold", 20 ),
+						cf_get( F_MAIN, 20 ),
 						320 - ts,
 						55+extra,
 						col,
@@ -348,7 +349,7 @@ moves.ammo.func = function( data ) ---------------------------------------------
 					)
 					draw.DrawText(
 						adsp,
-						cf_get( "Carbon Bold", 60 ),
+						cf_get( F_MAIN, 60 ),
 						320,
 						45+extra,
 						col,
