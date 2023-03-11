@@ -4,6 +4,8 @@
 local grad_up = Material( "solar/gradient_up.png", "")
 local grad_down = Material( "solar/gradient_down.png", "")
 local grad_left = Material( "solar/gradient_left.png", "")
+local grad_corn_bl = Material( "solar/gradient_corn_bl.png", "")
+local grad_corn_br = Material( "solar/gradient_corn_br.png", "")
 local grad_right = Material( "solar/gradient_right.png", "")
 local test3 = Material( "gui/center_gradient", "")
 
@@ -84,7 +86,7 @@ end
 local moves = {}
 moves.fix = Angle( 90, -90, 0 )
 moves.health = {}
-local agapa = -15
+local agapa = -12
 moves.health.func = function( data ) ------------------------------------------------
 	if SolarEnabled() then
 	local i_h = data.p:Health()/data.p:GetMaxHealth()
@@ -107,21 +109,20 @@ moves.health.func = function( data ) -------------------------------------------
 	local weed = (data.ang:Up() * globalweed)
 	cam.Start3D2D( data.pos, data.ang, 0.1 )
 		local he = 110
-		surface.SetMaterial( grad_up )
+		surface.SetMaterial( grad_corn_bl )
 		surface.SetDrawColor( Color( 60, 60, 60, 255 ))
 		surface.DrawTexturedRect( 0, 0, 280, he )
-		
-		surface.SetDrawColor( Color( 30, 30, 30, 255 ))
-		surface.DrawTexturedRect( 0, math.Round(he*(1/3)), 280, math.Round(he*(2/3)) )
+		surface.SetDrawColor( Color( 40, 40, 40, 255 ))
+		surface.DrawTexturedRect( 0, he*0.5, 280*0.5, he*0.5 )
 
-		surface.SetDrawColor( Color( 0, 0, 0, 127 ) )
-		surface.DrawTexturedRect( 0, he, 280, 5 )
-
+		surface.SetMaterial( grad_right )
 		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-		surface.DrawOutlinedRect( 0, he, 280, 5, 2 )
+		surface.DrawTexturedRect( 0, he+0, 280, 2 )
+		surface.DrawTexturedRect( 0, he+0, 280, 2 )
 
+		surface.SetMaterial( grad_up )
+		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
 		surface.DrawTexturedRect( 0, 0, 2, he )
-		surface.DrawTexturedRect( 0 + (280-2), 0, 2, he )
 	cam.End3D2D()
 
 	for i=1, 2 do
@@ -139,7 +140,7 @@ moves.health.func = function( data ) -------------------------------------------
 					data.p:Armor(),
 					cf_get( "Carbon Bold", 30 ),
 					(280*(1/8)),
-					(70)+extra+agap,
+					(65)+extra+agap,
 					i==1 and S_SHADOW or S_ARMOR,
 					TEXT_ALIGN_LEFT,
 					TEXT_ALIGN_TOP
@@ -151,7 +152,7 @@ moves.health.func = function( data ) -------------------------------------------
 				-- Armor icon
 				surface.SetFont( cf_get( "Carbon Bold", 30 ) )
 				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Armor())
-				surface.DrawTexturedRect( (280*(1/8)) + blah + 4, 74+agap, 12, 12 )
+				surface.DrawTexturedRect( (280*(1/8)) + blah + 4, 69+agap, 12, 12 )
 				
 				surface.SetFont( cf_get( "Carbon Bold", 80 ) )
 				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
@@ -204,7 +205,7 @@ moves.health.func = function( data ) -------------------------------------------
 	end
 	end
 end ------------------------------------------------
-moves.health.pos = Vector( -14 + ((16/9) * -32), 300, -32 )
+moves.health.pos = Vector( -14 + ((ScrW()/ScrH()) * -32), 300, -32 )
 moves.health.ang = Angle( -20, 0, 0 )
 
 moves.ammo = {}
