@@ -16,7 +16,18 @@ function SWEP:Think()
 		self:SetHoldType( ht )
 		self:SetWeaponHoldType( ht )
 
-		self:SetUserSight( p:KeyDown( IN_ATTACK2 ) )
+		--self:SetUserSight( p:KeyDown( IN_ATTACK2 ) )
+		if self:GetOwner():GetInfoNum("uc_cl_aimtoggle", 0) == 0 then
+			self:SetUserSight( self:GetOwner():KeyDown(IN_ATTACK2) )
+		else
+			if self:GetOwner():GetInfoNum("uc_cl_aimtoggle_reload", 0) == 1 and self:GetReloadingTime() > CurTime() then
+				self:SetUserSight( false )
+			elseif self:GetOwner():GetInfoNum("uc_cl_aimtoggle_sprint", 1) == 1 and spint then
+				self:SetUserSight( false )
+			elseif self:GetOwner():KeyPressed(IN_ATTACK2) then
+				self:SetUserSight( !self:GetUserSight() )
+			end
+		end
 		local canaim = (self:GetStopSightTime() <= CurTime()) and !spint
 		self:SetAim( math.Approach( self:GetAim(), self:GetUserSight() and canaim and 1 or 0, FrameTime() / (canaim and self.SightTime or 0.2) ) )
 
