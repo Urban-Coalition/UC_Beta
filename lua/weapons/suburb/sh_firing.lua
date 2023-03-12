@@ -40,7 +40,13 @@ function SWEP:PrimaryAttack()
 		return false
 	end
 	if CurTime() < self:GetReloadingTime() then
-		return false
+		if self:GetShotgunReloading() then
+			self:SetReloadingTime( CurTime() )
+			self:SetLoadIn( 0 )
+			self:SetShotgunReloading( false )
+		else
+			return false
+		end
 	end
 	if self:GetSprintPer() > 0.2 then
 		return false
