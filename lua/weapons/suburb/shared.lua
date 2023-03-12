@@ -269,12 +269,12 @@ function SWEP:Deploy()
 	if (!game.SinglePlayer() and SERVER) then net.Start("suburb_firstdeployfix") net.Send( self:GetOwner() ) end
 	if CLIENT then self.ClientDeployedCorrectly = true end
 
-	if !self:GetReadied() then
+	if !self:GetReadied() and self.Animations["ready"] then
 		self:SendAnimChoose( "ready", "draw" )
-		self:SetReadied(true)
 	else
 		self:SendAnimChoose( "draw", "draw" )
 	end
+	self:SetReadied(true)
 
 	return true
 end
