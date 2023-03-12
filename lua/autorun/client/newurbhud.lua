@@ -43,9 +43,9 @@ local S_AMMO = {
 		gap = 6,
 		width = 14,
 		height = 6,
-		start = -5,
+		start = -4,
 		mg = true,
-		mg_max = 30,
+		mg_max = 25,
 		mg_jump = 6,
 	},
 	["ar2"] = {
