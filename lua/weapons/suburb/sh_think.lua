@@ -43,7 +43,7 @@ function SWEP:Think()
 		end
 
 		local pred = (game.SinglePlayer() and SERVER) or (!game.SinglePlayer())
-		if true then
+		if pred then
 			if self:GetShotgunReloading() then
 				if self:GetShotgunReloadingTime() <= CurTime() then
 					if self:Ammo1() <= 0 or self:Clip1() >= self:GetMaxClip1() then
