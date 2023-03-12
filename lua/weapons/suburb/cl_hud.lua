@@ -57,7 +57,7 @@ function SWEP:DoDrawCrosshair()
 	local gap_a = (ScrH()/2)
 	gap_a = ( gap_a - lool2.y )
 
-	if GetConVar("developer"):GetInt() > 0 then
+	if SDe()>0 then
 		local tr = {
 			start = LocalPlayer():EyePos(),
 			filter = LocalPlayer(),
@@ -367,7 +367,7 @@ function SWEP:DrawHUD()
 		} )
 	end
 
-	if GetConVar("developer"):GetBool() then
+	if SDe()>0 then
 		surface.SetDrawColor( c1 )
 		surface.SetTextColor( c1 )
 		surface.SetFont("Trebuchet18")

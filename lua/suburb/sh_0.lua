@@ -6,11 +6,11 @@ Suburb.debug = function() return GetConVar("uc_dev_debug"):GetBool() end
 Suburb.HUToM = 0.0254
 
 function SDe()
-	return GetConVar("uc_dev_debug"):GetBool()
+	return GetConVar("uc_dev_debug"):GetInt()
 end
 
 function SDeP( ... )
-	if SDe() then
+	if SDe()>0 then
 		return print( ... )
 	end
 end

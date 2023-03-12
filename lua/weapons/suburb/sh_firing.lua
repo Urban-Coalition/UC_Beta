@@ -183,7 +183,7 @@ function SWEP:Attack_Sound()
 end
 
 function SWEP:Attack_Effects()
-	if !((game.SinglePlayer() and SERVER) or (!game.SinglePlayer() and !IsFirstTimePredicted())) then return end
+	if (game.SinglePlayer() and SERVER) or (!game.SinglePlayer() and (SERVER and true or CLIENT and !IsFirstTimePredicted())) then return end
 
 	local ed = EffectData()
 	ed:SetEntity(self)
@@ -303,7 +303,7 @@ function SWEP:InnyOuty()
 		tracebase.filter = wo
 		t_influ = t_influ + (tin.Influence or 1)
 		local result = util.TraceLine(tracebase)
-		if GetConVar("developer"):GetInt() > 1 then
+		if SDe()>1 then
 			debugoverlay.Line(wop - (vector_up * 4), result.HitPos - (vector_up * 4), 1, Color((_ / 4) * 255, 0, (1 - (_ / 4)) * 255))
 			debugoverlay.Text(result.HitPos - (vector_up * 4), math.Round((result.HitSky and 1 or result.Fraction) * 100) .. "%", 1)
 		end
@@ -311,9 +311,6 @@ function SWEP:InnyOuty()
 	end
 
 	vol = vol / t_influ
-	if GetConVar("developer"):GetInt() > 1 then
-		print(vol)
-	end
 
 	return vol
 end

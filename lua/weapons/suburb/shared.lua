@@ -265,7 +265,6 @@ function SWEP:Deploy()
 	self:SetSprintPer(0)
 	self:SetHolster_Entity(NULL)
 
-	
 	if (!game.SinglePlayer() and SERVER) then net.Start("suburb_firstdeployfix") net.Send( self:GetOwner() ) end
 	if CLIENT then self.ClientDeployedCorrectly = true end
 
