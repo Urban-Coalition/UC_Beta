@@ -140,6 +140,19 @@ SWEP.Animations				= {
 	["idle_empty"]	= {
 		Source = "idle_empty",
 	},
+	["ready"]	= {
+		Source = "fix",
+		Events = {
+			{ t = 0,			s = Ssnd.draw_pistol },
+			{ t = 0.1,			s = p0.."raise.ogg" },
+			
+			{ t = 0.7,			s = p1.."slide_pull_new.ogg" },
+			{ t = 0.7,			s = p1.."sliderel_deact.ogg" },
+			{ t = 0.9,			s = p1.."slide_rel_new.ogg" },
+		},
+		ReloadingTime = 1.0,
+		StopSightTime = 1.1,
+	},
 	["draw"]	= {
 		Source = "draw",
 		ReloadingTime = 0.2,

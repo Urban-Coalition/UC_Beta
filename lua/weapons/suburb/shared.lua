@@ -142,6 +142,7 @@ local yep = {
 		"Customizing",
 		"ShotgunReloading",
 		"NeedCycle",
+		"Readied",
 	},
 	["Int"] = {
 		"BurstCount",
@@ -239,15 +240,47 @@ function SWEP:Reload( automatic )
 	return true
 end
 
+if SERVER then
+	util.AddNetworkString("suburb_firstdeployfix")
+else
+	net.Receive("suburb_firstdeployfix", function()
+		timer.Simple( 0.05, function()
+			local p = LocalPlayer()
+			local w = p:GetActiveWeapon()
+			if IsValid( w ) then
+				if !w.ClientDeployedCorrectly then
+					SDeP(w, "Did the first deploy fix.")
+					w:Deploy()
+				else
+					SDeP(w, "First deploy fix was not required.")
+				end
+			end
+		end)
+	end)
+end
+
 function SWEP:Deploy()
 	self:SetHolster_Time(0)
 	self:SetAim(0)
 	self:SetSprintPer(0)
 	self:SetHolster_Entity(NULL)
 
-	self:SendAnimChoose( "draw", "draw" )
+	
+	if (!game.SinglePlayer() and SERVER) then net.Start("suburb_firstdeployfix") net.Send( self:GetOwner() ) end
+	if CLIENT then self.ClientDeployedCorrectly = true end
+
+	if !self:GetReadied() then
+		self:SendAnimChoose( "ready", "draw" )
+		self:SetReadied(true)
+	else
+		self:SendAnimChoose( "draw", "draw" )
+	end
 
 	return true
+end
+
+function SWEP:OwnerChanged()
+	self:SetReadied(false)
 end
 
 function SWEP:Holster( ent )

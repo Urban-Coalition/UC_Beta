@@ -5,6 +5,16 @@
 Suburb.debug = function() return GetConVar("uc_dev_debug"):GetBool() end
 Suburb.HUToM = 0.0254
 
+function SDe()
+	return GetConVar("uc_dev_debug"):GetBool()
+end
+
+function SDeP( ... )
+	if SDe() then
+		return print( ... )
+	end
+end
+
 local function ScaleFOVByWidthRatio( fovDegrees, ratio )
 	local halfAngleRadians = fovDegrees * ( 0.5 * math.pi / 180 )
 	local t = math.tan( halfAngleRadians )

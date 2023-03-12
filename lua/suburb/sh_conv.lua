@@ -12,6 +12,7 @@ if CLIENT then
 	CreateClientConVar("uc_cl_aimtoggle_reload", 0, true, true, "Exit sights after reloading?")
 	CreateClientConVar("uc_cl_aimtoggle_sprint", 1, true, true, "Exit sights after sprinting?")
 	CreateClientConVar("uc_dev_aimcorrect", 0, false, false)
+	CreateClientConVar("uc_dev_debug", 0, false, false)
 	CreateClientConVar("uc_cl_cheapscopes", 0, true, false, "Cheap scopes that zoom in your entire viewport instead of redrawing it.")
 	CreateClientConVar("uc_cl_cheapmuzzles", 0, true, false, "Cheap HL2 muzzle effects.")
 
