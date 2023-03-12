@@ -70,6 +70,31 @@ local menus = {
 
 			G_CHECKBOX(llist, "Enable HUD", "solar")
 			G_CHECKBOX(llist, "for all weapons", "solar_all", 5, 2)
+			G_CHECKBOX(llist, "Energy instead of Shield", "solar_armor")
+			
+			local cat_2 = vgui.Create( "DCollapsibleCategory", cat )
+			cat_2:SetLabel( "Colors" )
+			cat_2:SetExpanded( false )
+			cat_2:SetParent( cat )
+			cat_2:Dock( TOP )
+			cat_2:DockMargin( 5, 5, 5, 0 )
+
+			local llist_2 = vgui.Create( "DIconLayout", cat_2 )
+			cat_2:SetContents( llist_2 )
+			llist_2:Dock( FILL )
+			llist_2:SetSpaceX( 10 )
+			llist_2:SetSpaceY( 10 )
+			llist_2:DockPadding( 5, 2, 5, 2 )
+
+			local colorpicker = vgui.Create( "DColorMixer", cat_2 )
+			colorpicker:Dock( TOP )
+			colorpicker:DockPadding( 5, 2, 5, 2 )
+			colorpicker:SetPalette(false)
+			colorpicker:SetAlphaBar(false)
+			colorpicker:SetSize( 1000, 73 )
+			function colorpicker:OnValueChanged( col )
+				-- RunConsoleCommand()
+			end
 		end
 		do
 			local cat = vgui.Create( "DCollapsibleCategory", panel )

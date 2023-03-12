@@ -42,9 +42,9 @@ SWEP.CrouchPose = {
 	MidAng = Angle( 0, 0, 0 ),
 }
 SWEP.IronsightPose = {
-	Pos = Vector( -3.677, -7, 2.2 ),
+	Pos = Vector( -3.677, -6, 2.2 ),
 	Ang = Angle( -0.65, -0.0, 2.0 ),
-	MidPos = Vector( -1.15, -2, -1 ),
+	MidPos = Vector( -0.75, 1, 0 ),
 	MidAng = Angle( -0.5, 0, -6 ),
 	ViewModelFOV = 65,
 	Magnification = 1.1,
@@ -114,7 +114,7 @@ SWEP.Firemodes				= {
 }
 SWEP.SwayCorrection = 0.56
 
-SWEP.Accuracy				= 4
+SWEP.Accuracy				= 2.6
 
 SWEP.Dispersion				= 4
 SWEP.Dispersion_Air			= 3

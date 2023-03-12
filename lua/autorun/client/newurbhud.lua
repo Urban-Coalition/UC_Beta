@@ -36,14 +36,14 @@ local S_AMMO = {
 		width = 14,
 		height = 18,
 		start = 8,
-		mg_at = 30,
+		mg_at = 32,
 	},
 	["pistol_mg"] = {
 		mat = Material( "solar/ammo/pistol.png", "smooth" ),
 		gap = 6,
 		width = 14,
 		height = 6,
-		start = -4,
+		start = -5,
 		mg = true,
 		mg_max = 30,
 		mg_jump = 6,
@@ -53,7 +53,18 @@ local S_AMMO = {
 		gap = 5,
 		width = 18,
 		height = 18,
-		start = 9,
+		start = 8,
+		mg_at = 40,
+	},
+	["ar2_mg"] = {
+		mat = Material( "solar/ammo/rifle.png", "smooth" ),
+		gap = 8,
+		width = 32,
+		height = 4,
+		mg = true,
+		mg_max = 25,
+		mg_jump = 5,
+		start = -6,
 	},
 	["smg1"] = {
 		mat = Material( "solar/ammo/rifle.png", "smooth" ),
@@ -86,13 +97,13 @@ local globalweed = 3
 local globalweed2 = 2
 local globalweed3 = 5
 
+
+-- deprecaated, kill
 surface.CreateFont( "Solar_A_1", { font = "Arial", size = 000030, weight = 1000 } )
 surface.CreateFont( "Solar_A_2", { font = "Arial", size = 000043, weight = 0 } )
 surface.CreateFont( "Solar_A_3", { font = "Arial", size = 000026, weight = 0 } )
 surface.CreateFont( "Solar_A_4", { font = "Arial", size = 000060, weight = 0 } )
 surface.CreateFont( "Solar_A_5", { font = "Arial", size = 000022, weight = 0 } )
-surface.CreateFont( "Solar_B_1", { font = "Arial", size = 0000120, weight = 0 } )
-surface.CreateFont( "Solar_B_2", { font = "Arial", size = 000070, weight = 0 } )
 surface.CreateFont( "Solar_B2_1", { font = "Arial", size = 0000100, weight = 0 } )
 surface.CreateFont( "Solar_B2_2", { font = "Arial", size = 000050, weight = 0 } )
 surface.CreateFont( "Solar_C_1", { font = "Arial ", size = 000032, weight = 0 } )

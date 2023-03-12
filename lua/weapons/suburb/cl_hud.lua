@@ -7,6 +7,20 @@ local mat_dot = Material("solar/xhair/dot.png", "mips smooth")
 local mat_long = Material("solar/xhair/long.png", "mips smooth")
 local mat_dot_s = Material("solar/xhair/dot_s.png", "mips smooth")
 local mat_long_s = Material("solar/xhair/long_s.png", "mips smooth")
+local clm = {
+	[5] = {},
+	[10] = {},
+	[15] = {},
+	[20] = {},
+	[25] = {},
+	[30] = {},
+}
+for size, data in pairs(clm) do
+	print(size)
+	data.a = Material("solar/xhair/clump_" .. size .. ".png", "mips smooth")
+	data.b = Material("solar/xhair/clump_" .. size .. "_s.png", "mips smooth")
+	PrintTable(data)
+end
 local spacer_long = 2 -- screenscaled
 local gap = 0
 local size = 16
@@ -35,8 +49,8 @@ function SWEP:DoDrawCrosshair()
 	local dispersion = math.rad(self:GetDispersion())
 	local accuracy = math.rad(self.Accuracy)
 	cam.Start3D()
-		local lool = ( EyePos() + ( EyeAngles():Forward() ) + ( dispersion * EyeAngles():Up() ) ):ToScreen()
-		local lool2 = ( EyePos() + ( EyeAngles():Forward() ) + ( accuracy * EyeAngles():Up() ) ):ToScreen()
+		local lool = ( EyePos() + ( EyeAngles():Forward() * 8192 * 4 ) + ( dispersion * EyeAngles():Up() * 8192 * 4 ) ):ToScreen()
+		local lool2 = ( EyePos() + ( EyeAngles():Forward() * 8192 * 4 ) + ( accuracy * EyeAngles():Up() * 8192 * 4 ) ):ToScreen()
 	cam.End3D()
 
 	local gap = (ScrH()/2)
@@ -45,7 +59,7 @@ function SWEP:DoDrawCrosshair()
 	local gap_a = (ScrH()/2)
 	gap_a = ( gap_a - lool2.y )
 
-	if GetConVar("developer"):GetInt() > 0 then
+	if false and GetConVar("developer"):GetInt() > 0 then
 		surface.SetDrawColor( 255, 0, 0 )
 		surface.DrawLine( 0, th, w, th )
 		surface.DrawLine( tw, 0, tw, h )
@@ -85,6 +99,29 @@ function SWEP:DoDrawCrosshair()
 			surface.SetMaterial( mat2 )
 			surface.DrawTexturedRectRotated( poosx, poosy - gap, s(size), s(size), 0 )
 			surface.DrawTexturedRectRotated( poosx, poosy + gap, s(size), s(size), 0 )
+
+			local mat3
+			local maka = 14
+			local shad = i==1
+			local statty = math.Remap( gap_a/ScrH(), 0, 0.05, 0, 1 )
+			statty = math.Clamp( statty, 0, 1 )
+			if		statty > (6/7) then
+				mat3 = shad and clm[5].b or clm[5].a
+			elseif	statty > (5/7) then
+				mat3 = shad and clm[10].b or clm[10].a
+			elseif	statty > (4/7) then
+				mat3 = shad and clm[15].b or clm[15].a
+			elseif	statty > (3/7) then
+				mat3 = shad and clm[20].b or clm[20].a
+			elseif	statty > (2/7) then
+				mat3 = shad and clm[25].b or clm[25].a
+			else -- if	statty > (1/7) then
+				mat3 = shad and clm[30].b or clm[30].a
+			end
+			-- print( gap_a, statty, mat3 )
+			surface.SetMaterial( mat3 )
+			surface.DrawTexturedRectRotated( poosx, poosy, s(gap_a*2), s(gap_a*2), 0 )
+			--surface.DrawCircle( poosx, poosy, gap_a, 255, 255, 255, 255 )
 		end
 	end
 	return true
