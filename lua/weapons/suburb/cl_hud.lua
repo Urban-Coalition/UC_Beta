@@ -58,9 +58,30 @@ function SWEP:DoDrawCrosshair()
 	gap_a = ( gap_a - lool2.y )
 
 	if GetConVar("developer"):GetInt() > 0 then
+		local tr = {
+			start = LocalPlayer():EyePos(),
+			filter = LocalPlayer(),
+			ignoreworld = true,
+		}
+		tr.endpos = LocalPlayer():EyePos() + (LocalPlayer():EyeAngles():Forward() * 8192) + (LocalPlayer():EyeAngles():Right() * 8192 * -4)
+		local tr_l = util.TraceLine(tr).HitPos:ToScreen()
+		local l_tw, l_th = tr_l.x, tr_l.y
+
+		tr.endpos = LocalPlayer():EyePos() + (LocalPlayer():EyeAngles():Forward() * 8192) + (LocalPlayer():EyeAngles():Right() * 8192 * 4)
+		local tr_r = util.TraceLine(tr).HitPos:ToScreen()
+		local r_tw, r_th = tr_r.x, tr_r.y
+
+		tr.endpos = LocalPlayer():EyePos() + (LocalPlayer():EyeAngles():Forward() * 8192) + (LocalPlayer():EyeAngles():Up() * 8192 * 4)
+		local tr_u = util.TraceLine(tr).HitPos:ToScreen()
+		local u_tw, u_th = tr_u.x, tr_u.y
+		
+		tr.endpos = LocalPlayer():EyePos() + (LocalPlayer():EyeAngles():Forward() * 8192) + (LocalPlayer():EyeAngles():Up() * 8192 * -4)
+		local tr_d = util.TraceLine(tr).HitPos:ToScreen()
+		local d_tw, d_th = tr_d.x, tr_d.y
+
 		surface.SetDrawColor( 255, 0, 0 )
-		surface.DrawLine( 0, th, w, th )
-		surface.DrawLine( tw, 0, tw, h )
+		surface.DrawLine( l_tw, l_th, r_tw, r_th )
+		surface.DrawLine( u_tw, u_th, d_tw, d_th )
 		surface.DrawCircle( tw, th, gap, 255, 255, 255, 255 )
 		surface.DrawCircle( tw, th, gap_a, 0, 255, 255, 255 )
 	end
