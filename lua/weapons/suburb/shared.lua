@@ -40,6 +40,7 @@ SWEP.QCA_Case							= 2
 --
 SWEP.Primary.Ammo			= "ar2"
 SWEP.Primary.ClipSize		= 20
+SWEP.ChamberSize			= 1
 SWEP.Delay					= ( 60 / 800 )
 
 SWEP.Firemodes				= {

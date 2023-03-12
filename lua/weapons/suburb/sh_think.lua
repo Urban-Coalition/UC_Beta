@@ -46,7 +46,7 @@ function SWEP:Think()
 		if true then
 			if self:GetShotgunReloading() then
 				if self:GetShotgunReloadingTime() <= CurTime() then
-					if self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
+					if self:Ammo1() <= 0 or self:Clip1() >= self:GetMaxClip1() then
 						self:SetReloadingTime( CurTime() )
 						self:SetLoadIn( 0 )
 						if self.ManualAction and self:GetCycleCount() >= self.ManualAction then
@@ -70,6 +70,7 @@ function SWEP:Think()
 
 		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
 			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:GetLoadAmount(), self:Ammo1() )
+			if !self:GetShotgunReloading() then needtoload = needtoload + math.Clamp(self:Clip1(), 0, self.ChamberSize) end
 			self:SetLoadIn( 0 )
 			assert( (self:Clip1() + needtoload) > 0, "loading under 0 rounds??" .. (self:Clip1() + needtoload) )
 			self:SetClip1(self:Clip1() + needtoload)

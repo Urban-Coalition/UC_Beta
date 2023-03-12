@@ -105,6 +105,7 @@ SWEP.CameraCorrection					= Angle( 0, -90, -90 )
 --
 SWEP.Primary.Ammo			= "buckshot"
 SWEP.Primary.ClipSize		= 6
+SWEP.ChamberSize			= 1
 SWEP.Delay					= ( 60 / 120 )
 
 SWEP.Firemodes				= {
