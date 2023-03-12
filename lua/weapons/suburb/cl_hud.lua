@@ -138,6 +138,7 @@ function SWEP:DoDrawCrosshair()
 				mat3 = shad and clm[30].b or clm[30].a
 			end
 			surface.SetMaterial( mat3 )
+			surface.SetDrawColor( cooler.r, cooler.g, cooler.b, cooler.a * ( 1 - self:GetAim() ) * (1/10) )
 			surface.DrawTexturedRectRotated( poosx, poosy, s(gap_a*2), s(gap_a*2), 0 )
 		end
 	end
