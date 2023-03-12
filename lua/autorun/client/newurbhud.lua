@@ -269,7 +269,7 @@ moves.health.func = function( data ) -------------------------------------------
 	end
 	end
 end ------------------------------------------------
-moves.health.pos = Vector( -17 + ((ScrW()/ScrH()) * -32), 300, -32 )
+moves.health.pos = Vector( -17 + ((ScrW()/ScrH()) * -32), 168.75 * (ScrW()/ScrH()), -32 )
 -- moves.health.pos = Vector( -14, 300, -32 )
 moves.health.ang = Angle( -20, 0, 0 )
 
@@ -393,7 +393,7 @@ moves.ammo.func = function( data ) ---------------------------------------------
 		end
 	end
 end ------------------------------------------------
-moves.ammo.pos = Vector( -17 + (ScrW()/ScrH() * 32), 300, -32 )
+moves.ammo.pos = Vector( -17 + (ScrW()/ScrH() * 32), 168.75 * (ScrW()/ScrH()), -32 )
 --moves.ammo.pos = Vector( -28, 300, -32 )
 moves.ammo.ang = Angle( -20, 0, 0 )
 
