@@ -16,10 +16,8 @@ local clm = {
 	[30] = {},
 }
 for size, data in pairs(clm) do
-	print(size)
 	data.a = Material("solar/xhair/clump_" .. size .. ".png", "mips smooth")
 	data.b = Material("solar/xhair/clump_" .. size .. "_s.png", "mips smooth")
-	PrintTable(data)
 end
 local spacer_long = 2 -- screenscaled
 local gap = 0
@@ -59,7 +57,7 @@ function SWEP:DoDrawCrosshair()
 	local gap_a = (ScrH()/2)
 	gap_a = ( gap_a - lool2.y )
 
-	if false and GetConVar("developer"):GetInt() > 0 then
+	if GetConVar("developer"):GetInt() > 0 then
 		surface.SetDrawColor( 255, 0, 0 )
 		surface.DrawLine( 0, th, w, th )
 		surface.DrawLine( tw, 0, tw, h )
@@ -118,10 +116,8 @@ function SWEP:DoDrawCrosshair()
 			else -- if	statty > (1/7) then
 				mat3 = shad and clm[30].b or clm[30].a
 			end
-			-- print( gap_a, statty, mat3 )
 			surface.SetMaterial( mat3 )
 			surface.DrawTexturedRectRotated( poosx, poosy, s(gap_a*2), s(gap_a*2), 0 )
-			--surface.DrawCircle( poosx, poosy, gap_a, 255, 255, 255, 255 )
 		end
 	end
 	return true
