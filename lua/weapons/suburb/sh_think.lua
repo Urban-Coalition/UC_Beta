@@ -46,10 +46,10 @@ function SWEP:Think()
 		if pred then
 			if self:GetShotgunReloading() then
 				if self:GetShotgunReloadingTime() <= CurTime() then
-					if self:Ammo1() <= 0 or self:Clip1() >= self:GetMaxClip1() then
+					if self:Ammo1() <= 0 or self:Clip1() >= (self:GetMaxClip1() + (self:NeedCycle() and 0 or self.ChamberSize) ) then
 						self:SetReloadingTime( CurTime() )
 						self:SetLoadIn( 0 )
-						if self.ManualAction and self:GetCycleCount() >= self.ManualAction then
+						if self:NeedCycle() then
 							self:SendAnimChoose("sgreload_finish_empty", "sgfinish")
 							self:SetCycleCount( 0 )
 						else
@@ -60,7 +60,7 @@ function SWEP:Think()
 						self:SendAnimChoose("sgreload_insert", "sginsert")
 					end
 				end
-			elseif self.ManualAction and self:GetCycleDelayTime() <= CurTime() and self:GetCycleCount() >= self.ManualAction and self:Clip1() > 0 and !trdown then
+			elseif self.ManualAction and self:GetCycleDelayTime() <= CurTime() and self:NeedCycle() and self:Clip1() > 0 and !trdown then
 				self:SetCycleCount(0)
 				self:SendAnimChoose("cycle", "cycle")
 			end
@@ -69,8 +69,10 @@ function SWEP:Think()
 		self:Think_Shell()
 
 		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
-			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:GetLoadAmount(), self:Ammo1() )
-			if !self:GetShotgunReloading() then needtoload = needtoload + math.Clamp(self:Clip1(), 0, self.ChamberSize) end
+			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:Ammo1() )
+			local sgr = self:GetShotgunReloading()
+			if (!sgr or sgr and !self:NeedCycle()) then needtoload = needtoload + math.Clamp( self:Clip1(), 0, self.ChamberSize ) end
+			needtoload = math.min(self:GetLoadAmount(), needtoload)
 			self:SetLoadIn( 0 )
 			assert( (self:Clip1() + needtoload) > 0, "loading under 0 rounds??" .. (self:Clip1() + needtoload) )
 			self:SetClip1(self:Clip1() + needtoload)

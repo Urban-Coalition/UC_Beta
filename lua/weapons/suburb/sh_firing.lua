@@ -35,6 +35,10 @@ function SWEP:GetFiremodeTable(cust)
 	return self.Firemodes[cust or self:GetFiremode()] or false
 end
 
+function SWEP:NeedCycle()
+	return self.ManualAction > 0 and self:GetCycleCount() >= self.ManualAction
+end
+
 function SWEP:PrimaryAttack()
 	if CurTime() < self:GetNextFire() then
 		return false
@@ -58,7 +62,7 @@ function SWEP:PrimaryAttack()
 	if self:GetBurstCount() >= self:GetFiremodeTable().Mode then
 		return false
 	end
-	if self.ManualAction and self:GetCycleCount() >= self.ManualAction then
+	if self:NeedCycle() then
 		return false
 	end
 	if CurTime() < self:GetCycleDelayTime() then
@@ -68,7 +72,7 @@ function SWEP:PrimaryAttack()
 	self:SetNextFire( CurTime() + self.Delay )
 	self:SetClip1( self:Clip1() - 1 )
 	self:SetBurstCount( self:GetBurstCount() + 1 )
-	if self.ManualAction then
+	if self.ManualAction > 0 then
 		self:SetCycleCount( self:GetCycleCount() + 1 )
 	end
 	self:SetTotalShotCount( self:GetTotalShotCount() + 1 )

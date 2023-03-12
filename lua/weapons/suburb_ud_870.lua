@@ -108,6 +108,9 @@ SWEP.Primary.ClipSize		= 6
 SWEP.ChamberSize			= 1
 SWEP.Delay					= ( 60 / 120 )
 
+SWEP.ShotgunReloading		= true
+SWEP.ManualAction			= 1
+
 SWEP.Firemodes				= {
 	{
 		Mode = 1,
@@ -161,8 +164,6 @@ local shellin = {
 	p1 .. "shell-insert-02.ogg",
 	p1 .. "shell-insert-03.ogg"
 }
-SWEP.ShotgunReloading		= true
-SWEP.ManualAction			= 1
 SWEP.Animations				= {
 	["idle"]	= {
 		Source = "idle",
