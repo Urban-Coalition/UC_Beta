@@ -65,6 +65,7 @@ SWEP.SprintTime				= 0.3
 --
 SWEP.RecoilUp				= 4				-- degrees punched
 SWEP.RecoilSide				= 2				-- degrees punched, in either direction (-100% to 100%)
+SWEP.RecoilPunch			= 0.2			-- how much recoil is also used as punch
 SWEP.RecoilSwing			= 4				-- degrees on yaw punch
 SWEP.RecoilDrift			= 0.7			-- how much will be smooth recoil
 SWEP.RecoilDecay			= 20			-- how much recoil to remove per second
@@ -217,7 +218,7 @@ function SWEP:Reload( automatic )
 	if runawayburst and self:GetBurstCount() > 0 then
 		return false
 	end
-	if self:Clip1() >= self.Primary.ClipSize then
+	if self:Clip1() >= (self.Primary.ClipSize+self.ChamberSize) then
 		return false
 	end
 	if self:Ammo1() <= 0 then

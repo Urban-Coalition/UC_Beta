@@ -83,8 +83,9 @@ function SWEP:PrimaryAttack()
 		if !self.RecoilTable then
 			self.RecoilTable = {}
 		end
+		local randy = util.SharedRandom( "suburb_recoil", -1, 1 )
+		p:ViewPunch( Angle( self.RecoilUp * self.RecoilPunch, self.RecoilSide * randy * -self.RecoilPunch, self.RecoilSwing * randy ) )
 		if spmp then
-			local randy = math.Rand( -1, 1 )
 			local recoil = {}
 			recoil.dir = Angle( self.RecoilUp * (self.RecoilDrift), randy * self.RecoilSide * (self.RecoilDrift) )
 			recoil.speed = self.RecoilDecay
@@ -93,7 +94,6 @@ function SWEP:PrimaryAttack()
 			recoil.dir = Angle( self.RecoilUp * (1-self.RecoilDrift), randy * self.RecoilSide * (1-self.RecoilDrift) )
 			recoil.speed = math.huge
 			table.insert( self.RecoilTable, recoil )
-			p:ViewPunch( Angle( self.RecoilUp * 0.2, self.RecoilSide * randy * -0.2, self.RecoilSwing * randy ) )
 		end
 	end
 	

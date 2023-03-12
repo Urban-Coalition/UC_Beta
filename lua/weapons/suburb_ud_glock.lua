@@ -90,7 +90,7 @@ SWEP.MuzzleEffect						= "muzzleflash_1"
 SWEP.QCA_Muzzle							= 1
 
 SWEP.ShellModel							= "models/weapons/arccw/uc_shells/9x19.mdl"
-SWEP.ShellScale							= .666
+SWEP.ShellScale							= 0.5
 SWEP.QCA_Case							= 2
 
 SWEP.QCA_Camera							= 3
@@ -124,11 +124,12 @@ SWEP.SprintTime				= 0.3
 --
 -- Recoil
 --
-SWEP.RecoilUp				= 1.2
+SWEP.RecoilUp				= 0.8
 SWEP.RecoilSide				= 2
+SWEP.RecoilPunch			= 0.2
 SWEP.RecoilSwing			= 1
 SWEP.RecoilDrift			= 0.7
-SWEP.RecoilDecay			= 10
+SWEP.RecoilDecay			= 9
 
 --
 -- Animation

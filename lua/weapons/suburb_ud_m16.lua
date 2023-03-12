@@ -85,7 +85,7 @@ SWEP.MuzzleEffect						= "muzzleflash_1"
 SWEP.QCA_Muzzle							= 1
 
 SWEP.ShellModel							= "models/weapons/arccw/uc_shells/556x45.mdl"
-SWEP.ShellScale							= 1
+SWEP.ShellScale							= 0.5
 SWEP.QCA_Case							= 2
 
 SWEP.QCA_Camera							= 3
@@ -126,11 +126,12 @@ SWEP.SprintTime				= 0.4
 --
 -- Recoil
 --
-SWEP.RecoilUp				= 1
-SWEP.RecoilSide				= 0.6
-SWEP.RecoilSwing			= 1
+SWEP.RecoilUp				= 1.2
+SWEP.RecoilSide				= 0.7
+SWEP.RecoilPunch			= 0.2
+SWEP.RecoilSwing			= 0.5
 SWEP.RecoilDrift			= .8
-SWEP.RecoilDecay			= 15
+SWEP.RecoilDecay			= 11
 
 SWEP.UniversalAnimationInfo = {
 	bone = "m16_parent",

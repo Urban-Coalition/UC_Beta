@@ -74,7 +74,7 @@ SWEP.MuzzleEffect						= "muzzleflash_1"
 SWEP.QCA_Muzzle							= 1
 
 SWEP.ShellModel							= "models/weapons/arccw/uc_shells/9x19.mdl"
-SWEP.ShellScale							= 1
+SWEP.ShellScale							= .5
 SWEP.QCA_Case							= 2
 
 SWEP.QCA_Camera							= 3
@@ -112,10 +112,11 @@ SWEP.SprintTime				= 0.35
 --
 -- Recoil
 --
-SWEP.RecoilUp				= 1.4
-SWEP.RecoilSide				= 0.8
-SWEP.RecoilSwing			= 1.5
-SWEP.RecoilDrift			= 0.5
+SWEP.RecoilUp				= 1.2
+SWEP.RecoilSide				= 0.9
+SWEP.RecoilPunch			= 0.4
+SWEP.RecoilSwing			= 0.5
+SWEP.RecoilDrift			= 0.7
 SWEP.RecoilDecay			= 5
 
 --
@@ -168,13 +169,13 @@ SWEP.Animations				= {
 	},
 	["reload_empty"] = {
 		Source = "reload_empty",
-		Time = 3.1,
+		Time = 2.9,
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_pull_small.ogg" },
 			{ t = 0.3,			s = p1.."magout.ogg" },
-			{ t = 1.0,			s = p1.."magin.ogg" },
-			{ t = 2.0,			s = p1.."chback.ogg" },
-			{ t = 2.25,			s = p1.."chforward.ogg" },
+			{ t = 0.9,			s = p1.."magin.ogg" },
+			{ t = 1.8,			s = p1.."chback.ogg" },
+			{ t = 2.05,			s = p1.."chforward.ogg" },
 		},
 		ReloadingTime = 2.8,
 		LoadIn = 2.4,

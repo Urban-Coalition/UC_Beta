@@ -11,6 +11,8 @@ G_NUMSLIDER = function(list, text, convar, dec)
 	button:SetConVar( convar )
 	button:Dock( TOP )
 	button:DockMargin( 0, 5, 0, 5 )
+
+	return button
 end
 
 G_CHECKBOX = function(list, text, convar, padx, pady)
@@ -20,6 +22,8 @@ G_CHECKBOX = function(list, text, convar, padx, pady)
 	button:SetConVar(convar)
 	button:Dock( TOP )
 	button:DockMargin( padx or 0, pady or 5, 0, pady or 5 )
+
+	return button
 end
 
 G_HELP = function(list, text)
@@ -31,6 +35,18 @@ G_HELP = function(list, text)
 	button:SetWrap( true )
 	button:SetAutoStretchVertical( true )
 	button:SetTextColor( button:GetSkin().Colours.Tree.Hover )
+
+	return button
+end
+
+G_BUTTON = function(list, text)
+	local button = vgui.Create( "DButton", list )
+	button:SetText(text)
+	button:SetDark(1)
+	button:Dock( TOP )
+	button:DockMargin( 0, 5, 0, 5 )
+
+	return button
 end
 
 local menus = {
@@ -112,6 +128,47 @@ local menus = {
 			G_HELP(llist, "Scopes will zoom in your entire view instead of dual-rendering.")
 			G_CHECKBOX(llist, "Cheap Muzzle Effects", "uc_cl_cheapmuzzles")
 			G_HELP(llist, "Low-quality muzzle effects.")
+		end
+	end },
+	["developer"]	= { text = "Developer",	func = function(panel)
+		panel:AddControl("header", { description = "Development settings & utilities for Urban Coalition / Suburb weapons." })
+
+		do
+			local cat = vgui.Create( "DCollapsibleCategory", panel )
+			cat:SetLabel( "Additional Information" )
+			panel:AddPanel( cat )
+
+			local llist = vgui.Create( "DIconLayout", panel )
+			cat:SetContents( llist )
+			llist:Dock( FILL )
+			llist:SetSpaceX( 10 )
+			llist:SetSpaceY( 10 )
+			llist:DockPadding( 5, 2, 5, 2 )
+
+			G_CHECKBOX(llist, "Debug Information", "uc_dev_debug")
+			G_HELP(llist, "Enable debug overlays & messages.")
+		end
+		do
+			local cat = vgui.Create( "DCollapsibleCategory", panel )
+			cat:SetLabel( "Attachment Development" )
+			panel:AddPanel( cat )
+
+			local llist = vgui.Create( "DIconLayout", panel )
+			cat:SetContents( llist )
+			llist:Dock( FILL )
+			llist:SetSpaceX( 10 )
+			llist:SetSpaceY( 10 )
+			llist:DockPadding( 5, 2, 5, 2 )
+
+			local button = G_BUTTON(llist, "Reload Attachments")
+			function button:DoClick()
+				RunConsoleCommand("uc_dev_reloadatts")
+			end
+
+			local button = G_BUTTON(llist, "Reload Spawnmenu")
+			function button:DoClick()
+				RunConsoleCommand("spawnmenu_reload")
+			end
 		end
 	end },
 }
