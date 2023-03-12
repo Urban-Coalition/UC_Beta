@@ -208,7 +208,7 @@ SWEP.Animations				= {
 		Time = 0.5,
 		Events = {
 		},
-		ShotgunReloadingTime = 0.3,
+		ShotgunReloadingTime = 0.25,
 	},
 	["sgreload_insert"] = {
 		Source = "sgreload_insert",
@@ -217,7 +217,7 @@ SWEP.Animations				= {
 			{s = Ssnd.rottle, t = 0},
 			{s = shellin, t = 0.05},
 		},
-		LoadIn = 0.3,
+		LoadIn = 0.2,
 		AmountToLoad = 1,
 		ShotgunReloadingTime = 0.5,
 	},

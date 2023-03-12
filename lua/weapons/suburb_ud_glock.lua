@@ -109,7 +109,7 @@ SWEP.Firemodes				= {
 	}
 }
 
-SWEP.Accuracy				= 2
+SWEP.Accuracy				= 1
 
 SWEP.Dispersion				= 3
 SWEP.Dispersion_Air			= 2
@@ -141,7 +141,7 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
-		ReloadingTime = 0.3,
+		ReloadingTime = 0.2,
 		StopSightTime = 0.1,
 		Events = {
 			{ t = 0,			s = Ssnd.draw_pistol },
@@ -150,7 +150,7 @@ SWEP.Animations				= {
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
-		ReloadingTime = 0.3,
+		ReloadingTime = 0.2,
 		StopSightTime = 0.1,
 	},
 	["holster"]	= {
@@ -187,7 +187,7 @@ SWEP.Animations				= {
 			{ t = 1.2,			s = Ssnd.rottle },
 		},
 		ReloadingTime = 1.6,
-		LoadIn = 1,
+		LoadIn = 1.3,
 	},
 	["reload_empty"] = {
 		Source = "reload_empty",
@@ -204,7 +204,7 @@ SWEP.Animations				= {
 			{ t = 1.15,			s = Ssnd.rottle },
 			{ t = 1.5,			s = Ssnd.rottle },
 		},
-		ReloadingTime = 1.7,
-		LoadIn = 1.45,
+		ReloadingTime = 2.0,
+		LoadIn = 1.65,
 	},
 }

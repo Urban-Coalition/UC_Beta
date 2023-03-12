@@ -111,7 +111,7 @@ SWEP.Firemodes				= {
 }
 SWEP.SwayCorrection = 0.45
 
-SWEP.Accuracy				= 1
+SWEP.Accuracy				= 0.5
 
 SWEP.Dispersion				= 5
 SWEP.Dispersion_Air			= 3
@@ -193,8 +193,8 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 1.8,
-		LoadIn = 1.6,
+		ReloadingTime = 2.0,
+		LoadIn = 1.5,
 	},
 	["reload_empty"] = {
 		Source = "reload_empty",
@@ -215,8 +215,8 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.5,
-		LoadIn = 1.8,
+		ReloadingTime = 2.4,
+		LoadIn = 2.0,
 	},
 }
 
