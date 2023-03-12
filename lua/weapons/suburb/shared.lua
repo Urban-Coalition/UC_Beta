@@ -199,7 +199,7 @@ function SWEP:SetupDataTables()
 	self:SetLoadAmount(math.huge)
 end
 
-function SWEP:Reload()
+function SWEP:Reload( automatic )
 	if CurTime() < self:GetNextFire() then
 		return false
 	end
@@ -212,15 +212,22 @@ function SWEP:Reload()
 	if self:GetShotgunReloading() then
 		return false
 	end
+	if runawayburst and self:GetBurstCount() > 0 then
+		return false
+	end
 	if self:Clip1() >= self.Primary.ClipSize then
 		return false
 	end
 	if self:Ammo1() <= 0 then
 		return false
 	end
+	if self:GetOwner():KeyDown( IN_ATTACK ) and !automatic then
+		return false
+	end
 
 	self:SetReloadingTime( CurTime() + 1 )
 	self:SetLoadIn( CurTime() + 1 )
+	self:SetBurstCount( 0 )
 	local shotgun = self.ShotgunReloading
 	if shotgun then
 		self:SendAnimChoose( "sgreload_start", "reload" )

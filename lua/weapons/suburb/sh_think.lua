@@ -46,7 +46,7 @@ function SWEP:Think()
 		if true then
 			if self:GetShotgunReloading() then
 				if self:GetShotgunReloadingTime() <= CurTime() then
-					if trdown or self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
+					if self:Ammo1() <= 0 or self:Clip1() == self:GetMaxClip1() then
 						self:SetReloadingTime( CurTime() )
 						self:SetLoadIn( 0 )
 						if self.ManualAction and self:GetCycleCount() >= self.ManualAction then

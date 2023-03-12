@@ -40,7 +40,7 @@ function SWEP:PrimaryAttack()
 		return false
 	end
 	if CurTime() < self:GetReloadingTime() then
-		if self:GetShotgunReloading() then
+		if self:GetShotgunReloading() and self:Clip1() > 0 then
 			self:SetReloadingTime( CurTime() )
 			self:SetLoadIn( 0 )
 			self:SetShotgunReloading( false )
@@ -52,7 +52,7 @@ function SWEP:PrimaryAttack()
 		return false
 	end
 	if self:Clip1() <= 0 then
-		self:Reload()
+		self:Reload( true ) -- automatic reload
 		return false
 	end
 	if self:GetBurstCount() >= self:GetFiremodeTable().Mode then
