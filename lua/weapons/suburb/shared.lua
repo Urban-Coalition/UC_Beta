@@ -250,6 +250,8 @@ function SWEP:Deploy()
 end
 
 function SWEP:Holster( ent )
+	self:SetShotgunReloading( false )
+	self:SetLoadIn( 0 )
 	if ent == self then return end
 
 	if self:GetHolster_Time() != 0 and self:GetHolster_Time() <= CurTime() or IsValid( self:GetHolster_Entity() ) or !IsValid( ent ) then
