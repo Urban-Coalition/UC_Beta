@@ -106,8 +106,8 @@ surface.CreateFont( "Solar_A_4", { font = "Arial", size = 000060, weight = 0 } )
 surface.CreateFont( "Solar_A_5", { font = "Arial", size = 000022, weight = 0 } )
 surface.CreateFont( "Solar_B2_1", { font = "Arial", size = 0000100, weight = 0 } )
 surface.CreateFont( "Solar_B2_2", { font = "Arial", size = 000050, weight = 0 } )
-surface.CreateFont( "Solar_C_1", { font = "Arial ", size = 000032, weight = 0 } )
-surface.CreateFont( "Solar_C_2", { font = "Arial ", size = 000020, weight = 0 } )
+surface.CreateFont( "Solar_C_1", { font = "Arial", size = 000032, weight = 0 } )
+surface.CreateFont( "Solar_C_2", { font = "Arial", size = 000020, weight = 0 } )
 
 local genfonts = {
 }
@@ -145,6 +145,18 @@ local function SolarEnabled()
 	end
 	return (s_wep and true or C_SOLARALL:GetBool()) and C_SOLAR:GetBool()
 end
+
+local nu = 127
+
+local sg = 12
+local sw = 18
+local S_HP_1H, S_HP_1S, S_HP_1V = ColorToHSV( Color( 255, nu, nu ) )
+local S_HP_2H, S_HP_2S, S_HP_2V = ColorToHSV( Color( nu, 255, nu ) )
+
+local sg_a = 6
+local sw_a = 40
+local S_AP_1H, S_AP_1S, S_AP_1V = ColorToHSV( Color( nu, nu, 255 ) )
+local S_AP_2H, S_AP_2S, S_AP_2V = ColorToHSV( Color( nu, 255, 255 ) )
 
 local moves = {}
 moves.fix = Angle( 90, -90, 0 )
@@ -210,14 +222,20 @@ moves.health.func = function( data ) -------------------------------------------
 					TEXT_ALIGN_LEFT,
 					TEXT_ALIGN_TOP
 				)
-				surface.SetDrawColor( i==1 and S_SHADOW or S_ARMOR )
-				sumshit = (i==1 and 1 or i_a)
-				surface.DrawRect( (wid*.125), 100 - 15 + extra, (wid*.75) * sumshit, 10 )
 
 				-- Armor icon
 				surface.SetFont( cf_get( F_MAIN, 30 ) )
+				surface.SetDrawColor( i==1 and S_SHADOW or S_ARMOR )
 				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Armor())
 				surface.DrawTexturedRect( (wid*(1/8)) + blah + 4, 69+agap, 12, 12 )
+
+				local seg = sg_a-1
+				for u=0, seg do
+					-- Armor bar
+					surface.SetDrawColor( i==1 and S_SHADOW or HSVToColor( Lerp( u/seg, S_AP_1H, S_AP_2H ), Lerp( u/seg, S_AP_1S, S_AP_2S ), Lerp( u/seg, S_AP_1V, S_AP_2V ) ) )
+					local fuck = i==1 and 1 or math.Clamp( math.TimeFraction( u/sg_a, (u/sg_a)+(1/sg_a), i_a ), 0, 1 )
+					surface.DrawRect( wid*Lerp(u/seg, (1/8), (7/8)) - (sw_a*Lerp(u/seg, 0, 1)), 100 - 15 + extra, sw_a * fuck, 10 )
+				end
 			end
 			surface.SetFont( cf_get( F_MAIN, 80 ) )
 			local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Health())
@@ -240,10 +258,13 @@ moves.health.func = function( data ) -------------------------------------------
 				TEXT_ALIGN_TOP
 			)
 			
-			-- Health bar
-			surface.SetDrawColor( i==1 and S_SHADOW or S_WHITE )
-			local sumshit = (i==1 and 1 or i_h)
-			surface.DrawRect( (wid*.125), 100 + extra, (wid*.75) * sumshit, 10 )
+			local seg = sg-1
+			for u=0, seg do
+				-- Health bar
+				surface.SetDrawColor( i==1 and S_SHADOW or HSVToColor( Lerp( u/seg, S_HP_1H, S_HP_2H ), Lerp( u/seg, S_HP_1S, S_HP_2S ), Lerp( u/seg, S_HP_1V, S_HP_2V ) ) )
+				local fuck = i==1 and 1 or math.Clamp( math.TimeFraction( u/sg, (u/sg)+(1/sg), i_h ), 0, 1 )
+				surface.DrawRect( wid*Lerp(u/seg, (1/8), (7/8)) - (sw*Lerp(u/seg, 0, 1)), 100 + extra, sw * fuck, 10 )
+			end
 		cam.End3D2D()
 	end
 	end
