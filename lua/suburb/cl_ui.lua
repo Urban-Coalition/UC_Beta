@@ -727,11 +727,8 @@ moves.test1.func = function( data ) --------------------------------------------
 
 	end
 end ------------------------------------------------
-moves.test1.pos = Vector( -72/2 - 36, 330, 72/2 )
+moves.test1.pos = Vector( -72/2 - 36, 300, 72/2 )
 moves.test1.ang = Angle( -10, 0, 0 )
-
---moves.test1.pos = Vector( -72/2 - 36, 230, 72/2 )
---moves.test1.ang = Angle( -45, 0, -45 )
 
 local papi2 = {
 	[1] = {
@@ -786,10 +783,10 @@ moves.test2.func = function( data ) --------------------------------------------
 			local crack1 = cs2
 			draw.DrawText(
 				name,
-				v["Font"],
+				cf_get( F_MAIN, i==1 and 64 or 24 ),
 				720-159,
 				89+((i-1)+gaap),
-				crack1,
+				S_SHADOW,
 				TEXT_ALIGN_RIGHT,
 				TEXT_ALIGN_TOP
 			)
@@ -798,10 +795,10 @@ moves.test2.func = function( data ) --------------------------------------------
 			local crack1 = cw
 			draw.DrawText(
 				name,
-				v["Font"],
+				cf_get( F_MAIN, i==1 and 64 or 24 ),
 				720-159,
 				89+((i-1)+gaap),
-				crack1,
+				S_WHITE,
 				TEXT_ALIGN_RIGHT,
 				TEXT_ALIGN_TOP
 			)
@@ -841,7 +838,7 @@ moves.test2.func = function( data ) --------------------------------------------
 		end
 	end
 end ------------------------------------------------
-moves.test2.pos = Vector( -72/2 + 36, 330, 72/2 )
+moves.test2.pos = Vector( -72/2 + 36, 300, 72/2 )
 moves.test2.ang = Angle( -10, 0, 0 )
 
 hook.Add("HUDPaint", "Solar", function()
