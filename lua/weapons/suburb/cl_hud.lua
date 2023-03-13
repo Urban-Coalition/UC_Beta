@@ -86,13 +86,18 @@ function SWEP:DoDrawCrosshair()
 		surface.DrawCircle( tw, th, gap_a, 0, 255, 255, 255 )
 	end
 
-	local touse1 = col_1
-	local touse2 = col_2
+	local touse1 = GetConVar("uc_x_col"):GetString()
+	touse1 = string.Explode( " ", touse1 )
+	touse1 = Color( touse1[1], touse1[2], touse1[3] )
+	local touse2 = GetConVar("uc_x_col_shad"):GetString()
+	touse2 = string.Explode( " ", touse2 )
+	touse2 = Color( touse2[1], touse2[2], touse2[3] )
 	for i=1, 2 do
-		local cooler = i == 1 and touse2 or touse1
-		local poosx, poosy = i == 1 and ps_x or pl_x, i == 1 and ps_y or pl_y
-		local mat1 = i == 1 and mat_long_s or mat_long
-		local mat2 = i == 1 and mat_dot_s or mat_dot
+		local f = i==1
+		local cooler = f and touse2 or touse1
+		local poosx, poosy = f and ps_x or pl_x, f and ps_y or pl_y
+		local mat1 = f and mat_long_s or mat_long
+		local mat2 = f and mat_dot_s or mat_dot
 		surface.SetDrawColor( cooler.r, cooler.g, cooler.b, cooler.a * ( 1 - self:GetAim() ) )
 		if self.XHairMode == "rifle" then
 			surface.SetMaterial( mat1 )
@@ -121,21 +126,20 @@ function SWEP:DoDrawCrosshair()
 
 			local mat3
 			local maka = 14
-			local shad = i==1
 			local statty = math.Remap( gap_a/ScrH(), 0, 0.05, 0, 1 )
 			statty = math.Clamp( statty, 0, 1 )
 			if		statty > (6/7) then
-				mat3 = shad and clm[5].b or clm[5].a
+				mat3 = f and clm[5].b or clm[5].a
 			elseif	statty > (5/7) then
-				mat3 = shad and clm[10].b or clm[10].a
+				mat3 = f and clm[10].b or clm[10].a
 			elseif	statty > (4/7) then
-				mat3 = shad and clm[15].b or clm[15].a
+				mat3 = f and clm[15].b or clm[15].a
 			elseif	statty > (3/7) then
-				mat3 = shad and clm[20].b or clm[20].a
+				mat3 = f and clm[20].b or clm[20].a
 			elseif	statty > (2/7) then
-				mat3 = shad and clm[25].b or clm[25].a
+				mat3 = f and clm[25].b or clm[25].a
 			else -- if	statty > (1/7) then
-				mat3 = shad and clm[30].b or clm[30].a
+				mat3 = f and clm[30].b or clm[30].a
 			end
 			surface.SetMaterial( mat3 )
 			surface.SetDrawColor( cooler.r, cooler.g, cooler.b, cooler.a * ( 1 - self:GetAim() ) * (1/10) )

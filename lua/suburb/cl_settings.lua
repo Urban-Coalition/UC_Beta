@@ -39,6 +39,18 @@ G_HELP = function(list, text)
 	return button
 end
 
+G_LABEL = function(list, text, padx, pady)
+	local button = vgui.Create( "DLabel", list )
+	button:SetText(text)
+	button:SetDark(1)
+	button:Dock( TOP )
+	button:DockMargin( padx or 0, pady or 2, padx or 0, pady or 2 )
+	button:SetWrap( true )
+	button:SetAutoStretchVertical( true )
+
+	return button
+end
+
 G_BUTTON = function(list, text)
 	local button = vgui.Create( "DButton", list )
 	button:SetText(text)
@@ -88,10 +100,9 @@ local menus = {
 			G_CHECKBOX(llist, "for all weapons", "solar_all", 5, 2)
 			G_CHECKBOX(llist, "Energy instead of Shield", "solar_armor")
 			
-			local cat_2 = vgui.Create( "DCollapsibleCategory", cat )
+			local cat_2 = vgui.Create( "DCollapsibleCategory", llist )
 			cat_2:SetLabel( "Colors" )
 			cat_2:SetExpanded( false )
-			cat_2:SetParent( cat )
 			cat_2:Dock( TOP )
 			cat_2:DockMargin( 5, 5, 5, 0 )
 
@@ -102,14 +113,38 @@ local menus = {
 			llist_2:SetSpaceY( 10 )
 			llist_2:DockPadding( 5, 2, 5, 2 )
 
-			local colorpicker = vgui.Create( "DColorMixer", cat_2 )
+			G_LABEL(llist_2, "Crosshair Color")
+
+			local colorpicker = vgui.Create( "DColorMixer", llist_2 )
 			colorpicker:Dock( TOP )
-			colorpicker:DockPadding( 5, 2, 5, 2 )
+			colorpicker:DockPadding( 0, 2, 0, 2 )
 			colorpicker:SetPalette(false)
 			colorpicker:SetAlphaBar(false)
 			colorpicker:SetSize( 1000, 73 )
-			function colorpicker:OnValueChanged( col )
-				-- RunConsoleCommand()
+			do
+				local touse1 = GetConVar("uc_x_col"):GetString()
+				touse1 = string.Explode( " ", touse1 )
+				colorpicker:SetColor( Color( touse1[1], touse1[2], touse1[3] ) )
+			end
+			function colorpicker:ValueChanged( col )
+				RunConsoleCommand( "uc_x_col", col.r .. " " .. col.g .. " " .. col.b )
+			end
+
+			G_LABEL(llist_2, "Crosshair Shadow")
+
+			local colorpicker = vgui.Create( "DColorMixer", llist_2 )
+			colorpicker:Dock( TOP )
+			colorpicker:DockPadding( 0, 2, 0, 2 )
+			colorpicker:SetPalette(false)
+			colorpicker:SetAlphaBar(false)
+			colorpicker:SetSize( 1000, 73 )
+			do
+				local touse1 = GetConVar("uc_x_col_shad"):GetString()
+				touse1 = string.Explode( " ", touse1 )
+				colorpicker:SetColor( Color( touse1[1], touse1[2], touse1[3] ) )
+			end
+			function colorpicker:ValueChanged( col )
+				RunConsoleCommand( "uc_x_col_shad", col.r .. " " .. col.g .. " " .. col.b )
 			end
 		end
 		do
