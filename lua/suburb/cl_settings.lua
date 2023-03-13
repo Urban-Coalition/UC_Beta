@@ -185,7 +185,7 @@ local menus = {
 		end
 		do
 			local cat = vgui.Create( "DCollapsibleCategory", panel )
-			cat:SetLabel( "Attachment Development" )
+			cat:SetLabel( "Development" )
 			panel:AddPanel( cat )
 
 			local llist = vgui.Create( "DIconLayout", panel )
@@ -203,6 +203,11 @@ local menus = {
 			local button = G_BUTTON(llist, "Reload Spawnmenu")
 			function button:DoClick()
 				RunConsoleCommand("spawnmenu_reload")
+			end
+
+			local button = G_BUTTON(llist, "Reload Languages")
+			function button:DoClick()
+				RunConsoleCommand("uc_dev_reloadlang")
 			end
 		end
 	end },

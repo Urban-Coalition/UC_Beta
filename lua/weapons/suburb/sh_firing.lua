@@ -8,11 +8,9 @@ function SWEP:SwitchFiremode(prev)
 	end
 	if self:GetFiremode() != nextfm then
 		self:SetFiremode(nextfm)
-		--if !IsFirstTimePredicted() then return end
-		--if SERVER then SuppressHostEvents( self:GetOwner() ) end
+		if (game.SinglePlayer() and SERVER or !game.SinglePlayer() and true) then
 			self:EmitSound("suburb/firemode.ogg", 60, 100, 0.5, CHAN_STATIC)
-			--if CLIENT then self:GetOwner():ChatPrint( "Switched to " .. self:GetFiremodeName() ) end
-		--if SERVER then SuppressHostEvents( NULL ) end
+		end
 	end
 end
 
@@ -187,7 +185,7 @@ function SWEP:Attack_Sound()
 end
 
 function SWEP:Attack_Effects()
-	if (game.SinglePlayer() and SERVER) or (!game.SinglePlayer() and (SERVER and true or CLIENT and !IsFirstTimePredicted())) then return end
+	if (game.SinglePlayer() and CLIENT) or (!game.SinglePlayer() and (SERVER and true or CLIENT and !IsFirstTimePredicted())) then return end
 
 	local ed = EffectData()
 	ed:SetEntity(self)

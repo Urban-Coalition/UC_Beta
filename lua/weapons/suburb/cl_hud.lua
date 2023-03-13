@@ -418,4 +418,23 @@ function SWEP:DrawHUD()
 			surface.DrawText( "- " .. (v.Installed or "none") )
 		end
 	end
+
+	if false then -- REMOVE IN THE FUTURE
+		surface.SetDrawColor( 0, 0, 0, 255 )
+		local sx, sy = 10, 10
+		local zx, zy = 800, 400
+
+		for i=1, 5 do
+			bwah = (1/i) * 200
+			surface.SetDrawColor( bwah, bwah, bwah, 127 )
+			surface.DrawRect( sx, math.Round(sy + (zy * ((i-1)/i)), 0), zx, math.Round(zy * (1/i), 0) )
+		end
+
+		for i=1, 5 do
+			surface.SetFont( "TargetID" )
+			surface.SetTextColor( 255, 255, 255, 127 )
+			surface.SetTextPos( sx + 4, math.Round(sy + (zy * ((i-1)/i)), 0) + 4 )
+			surface.DrawText( i+1 )
+		end
+	end
 end
