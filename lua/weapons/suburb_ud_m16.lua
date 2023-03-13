@@ -140,6 +140,15 @@ SWEP.UniversalAnimationInfo = {
 }
 
 --
+-- Damage
+--
+SWEP.DamageNear				= 34
+SWEP.RangeNear				= 40
+SWEP.DamageFar				= 22
+SWEP.RangeFar				= 200
+SWEP.Force					= 5
+
+--
 -- Animation
 --
 SWEP.Animations				= {
