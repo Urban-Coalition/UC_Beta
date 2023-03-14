@@ -279,6 +279,8 @@ function SWEP:Deploy()
 	end
 	self:SetReadied(true)
 
+	self:GetOwner():SetCanZoom( false )
+
 	return true
 end
 
@@ -292,6 +294,7 @@ function SWEP:Holster( ent )
 	if ent == self then return end
 
 	if self:GetHolster_Time() != 0 and self:GetHolster_Time() <= CurTime() or IsValid( self:GetHolster_Entity() ) or !IsValid( ent ) then
+		self:GetOwner():SetCanZoom( true )
 		self:SetHolster_Time(0)
 		self:SetHolster_Entity( NULL )
 		return true

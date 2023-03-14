@@ -12,7 +12,6 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 			end
 
 			if !cmd:KeyDown(IN_USE) then
-				ply:SetCanZoom( false )
 				if cmd:KeyDown(IN_ZOOM) then
 					if !fmdebounce then
 						cmd:SetImpulse(150)
@@ -41,12 +40,8 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 						ply.AttachmentRadial = true
 					end
 				end
-			else
-				ply:SetCanZoom( true )
 			end
 			if SERVER and ply:FlashlightIsOn() then ply:Flashlight() end
-		else
-			ply:SetCanZoom( true )
 		end
 	end
 end)

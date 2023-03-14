@@ -110,12 +110,12 @@ SWEP.Firemodes				= {
 	}
 }
 
-SWEP.Accuracy				= 1
+SWEP.Accuracy				= 0.5
 
-SWEP.Dispersion				= 3
-SWEP.Dispersion_Air			= 2
-SWEP.Dispersion_Move		= 2
-SWEP.Dispersion_Crouch		= 0.75
+SWEP.Dispersion				= 2
+SWEP.Dispersion_Air			= 1.5
+SWEP.Dispersion_Move		= 1.5
+SWEP.Dispersion_Crouch		= 0.5
 SWEP.Dispersion_Sights		= 0
 
 SWEP.SightTime				= 0.3
@@ -130,6 +130,16 @@ SWEP.RecoilPunch			= 0.2
 SWEP.RecoilSwing			= 1
 SWEP.RecoilDrift			= 0.7
 SWEP.RecoilDecay			= 9
+
+--
+-- Damage
+--
+SWEP.DamageNear				= ArcCW.UC.StdDmg["9mm"].max
+SWEP.RangeNear				= 15
+SWEP.DamageFar				= ArcCW.UC.StdDmg["9mm"].min
+SWEP.RangeFar				= 50
+SWEP.Force					= 5
+SWEP.Penetration			= ArcCW.UC.StdDmg["9mm"].pen
 
 --
 -- Animation

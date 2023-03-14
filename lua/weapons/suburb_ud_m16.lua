@@ -112,11 +112,11 @@ SWEP.Firemodes				= {
 }
 SWEP.SwayCorrection = 0.45
 
-SWEP.Accuracy				= 0.5
+SWEP.Accuracy				= 0.25
 
-SWEP.Dispersion				= 5
-SWEP.Dispersion_Air			= 3
-SWEP.Dispersion_Move		= 3
+SWEP.Dispersion				= 3.5
+SWEP.Dispersion_Air			= 2.5
+SWEP.Dispersion_Move		= 2.5
 SWEP.Dispersion_Crouch		= 0.75
 SWEP.Dispersion_Sights		= 0
 
@@ -142,11 +142,12 @@ SWEP.UniversalAnimationInfo = {
 --
 -- Damage
 --
-SWEP.DamageNear				= 34
-SWEP.RangeNear				= 40
-SWEP.DamageFar				= 22
-SWEP.RangeFar				= 200
+SWEP.DamageNear				= ArcCW.UC.StdDmg["556"].max
+SWEP.RangeNear				= 50
+SWEP.DamageFar				= ArcCW.UC.StdDmg["556"].min
+SWEP.RangeFar				= 300
 SWEP.Force					= 5
+SWEP.Penetration			= ArcCW.UC.StdDmg["556"].pen
 
 --
 -- Animation

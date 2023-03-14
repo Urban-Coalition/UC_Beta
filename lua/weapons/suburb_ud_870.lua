@@ -118,11 +118,11 @@ SWEP.Firemodes				= {
 }
 SWEP.SwayCorrection = 0.56
 
-SWEP.Accuracy				= 2.6
+SWEP.Accuracy				= 1
 
 SWEP.Dispersion				= 4
-SWEP.Dispersion_Air			= 3
-SWEP.Dispersion_Move		= 3
+SWEP.Dispersion_Air			= 2.4
+SWEP.Dispersion_Move		= 2.4
 SWEP.Dispersion_Crouch		= 0.75
 SWEP.Dispersion_Sights		= 0
 
@@ -146,7 +146,7 @@ SWEP.DamageNear				= ArcCW.UC.StdDmg["12g_p"].max
 SWEP.RangeNear				= 5
 SWEP.DamageFar				= ArcCW.UC.StdDmg["12g_p"].min
 SWEP.RangeFar				= 50
-SWEP.Force					= 5
+SWEP.Force					= 8
 SWEP.Penetration			= ArcCW.UC.StdDmg["12g_p"].pen
 SWEP.Pellets				= ArcCW.UC.StdDmg["12g_p"].num
 
