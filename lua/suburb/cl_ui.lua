@@ -48,24 +48,6 @@ local S_AMMO = {
 		mg_max = 25,
 		mg_jump = 6,
 	},
-	["ar2"] = {
-		mat = Material( "solar/ammo/rifle.png", "smooth" ),
-		gap = 5,
-		width = 18,
-		height = 18,
-		start = 8,
-		mg_at = 40,
-	},
-	["ar2_mg"] = {
-		mat = Material( "solar/ammo/rifle.png", "smooth" ),
-		gap = 8,
-		width = 32,
-		height = 4,
-		mg = true,
-		mg_max = 25,
-		mg_jump = 5,
-		start = -6,
-	},
 	["smg1"] = {
 		mat = Material( "solar/ammo/rifle.png", "smooth" ),
 		gap = 5,
@@ -92,6 +74,8 @@ local S_AMMO = {
 		start = 9,
 	},
 }
+S_AMMO["ar2"] = S_AMMO["smg1"]
+S_AMMO["ar2_mg"] = S_AMMO["smg1_mg"]
 
 local globalweed = 3
 local globalweed2 = 2
