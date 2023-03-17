@@ -317,14 +317,16 @@ moves.ammo.func = function( data ) ---------------------------------------------
 				surface.DrawTexturedRect( wid+2, 0, 2, he+2 )
 			cam.End3D2D()
 			
+			local atm = game.GetAmmoName(w:GetPrimaryAmmoType())
+			atm = atm and string.lower(atm) or nil
 			local wah = S_AMMO["pistol"]
 			local mg = false
-			if w:GetPrimaryAmmoType() >= 0 and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))] then
-				wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType()))]
+			if w:GetPrimaryAmmoType() >= 0 and S_AMMO[atm] then
+				wah = S_AMMO[atm]
 				if wah.mg then
-					mg = wah.mg
-				elseif w_clipm > (wah.mg_at or math.huge) and S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"] then
-					wah = S_AMMO[string.lower(game.GetAmmoName(w:GetPrimaryAmmoType())) .. "_mg"]
+					mg = true
+				elseif w_clipm > (wah.mg_at or math.huge) and S_AMMO[atm .. "_mg"] then
+					wah = S_AMMO[atm .. "_mg"]
 					mg = wah.mg
 				end
 			end
