@@ -35,5 +35,4 @@ if CLIENT then
 	-- HUD
 	CreateClientConVar("solar", 1)
 	CreateClientConVar("solar_all", 0)
-	CreateClientConVar("solar_armor", 0) -- Power or shield
 end

@@ -20,12 +20,8 @@ local S_BLACK = Color( 0, 0, 0, 255 )
 local S_NO = Color( 0, 0, 0, 0 )
 local S_RED = Color( 255, 120, 120, 255 )
 
-local S_ARMOR = color_white
-
-local S_ARMOR_BLUE = Color( 0, 202, 255, 255 )
-local S_ARMOR_YELLOW = Color( 255, 210, 0, 255 )
-local S_ARMOR_BLUE_MAT = Material( "solar/armor2.png", "smooth" )
-local S_ARMOR_YELLOW_MAT = Material( "solar/armor.png", "smooth" )
+local S_ARMOR = Color( 0, 202, 255, 255 )
+local S_ARMOR_MAT = Material( "solar/armor2.png", "smooth" )
 
 local F_MAIN = "Carbon Bold"
 
@@ -119,7 +115,6 @@ end
 
 local C_SOLAR = GetConVar("solar")
 local C_SOLARALL = GetConVar("solar_all")
-local C_ARMOR_CONV = GetConVar( "solar_armor" )
 
 local function SolarEnabled()
 	local p = LocalPlayer()
@@ -141,6 +136,10 @@ local sg_a = 6
 local sw_a = 40
 local S_AP_1H, S_AP_1S, S_AP_1V = ColorToHSV( Color( nu, nu, 255 ) )
 local S_AP_2H, S_AP_2S, S_AP_2V = ColorToHSV( Color( nu, 255, 255 ) )
+
+local hsvcalc = function( fl, a, b, c, d, e, f )
+	return HSVToColor( Lerp( fl, a, b ), Lerp( fl, c, d ), Lerp( fl, e, f ) )
+end
 
 local moves = {}
 moves.fix = Angle( 90, -90, 0 )
@@ -190,13 +189,6 @@ moves.health.func = function( data ) -------------------------------------------
 		cam.Start3D2D( data.pos + ( weed * (i/2) ), data.ang, 0.1 )
 			local col = i == 1 and S_SHADOW or S_WHITE
 			if (i_a > 0) then
-				if C_ARMOR_CONV:GetBool() then
-					surface.SetMaterial( S_ARMOR_YELLOW_MAT )
-					S_ARMOR = S_ARMOR_YELLOW
-				else
-					surface.SetMaterial( S_ARMOR_BLUE_MAT )
-					S_ARMOR = S_ARMOR_BLUE
-				end
 				draw.DrawText(
 					data.p:Armor(),
 					cf_get( F_MAIN, 30 ),
@@ -211,12 +203,13 @@ moves.health.func = function( data ) -------------------------------------------
 				surface.SetFont( cf_get( F_MAIN, 30 ) )
 				surface.SetDrawColor( i==1 and S_SHADOW or S_ARMOR )
 				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Armor())
+				surface.SetMaterial( S_ARMOR_MAT )
 				surface.DrawTexturedRect( (wid*(1/8)) + blah + 4, 69+agap, 12, 12 )
 
 				local seg = sg_a-1
 				for u=0, seg do
 					-- Armor bar
-					surface.SetDrawColor( i==1 and S_SHADOW or HSVToColor( Lerp( u/seg, S_AP_1H, S_AP_2H ), Lerp( u/seg, S_AP_1S, S_AP_2S ), Lerp( u/seg, S_AP_1V, S_AP_2V ) ) )
+					surface.SetDrawColor( i==1 and S_SHADOW or hsvcalc( u/seg, S_AP_1H, S_AP_2H, S_AP_1S, S_AP_2S, S_AP_1V, S_AP_2V ) )
 					local fuck = i==1 and 1 or math.Clamp( math.TimeFraction( u/sg_a, (u/sg_a)+(1/sg_a), i_a ), 0, 1 )
 					surface.DrawRect( wid*Lerp(u/seg, (1/8), (7/8)) - (sw_a*Lerp(u/seg, 0, 1)), 100 - 15 + extra, sw_a * fuck, 10 )
 				end
@@ -373,6 +366,15 @@ moves.ammo.func = function( data ) ---------------------------------------------
 						col,
 						TEXT_ALIGN_RIGHT,
 						TEXT_ALIGN_TOP
+					)
+					draw.DrawText(
+						w:GetPrintName(),
+						cf_get( F_MAIN, 20 ),
+						320,
+						55+extra-20,
+						col,
+						TEXT_ALIGN_RIGHT,
+						TEXT_ALIGN_BOTTOM
 					)
 				cam.End3D2D()
 			end
