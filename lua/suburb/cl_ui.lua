@@ -144,6 +144,7 @@ end
 local moves = {}
 moves.fix = Angle( 90, -90, 0 )
 moves.health = {}
+local jump = 512
 local agapa = -12
 moves.health.func = function( data ) ------------------------------------------------
 	if SolarEnabled() then
@@ -152,6 +153,7 @@ moves.health.func = function( data ) -------------------------------------------
 	local extra = -5
 	local agap = (i_a > 0) and agapa or 0
 	local wid = 340
+
 
 	local potal = Vector()
 	potal:Add( moves.health.pos )
@@ -170,19 +172,19 @@ moves.health.func = function( data ) -------------------------------------------
 		local he = 110
 		surface.SetMaterial( grad_corn_bl )
 		surface.SetDrawColor( Color( 60, 60, 60, 255 ))
-		surface.DrawTexturedRect( 4, 0, wid, he )
+		surface.DrawTexturedRect( 4, jump+0, wid, he )
 		surface.SetDrawColor( Color( 40, 40, 40, 255 ))
-		surface.DrawTexturedRect( 4, he*0.5, wid*0.5, he*0.5 )
+		surface.DrawTexturedRect( 4, jump+he*0.5, wid*0.5, he*0.5 )
 
 		surface.SetMaterial( grad_right )
 		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-		surface.DrawTexturedRect( 0, he+2, wid, 2 )
-		surface.DrawTexturedRect( 0, he+2, wid, 2 )
+		surface.DrawTexturedRect( 0, jump+he+2, wid, 2 )
+		surface.DrawTexturedRect( 0, jump+he+2, wid, 2 )
 
 		surface.SetMaterial( grad_up )
 		surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-		surface.DrawTexturedRect( 0, 2, 2, he+2 )
-		surface.DrawTexturedRect( 0, 2, 2, he+2 )
+		surface.DrawTexturedRect( 0, jump+2, 2, he+2 )
+		surface.DrawTexturedRect( 0, jump+2, 2, he+2 )
 	cam.End3D2D()
 
 	for i=1, 2 do
@@ -193,7 +195,7 @@ moves.health.func = function( data ) -------------------------------------------
 					data.p:Armor(),
 					cf_get( F_MAIN, 30 ),
 					(wid*(1/8)),
-					(65)+extra+agap,
+					jump+(65)+extra+agap,
 					i==1 and S_SHADOW or S_ARMOR,
 					TEXT_ALIGN_LEFT,
 					TEXT_ALIGN_TOP
@@ -204,14 +206,14 @@ moves.health.func = function( data ) -------------------------------------------
 				surface.SetDrawColor( i==1 and S_SHADOW or S_ARMOR )
 				local blah = surface.GetTextSize( "7" ) * #tostring(data.p:Armor())
 				surface.SetMaterial( S_ARMOR_MAT )
-				surface.DrawTexturedRect( (wid*(1/8)) + blah + 4, 69+agap, 12, 12 )
+				surface.DrawTexturedRect( (wid*(1/8)) + blah + 4, jump+69+agap, 12, 12 )
 
 				local seg = sg_a-1
 				for u=0, seg do
 					-- Armor bar
 					surface.SetDrawColor( i==1 and S_SHADOW or hsvcalc( u/seg, S_AP_1H, S_AP_2H, S_AP_1S, S_AP_2S, S_AP_1V, S_AP_2V ) )
 					local fuck = i==1 and 1 or math.Clamp( math.TimeFraction( u/sg_a, (u/sg_a)+(1/sg_a), i_a ), 0, 1 )
-					surface.DrawRect( wid*Lerp(u/seg, (1/8), (7/8)) - (sw_a*Lerp(u/seg, 0, 1)), 100 - 15 + extra, sw_a * fuck, 10 )
+					surface.DrawRect( wid*Lerp(u/seg, (1/8), (7/8)) - (sw_a*Lerp(u/seg, 0, 1)), jump + 100 - 15 + extra, sw_a * fuck, 10 )
 				end
 			end
 			surface.SetFont( cf_get( F_MAIN, 80 ) )
@@ -220,7 +222,7 @@ moves.health.func = function( data ) -------------------------------------------
 				"+",
 				cf_get( F_MAIN, 50 ),
 				(wid*(7/8) - blah - 10),
-				(30)+extra+agap,
+				jump+(30)+extra+agap,
 				col,
 				TEXT_ALIGN_RIGHT,
 				TEXT_ALIGN_TOP
@@ -229,7 +231,7 @@ moves.health.func = function( data ) -------------------------------------------
 				data.p:Health(),
 				cf_get( F_MAIN, 80 ),
 				(wid*(7/8)),
-				(25)+extra+agap,
+				jump+(25)+extra+agap,
 				col,
 				TEXT_ALIGN_RIGHT,
 				TEXT_ALIGN_TOP
@@ -240,13 +242,13 @@ moves.health.func = function( data ) -------------------------------------------
 				-- Health bar
 				surface.SetDrawColor( i==1 and S_SHADOW or HSVToColor( Lerp( u/seg, S_HP_1H, S_HP_2H ), Lerp( u/seg, S_HP_1S, S_HP_2S ), Lerp( u/seg, S_HP_1V, S_HP_2V ) ) )
 				local fuck = i==1 and 1 or math.Clamp( math.TimeFraction( u/sg, (u/sg)+(1/sg), i_h ), 0, 1 )
-				surface.DrawRect( wid*Lerp(u/seg, (1/8), (7/8)) - (sw*Lerp(u/seg, 0, 1)), 100 + extra, sw * fuck, 10 )
+				surface.DrawRect( wid*Lerp(u/seg, (1/8), (7/8)) - (sw*Lerp(u/seg, 0, 1)), jump + 100 + extra, sw * fuck, 10 )
 			end
 		cam.End3D2D()
 	end
 	end
 end ------------------------------------------------
-moves.health.pos = Vector( -17 + ((ScrW()/ScrH()) * -32), 168.75 * (ScrW()/ScrH()), -32 )
+moves.health.pos = Vector( -17 + ((ScrW()/ScrH()) * -31), 168.75 * (ScrW()/ScrH()), 18 )
 -- moves.health.pos = Vector( -14, 300, -32 )
 moves.health.ang = Angle( -20, 0, 0 )
 
@@ -295,19 +297,19 @@ moves.ammo.func = function( data ) ---------------------------------------------
 				local he = 110
 				surface.SetMaterial( grad_corn_br )
 				surface.SetDrawColor( Color( 60, 60, 60, 255 ))
-				surface.DrawTexturedRect( 0, 0, wid, he )
+				surface.DrawTexturedRect( 0, jump+0, wid, he )
 				surface.SetDrawColor( Color( 40, 40, 40, 255 ))
-				surface.DrawTexturedRect( wid*0.5, he*0.5, wid*0.5, he*0.5 )
+				surface.DrawTexturedRect( wid*0.5, jump+he*0.5, wid*0.5, he*0.5 )
 		
 				surface.SetMaterial( grad_left )
 				surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-				surface.DrawTexturedRect( 0, he+2, wid+4, 2 )
-				surface.DrawTexturedRect( 0, he+2, wid+4, 2 )
+				surface.DrawTexturedRect( 0, jump+he+2, wid+4, 2 )
+				surface.DrawTexturedRect( 0, jump+he+2, wid+4, 2 )
 		
 				surface.SetMaterial( grad_up )
 				surface.SetDrawColor( Color( 0, 0, 0, 255 ) )
-				surface.DrawTexturedRect( wid+2, 0, 2, he+2 )
-				surface.DrawTexturedRect( wid+2, 0, 2, he+2 )
+				surface.DrawTexturedRect( wid+2, jump+0, 2, he+2 )
+				surface.DrawTexturedRect( wid+2, jump+0, 2, he+2 )
 			cam.End3D2D()
 			
 			local atm = game.GetAmmoName(w:GetPrimaryAmmoType())
@@ -341,19 +343,19 @@ moves.ammo.func = function( data ) ---------------------------------------------
 						for c=0, math.Clamp( math.max(w_clip, w_clipm)-1, 0, 500 ) do
 							local m1, m2 = c%mgmax, math.floor(c/mgmax)
 							surface.SetDrawColor( i==1 and S_SHADOW or (c+1>w_clipm) and S_RED or (c+1<=w_clip) and S_WHITE or S_NO )
-							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((m1+0.5) * ng), 84 - (ns) - (wah.mg_jump*m2), nw, nh )
+							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((m1+0.5) * ng), jump + 84 - (ns) - (wah.mg_jump*m2), nw, nh )
 						end
 					else
 						for c=1, math.Clamp( math.max(w_clip, w_clipm), 0, 500 ) do
 							surface.SetDrawColor( i==1 and S_SHADOW or (c>w_clipm) and S_RED or (c<=w_clip) and S_WHITE or S_NO )
-							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((c-0.5) * ng), 84 - (ns), nw, nh )
+							surface.DrawTexturedRect( 320 - ts - (nw*0.5) - ((c-0.5) * ng), jump + 84 - (ns), nw, nh )
 						end
 					end
 					draw.DrawText(
 						string.upper( w.GetFiremodeName and w:GetFiremodeName() or "" ),
 						cf_get( F_MAIN, 20 ),
 						320 - ts,
-						55+extra,
+						jump+55+extra,
 						col,
 						TEXT_ALIGN_RIGHT,
 						TEXT_ALIGN_BOTTOM
@@ -362,7 +364,7 @@ moves.ammo.func = function( data ) ---------------------------------------------
 						adsp,
 						cf_get( F_MAIN, 60 ),
 						320,
-						45+extra,
+						jump+45+extra,
 						col,
 						TEXT_ALIGN_RIGHT,
 						TEXT_ALIGN_TOP
@@ -371,7 +373,7 @@ moves.ammo.func = function( data ) ---------------------------------------------
 						w:GetPrintName(),
 						cf_get( F_MAIN, 20 ),
 						320,
-						55+extra-20,
+						jump+55+extra-20,
 						col,
 						TEXT_ALIGN_RIGHT,
 						TEXT_ALIGN_BOTTOM
@@ -381,7 +383,7 @@ moves.ammo.func = function( data ) ---------------------------------------------
 		end
 	end
 end ------------------------------------------------
-moves.ammo.pos = Vector( -17 + (ScrW()/ScrH() * 32), 168.75 * (ScrW()/ScrH()), -32 )
+moves.ammo.pos = Vector( -17 + (ScrW()/ScrH() * 31), 170 * (ScrW()/ScrH()), 18 )
 --moves.ammo.pos = Vector( -28, 300, -32 )
 moves.ammo.ang = Angle( -20, 0, 0 )
 
