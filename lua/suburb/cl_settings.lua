@@ -98,7 +98,6 @@ local menus = {
 
 			G_CHECKBOX(llist, "Enable HUD", "solar")
 			G_CHECKBOX(llist, "for all weapons", "solar_all", 5, 2)
-			G_CHECKBOX(llist, "Energy instead of Shield", "solar_armor")
 			
 			local cat_2 = vgui.Create( "DCollapsibleCategory", llist )
 			cat_2:SetLabel( "Colors" )
