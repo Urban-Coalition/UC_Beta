@@ -17,7 +17,9 @@ concommand.Add( "uc_dev_reloadatts", function()
 	end
 end)
 
-
+-- Debug & developer
+CreateConVar("uc_dev_aimcorrect", 0, FCVAR_REPLICATED, "Sway the gun around to get SWEP.SwayCorrection correct yourself")
+CreateConVar("uc_dev_debug", 0, FCVAR_REPLICATED, "Spit debug information")
 if CLIENT then
 	-- Clientside stuff
 	CreateClientConVar("uc_cl_cammult", 1, true, false)
@@ -29,10 +31,6 @@ if CLIENT then
 
 	CreateClientConVar("uc_x_col", "255 255 255 255", true, false, "Crosshair color.")
 	CreateClientConVar("uc_x_col_shad", "0 0 0 255", true, false, "Crosshair shadowcolor.")
-
-	-- Debug & developer
-	CreateClientConVar("uc_dev_aimcorrect", 0, false, false, "Sway the gun around to get SWEP.SwayCorrection correct yourself")
-	CreateClientConVar("uc_dev_debug", 0, false, false, "Spit debug information")
 
 	-- HUD
 	CreateClientConVar("solar", 1)

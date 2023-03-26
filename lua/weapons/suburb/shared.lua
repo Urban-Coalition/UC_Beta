@@ -251,7 +251,7 @@ else
 		timer.Simple( 0.05, function()
 			local p = LocalPlayer()
 			local w = p:GetActiveWeapon()
-			if IsValid( w ) then
+			if IsValid( w ) and w.Suburb then
 				if !w.ClientDeployedCorrectly then
 					SDeP(w, "Did the first deploy fix.")
 					w:Deploy()
