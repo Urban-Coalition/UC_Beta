@@ -45,7 +45,7 @@ function EFFECT:Init(data)
 		if particle then
 			particle:SetVelocity( ang:Forward() )
 			particle:SetLifeTime( 0 )
-			particle:SetDieTime( 1/24 )
+			particle:SetDieTime( 2/24 )
 			particle:SetStartAlpha( 255 )
 			particle:SetEndAlpha( 0 )
 			particle:SetStartSize( math.random( 12, 36 ) )
