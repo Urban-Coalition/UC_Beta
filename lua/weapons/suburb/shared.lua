@@ -731,9 +731,36 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 		end
 		vm:SetSkin( self.DefaultSkin or 0 )
 	end
+
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
 	cam.IgnoreZ(true)
+
+	for i, data in pairs( self.Elements ) do
+		if data.Model and data.Bone and data.iRep then
+			if IsValid(vm) then
+				local bm = vm:GetBoneMatrix( vm:LookupBone( data.Bone ) )
+				if bm then
+					local pos, ang = bm:GetTranslation(), bm:GetAngles()
+					pos:Add( ang:Right() * data.Pos.x )
+					pos:Add( ang:Forward() * data.Pos.y )
+					pos:Add( ang:Up() * data.Pos.z )
+
+					ang:RotateAroundAxis( ang:Right(), data.Ang.p )
+					ang:RotateAroundAxis( ang:Forward(), data.Ang.y )
+					ang:RotateAroundAxis( ang:Up(), data.Ang.r )
+					data.iRep:SetPos( pos )
+					data.iRep:SetAngles( ang )
+
+					local may = Matrix()
+					may:Scale( data.Scale )
+					data.iRep:EnableMatrix( "RenderMultiply", may )
+
+					data.iRep:DrawModel()
+				end
+			end
+		end
+	end
 end
 
 function SWEP:PostDrawViewModel( vm, weapon, ply )

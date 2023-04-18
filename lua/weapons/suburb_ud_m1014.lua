@@ -253,4 +253,12 @@ SWEP.Attachments = {
 	},
 }
 
-SWEP.Elements = {}
+SWEP.Elements = {
+	["test"] = {
+		Model = "models/props_junk/wood_crate001a.mdl",
+		Bone = "1014_parent",
+		Pos = Vector(-2, 0, 2),
+		Ang = Angle(0, -90, 0),
+		Scale = Vector(0.03, 0.03, 0.03),
+	}
+}

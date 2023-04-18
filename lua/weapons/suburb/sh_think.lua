@@ -16,7 +16,17 @@ function SWEP:Think()
 		self:SetHoldType( ht )
 		self:SetWeaponHoldType( ht )
 
-		--self:SetUserSight( p:KeyDown( IN_ATTACK2 ) )
+		if CLIENT then
+			for i, data in pairs( self.Elements ) do
+				if data.Model and data.Bone and !data.iRep then
+					local am = ents.CreateClientside( "suburb_att" )
+					am:SetModel( data.Model )
+					am:Spawn()
+					data.iRep = am
+				end
+			end
+		end
+
 		if self:GetOwner():GetInfoNum("uc_cl_aimtoggle", 0) == 0 then
 			self:SetUserSight( self:GetOwner():KeyDown(IN_ATTACK2) )
 		else
