@@ -241,7 +241,8 @@ SWEP.Attachments = {
 	{
 		Name = "Optical Sight",
 		SortOrder = 1.1,
-		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
+		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long")
 	},
 	{
 		Name = "Front Sight",
@@ -261,17 +262,20 @@ SWEP.Attachments = {
 	{
 		Name = "Upper Receiver",
 		SortOrder = 2.2,
-		Icon = Material("entities/att/acwatt_ud_m16_receiver_auto.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_ud_m16_receiver_auto.png", "mips smooth"),
+		Slot = "ud_m16_ur"
 	},
 	{
 		Name = "Lower Receiver",
 		SortOrder = 2.3,
-		Icon = Material("entities/att/acwatt_ud_m16_receiver_default.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_ud_m16_receiver_default.png", "mips smooth"),
+		Slot = "ud_m16_lr"
 	},
 	{
 		Name = "Magazine",
 		SortOrder = 2.4,
-		Icon = Material("entities/att/acwatt_ud_m16_mag_30.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_ud_m16_mag_30.png", "mips smooth"),
+		Slot = "ud_m16_mag"
 	},
 	{
 		Name = "Muzzle",

@@ -21,7 +21,7 @@ local att = {}
 att.Name = "EOTech 553 + G33"
 att.ShortName = "EOTech 553 + G33"
 att.ShortNameSubtitle = "HOLO / 2x OPTICAL"
-att.Slot = "optic_hybrid"
+att.Slot = Sslot( "optic_hybrid", "optic_short", "optic_long" )
 Suburb_GenAtt(att, "uc_optic_holosun")
 
 -- Medium

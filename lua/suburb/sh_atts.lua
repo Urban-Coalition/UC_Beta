@@ -29,6 +29,8 @@ function Suburb_GenAtt( tabl, name )
 	assert( tabl, "Table is nil!" )
 	assert( istable(tabl), "Table given is not a table!" )
 	print( " - " .. name .. " -- " .. tabl.Name or "[no nice name]" )
+
+	Suburb.AttTable[name] = tabl
 end
 
 if SERVER then
@@ -36,6 +38,16 @@ if SERVER then
 	util.AddNetworkString( "Suburb_ATT_Toggle" )
 end
 
+function Sslot( ... )
+	local args = { ... }
+	local tabb = {}
+	for i, v in ipairs( args ) do
+		tabb[v] = true
+	end
+	return tabb
+end
+
+--[[
 if SERVER then
 	Suburb.test = function( err )
 		net.Start( "Suburb_ATT_Install" )
@@ -57,3 +69,4 @@ else
 		end
 	end )
 end
+]]
