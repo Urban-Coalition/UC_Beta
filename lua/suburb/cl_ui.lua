@@ -256,7 +256,7 @@ moves.ammo = {}
 moves.ammo.func = function( data ) ------------------------------------------------
 	if SolarEnabled() then
 		local w_clip = false
-		local w_clipm = false
+		local w_clipm = 0
 		local w_ammo = false
 		local extra = 0
 		local wid = 340
