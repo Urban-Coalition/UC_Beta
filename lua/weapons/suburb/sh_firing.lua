@@ -1,4 +1,4 @@
-
+local suburb_hellfire = GetConVar("uc_cl_hellfire")
 
 function SWEP:SwitchFiremode(prev)
 	-- lol?
@@ -129,7 +129,57 @@ function SWEP:PrimaryAttack()
 		})
 	end
 
+	-- Cool projected texture (badass)
+	if game.SinglePlayer() then
+		self:CallOnClient("Hellfire")
+	elseif SERVER then
+		net.Start("Suburb_Hellfire")
+			net.WriteEntity(self)
+		net.SendPVS( self:GetOwner():GetPos() )
+	else
+		if suburb_hellfire:GetInt() > 0 then
+			self:Hellfire()
+		end
+	end
+
 	return true
+end
+
+if SERVER then
+	util.AddNetworkString("Suburb_Hellfire")
+else
+	net.Receive("Suburb_Hellfire", function()
+		local wep = net.ReadEntity()
+		if (wep:GetOwner() != LocalPlayer()) and suburb_hellfire:GetInt() > 1 then
+			wep:Hellfire()
+		end
+	end)
+end
+
+function SWEP:Hellfire()
+	if CLIENT then
+		local p = self:GetOwner()
+		local lamp = ProjectedTexture() -- Create a projected texture
+
+		-- Set it all up
+		lamp:SetTexture( "suburb/muzzleflash_light" )
+		lamp:SetFarZ( 1000 ) -- How far the light should shine
+		lamp:SetFOV( math.Rand( 120, 130 ) )
+		lamp:SetBrightness( math.Rand( 4, 6 ) )
+		lamp:SetShadowFilter( 1 )
+		lamp:SetEnableShadows( true )
+
+		local ttr = util.TraceLine({start = p:EyePos(), endpos = p:EyePos() + (p:EyeAngles():Forward()*12), filter = p})
+		lamp:SetPos( ttr.HitPos - ttr.HitNormal*4 ) -- Initial position and angles
+		lamp:SetAngles( p:EyeAngles() + Angle( math.Rand(-6, 6), math.Rand(-6, 6), math.Rand(0, 360) ) )
+		lamp:Update()
+		
+		timer.Simple( 0.08, function()
+			if IsValid( lamp ) then
+				lamp:Remove()
+			end
+		end)
+	end
 end
 
 function SWEP:ApplyRandomSpread( dir, spread, pellet )
