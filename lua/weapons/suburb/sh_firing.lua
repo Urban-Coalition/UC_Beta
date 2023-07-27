@@ -131,7 +131,7 @@ function SWEP:PrimaryAttack()
 	end
 
 	-- Cool projected texture (badass)
-	if game.SinglePlayer() then
+	if game.SinglePlayer() and suburb_hellfire:GetInt() > 0 then
 		self:CallOnClient("Hellfire")
 	elseif SERVER then
 		net.Start("Suburb_Hellfire")
