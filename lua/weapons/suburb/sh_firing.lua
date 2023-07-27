@@ -169,9 +169,9 @@ function SWEP:Hellfire()
 
 		-- Set it all up
 		lamp:SetTexture( "suburb/muzzleflash_light" )
-		lamp:SetFarZ( 1000 ) -- How far the light should shine
+		lamp:SetFarZ( 600 ) -- How far the light should shine
 		lamp:SetFOV( math.Rand( 120, 130 ) )
-		lamp:SetBrightness( math.Rand( 2, 4 ) * suburb_hellfire_intensity:GetFloat() )
+		lamp:SetBrightness( math.Rand( 1, 2 ) * suburb_hellfire_intensity:GetFloat() )
 		lamp:SetShadowFilter( 1 )
 		lamp:SetEnableShadows( true )
 
