@@ -1,12 +1,12 @@
 
 -- Spawnmenu settings menu
 
-G_NUMSLIDER = function(list, text, convar, dec)
+G_NUMSLIDER = function(list, text, convar, dec, min, max )
 	local button = vgui.Create( "DNumSlider", list )
 	button:SetText( text )
 	button:SetDark( 1 )
-	button:SetMin( 0 )
-	button:SetMax( 2 )
+	button:SetMin( min or 0 )
+	button:SetMax( max or 2 )
 	button:SetDecimals( dec or 1 )
 	button:SetConVar( convar )
 	button:Dock( TOP )
@@ -83,6 +83,10 @@ local menus = {
 			G_CHECKBOX(llist, "Exit Sights when Sprinting", "uc_cl_aimtoggle_sprint", 5, 2)
 			G_NUMSLIDER(llist, "Camera Multiplier", "uc_cl_cammult")
 			G_HELP(llist, "Multiplier for camera movement from weapon animations.")
+			G_CHECKBOX(llist, "'Hellfire'", "uc_cl_hellfire")
+			G_HELP(llist, "Muzzleflash projection onto the walls and onto your friends!")
+			G_NUMSLIDER(llist, "'Hellfire' Intensity", "uc_cl_hellfire_intensity", nil, 0, 1)
+			G_HELP(llist, "Multiplier for intensity of the muzzleflash projection.")
 		end
 		do
 			local cat = vgui.Create( "DCollapsibleCategory", panel )

@@ -1,4 +1,5 @@
 local suburb_hellfire = GetConVar("uc_cl_hellfire")
+local suburb_hellfire_intensity = GetConVar("uc_cl_hellfire_intensity")
 
 function SWEP:SwitchFiremode(prev)
 	-- lol?
@@ -159,19 +160,35 @@ end
 function SWEP:Hellfire()
 	if CLIENT then
 		local p = self:GetOwner()
+		local pe = p:EyePos()
+		local pa = p:EyeAngles()
+		local pa_F = pa:Forward()
+		local pa_R = pa:Right()
+		local pa_U = pa:Up()
 		local lamp = ProjectedTexture() -- Create a projected texture
 
 		-- Set it all up
 		lamp:SetTexture( "suburb/muzzleflash_light" )
 		lamp:SetFarZ( 1000 ) -- How far the light should shine
 		lamp:SetFOV( math.Rand( 120, 130 ) )
-		lamp:SetBrightness( math.Rand( 4, 6 ) )
+		lamp:SetBrightness( math.Rand( 2, 4 ) * suburb_hellfire_intensity:GetFloat() )
 		lamp:SetShadowFilter( 1 )
 		lamp:SetEnableShadows( true )
 
-		local ttr = util.TraceLine({start = p:EyePos(), endpos = p:EyePos() + (p:EyeAngles():Forward()*12), filter = p})
-		lamp:SetPos( ttr.HitPos - ttr.HitNormal*4 ) -- Initial position and angles
-		lamp:SetAngles( p:EyeAngles() + Angle( math.Rand(-6, 6), math.Rand(-6, 6), math.Rand(0, 360) ) )
+		local ttr = util.TraceLine({
+			start = pe,
+			endpos = pe + (pa_F*-4) + (pa_R*4) + (pa_U*2),
+			filter = p
+		})
+		
+		local ttr2 = util.TraceLine({
+			start = ttr.HitPos,
+			endpos = pe + (pa_F*2000),
+			filter = p,
+		})
+
+		lamp:SetPos( ttr2.StartPos + (pa_F*16) ) -- Initial position and angles
+		lamp:SetAngles( ttr2.Normal:Angle() )-- + Angle( math.Rand(-6, 6), math.Rand(-6, 6), math.Rand(0, 360) ) )
 		lamp:Update()
 		
 		timer.Simple( 0.08, function()

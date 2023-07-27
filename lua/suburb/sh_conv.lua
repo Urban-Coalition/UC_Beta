@@ -28,7 +28,8 @@ if CLIENT then
 	CreateClientConVar("uc_cl_aimtoggle_sprint", 1, true, true, "Exit sights after sprinting?")
 	CreateClientConVar("uc_cl_cheapscopes", 0, true, false, "Cheap scopes that zoom in your entire viewport instead of redrawing it.")
 	CreateClientConVar("uc_cl_cheapmuzzles", 0, true, false, "Cheap HL2 muzzle effects.")
-	CreateClientConVar("uc_cl_hellfire", 1, true, false, "Outrageous muzzle flashes!!")
+	CreateClientConVar("uc_cl_hellfire", 1, true, false, "Outrageous muzzle flashes!! Hellfire™.")
+	CreateClientConVar("uc_cl_hellfire_intensity", 0.5, true, false, "Hellfire brightness")
 
 	CreateClientConVar("uc_x_col", "255 255 255 255", true, false, "Crosshair color.")
 	CreateClientConVar("uc_x_col_shad", "0 0 0 255", true, false, "Crosshair shadowcolor.")
