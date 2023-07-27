@@ -177,7 +177,7 @@ function SWEP:Hellfire()
 
 		local ttr = util.TraceLine({
 			start = pe,
-			endpos = pe + (pa_F*-4) + (pa_R*4) + (pa_U*2),
+			endpos = pe + (pa_F*-4) + (pa_R*4) + (pa_U*2) + VectorRand( -4, 4 ),
 			filter = p
 		})
 		
@@ -188,7 +188,7 @@ function SWEP:Hellfire()
 		})
 
 		lamp:SetPos( ttr2.StartPos + (pa_F*16) ) -- Initial position and angles
-		lamp:SetAngles( ttr2.Normal:Angle() )-- + Angle( math.Rand(-6, 6), math.Rand(-6, 6), math.Rand(0, 360) ) )
+		lamp:SetAngles( ttr2.Normal:Angle() + Angle( math.Rand(-3, 3), math.Rand(-3, 3), math.Rand(0, 360) ) )
 		lamp:Update()
 		
 		timer.Simple( 0.08, function()
