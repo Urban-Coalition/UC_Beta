@@ -35,6 +35,7 @@ end
 
 if SERVER then
 	util.AddNetworkString( "Suburb_ATT_Install" )
+	util.AddNetworkString( "Suburb_ATT_Confirm" )
 	util.AddNetworkString( "Suburb_ATT_Toggle" )
 end
 

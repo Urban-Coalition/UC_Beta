@@ -18,8 +18,8 @@ SWEP.WorldModel				= "models/weapons/arccw/c_ud_m16.mdl"
 SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
 SWEP.ViewModelFOV			= 72
 
-SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 0 0 0 1"
 SWEP.DefaultBodygroups = "0 3 0 0 1 4 2 7 0 0 0 2"
+SWEP.DefaultBodygroups = "0 1 0 2 1 5 2 7 0 0 0 2"
 SWEP.DefaultSkin = 0
 
 SWEP.ActivePose = {
@@ -236,7 +236,8 @@ SWEP.Attachments = {
 	{
 		Name = "Rear Sight",
 		SortOrder = 1.0,
-		Icon = Material("entities/att/acwatt_ud_m16_rs_kac.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_ud_m16_rs_kac.png", "mips smooth"),
+		Slot = "ud_m16_sight_rear"
 	},
 	{
 		Name = "Optical Sight",
@@ -247,17 +248,20 @@ SWEP.Attachments = {
 	{
 		Name = "Front Sight",
 		SortOrder = 1.2,
-		Icon = Material("entities/att/acwatt_ud_m16_fs_kac.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_ud_m16_fs_kac.png", "mips smooth"),
+		Slot = "ud_m16_sight_front"
 	},
 	{
 		Name = "Barrel",
 		SortOrder = 2.0,
-		Icon = Material("entities/att/acwatt_ud_m16_barrel_20.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_ud_m16_barrel_20.png", "mips smooth"),
+		Slot = "ud_m16_barrel"
 	},
 	{
 		Name = "Handguard",
 		SortOrder = 2.1,
-		Icon = Material("entities/att/acwatt_ud_m16_hg_ribbed.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_ud_m16_hg_ribbed.png", "mips smooth"),
+		Slot = "ud_m16_handguard"
 	},
 	{
 		Name = "Upper Receiver",
@@ -280,17 +284,20 @@ SWEP.Attachments = {
 	{
 		Name = "Muzzle",
 		SortOrder = 3.0,
-		Icon = Material("entities/att/acwatt_uc_muzzle_fhider1.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_uc_muzzle_fhider1.png", "mips smooth"),
+		Slot = Sslot("muzzle_break", "muzzle_suppressor")
 	},
 	{
 		Name = "Tactical",
 		SortOrder = 3.1,
-		Icon = Material("entities/att/acwatt_uc_tac_anpeq16a.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_uc_tac_anpeq16a.png", "mips smooth"),
+		Slot = "tactical"
 	},
 	{
 		Name = "Underbarrel",
 		SortOrder = 3.2,
-		Icon = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth")
+		Icon = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth"),
+		Slot = "underbarrel"
 	},
 }
 
