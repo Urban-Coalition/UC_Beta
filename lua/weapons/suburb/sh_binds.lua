@@ -168,10 +168,10 @@ if CLIENT then
 
 			local wepslot, attslot = wep.Attachments[index].Slot, v.Slot
 			if !wepslot then
-				print( "No wepslot, wtf")
+				print( "Suburb: Index #" .. index .. " has no wepslot" )
 			end
 			if !attslot then
-				print( "No attslot, wtf")
+				print( "Suburb: Attachment " .. i .. " has no attslot" )
 			end
 			if !wepslot or !attslot or !Quickcheck( wepslot, attslot ) then continue end
 
