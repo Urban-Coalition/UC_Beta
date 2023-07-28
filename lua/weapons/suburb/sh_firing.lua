@@ -1,6 +1,3 @@
-local suburb_hellfire = GetConVar("uc_cl_hellfire")
-local suburb_hellfire_intensity = GetConVar("uc_cl_hellfire_intensity")
-
 function SWEP:SwitchFiremode(prev)
 	-- lol?
 	local nextfm = self:GetFiremode() + 1
@@ -131,14 +128,14 @@ function SWEP:PrimaryAttack()
 	end
 
 	-- Cool projected texture (badass)
-	if game.SinglePlayer() and suburb_hellfire:GetInt() > 0 then
+	if game.SinglePlayer() and GetConVar("uc_cl_hellfire"):GetInt() > 0 then
 		self:CallOnClient("Hellfire")
 	elseif SERVER then
 		net.Start("Suburb_Hellfire")
 			net.WriteEntity(self)
 		net.SendPVS( self:GetOwner():GetPos() )
 	else
-		if suburb_hellfire:GetInt() > 0 then
+		if GetConVar("uc_cl_hellfire"):GetInt() > 0 then
 			self:Hellfire()
 		end
 	end
@@ -151,7 +148,7 @@ if SERVER then
 else
 	net.Receive("Suburb_Hellfire", function()
 		local wep = net.ReadEntity()
-		if (wep:GetOwner() != LocalPlayer()) and suburb_hellfire:GetInt() > 1 then
+		if (wep:GetOwner() != LocalPlayer()) and GetConVar("uc_cl_hellfire"):GetInt() > 1 then
 			wep:Hellfire()
 		end
 	end)
@@ -171,7 +168,7 @@ function SWEP:Hellfire()
 		lamp:SetTexture( "suburb/muzzleflash_light" )
 		lamp:SetFarZ( 600 ) -- How far the light should shine
 		lamp:SetFOV( math.Rand( 120, 130 ) )
-		lamp:SetBrightness( math.Rand( 1, 2 ) * suburb_hellfire_intensity:GetFloat() )
+		lamp:SetBrightness( math.Rand( 1, 2 ) * GetConVar("uc_cl_hellfire_intensity"):GetFloat() )
 		lamp:SetShadowFilter( 1 )
 		lamp:SetEnableShadows( true )
 
