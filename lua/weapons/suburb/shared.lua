@@ -323,7 +323,12 @@ local ler_sprint = 0
 local tempsprintpos, tempsprintang = Vector( 1, 0, 0.5 ), Angle( -15, 10, -10 )
 local tempcustpos, tempcustang = Vector( 3, 0, -1 ), Angle( 15, 15, 15 )
 
+local lastpos, lastang = Vector(), Angle()
+
 function SWEP:GetViewModelPosition(pos, ang)
+	if GetConVar("uc_dev_benchgun"):GetBool() then
+		return lastpos, lastang
+	end
 	local opos, oang = Vector(), Angle()
 	local p = self:GetOwner()
 	if IsValid(p) then
@@ -472,6 +477,13 @@ function SWEP:GetViewModelPosition(pos, ang)
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
+	do -- recoil fix
+		local b_ang = Angle()
+		b_ang:Set( self:GetOwner():GetViewPunchAngles() )
+
+		b_ang.y = -b_ang.y
+		oang:Add( b_ang )
+	end
 	if false then -- THINGING
 		local b_pos, b_ang = Vector(), Angle()
 
@@ -584,6 +596,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 	pos:Add( opos.y * ang:Forward() )
 	pos:Add( opos.z * ang:Up() )
 
+	lastpos:Set(pos)
+	lastang:Set(ang)
 	return pos, ang
 end
 
@@ -733,30 +747,44 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 	end
 
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
+	
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
 	cam.IgnoreZ(true)
 
-	for i, data in pairs( self.Elements ) do
-		if data.Model and data.Bone and data.iRep then
+	for index, data in pairs( self.Attachments ) do
+		if data._Model and data.Bone then
+			local AT = Suburb.AttTable[data._Installed]
+			assert(AT, "Suburb Think: That attachment doesn't exist!!", index, data._Installed)
+
 			if IsValid(vm) then
 				local bm = vm:GetBoneMatrix( vm:LookupBone( data.Bone ) )
 				if bm then
 					local pos, ang = bm:GetTranslation(), bm:GetAngles()
-					pos:Add( ang:Right() * data.Pos.x )
-					pos:Add( ang:Forward() * data.Pos.y )
-					pos:Add( ang:Up() * data.Pos.z )
+					if data.Pos then
+						pos:Add( ang:Right() * data.Pos.x )
+						pos:Add( ang:Forward() * data.Pos.y )
+						pos:Add( ang:Up() * data.Pos.z )
+					end
+					if AT.ModelOffset then
+						pos:Add( ang:Right() * AT.ModelOffset.x )
+						pos:Add( ang:Forward() * AT.ModelOffset.y )
+						pos:Add( ang:Up() * AT.ModelOffset.z )
+					end
 
 					ang:RotateAroundAxis( ang:Right(), data.Ang.p )
 					ang:RotateAroundAxis( ang:Forward(), data.Ang.y )
 					ang:RotateAroundAxis( ang:Up(), data.Ang.r )
-					data.iRep:SetPos( pos )
-					data.iRep:SetAngles( ang )
+					data._Model:SetPos( pos )
+					data._Model:SetAngles( ang )
 
-					local may = Matrix()
-					may:Scale( data.Scale )
-					data.iRep:EnableMatrix( "RenderMultiply", may )
+					if data.Scale or AT.ModelScale then
+						local may = Matrix()
+						if data.Scale then may:Scale( data.Scale ) end
+						if AT.ModelScale then may:Scale( AT.ModelScale ) end
+						data._Model:EnableMatrix( "RenderMultiply", may )
+					end
 
-					data.iRep:DrawModel()
+					data._Model:DrawModel()
 				end
 			end
 		end

@@ -130,4 +130,33 @@ function SWEP:Think()
 			end
 		end
 	end
+
+	-- placeholder logic for shit
+	if CLIENT then
+		for index, data in ipairs(self.Attachments) do
+			if index == "BaseClass" then continue end
+
+			if data._Installed then
+				local AT = Suburb.AttTable[data._Installed]
+				assert(AT, "Suburb Think: That attachment doesn't exist!!", index, data._Installed)
+
+				if AT.Model then
+					if !data._Model then
+						data._Model = ClientsideModel(AT.Model)
+						data._Model:SetNoDraw( true )
+					else
+						if data._Model:GetModel() != AT.Model then
+							data._Model:SetModel(AT.Model)
+						end
+					end
+				end
+			else
+				if data._Model then
+					data._Model:Remove()
+					data._Model = nil
+				end
+			end
+		end
+	end
+
 end

@@ -20,6 +20,7 @@ end)
 -- Debug & developer
 CreateConVar("uc_dev_aimcorrect", 0, FCVAR_REPLICATED, "Sway the gun around to get SWEP.SwayCorrection correct yourself")
 CreateConVar("uc_dev_debug", 0, FCVAR_REPLICATED, "Spit debug information")
+CreateConVar("uc_dev_benchgun", 0, FCVAR_REPLICATED, "Place gun at world origin")
 if CLIENT then
 	-- Clientside stuff
 	CreateClientConVar("uc_cl_cammult", 1, true, false)

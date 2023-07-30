@@ -243,7 +243,11 @@ SWEP.Attachments = {
 		Name = "Optical Sight",
 		SortOrder = 1.1,
 		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
-		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long")
+		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
+
+		Bone = "m16_parent",
+		Pos = Vector(-1.652, 0, 1.5),
+		Ang = Angle(90, -90, 0),
 	},
 	{
 		Name = "Front Sight",
@@ -285,7 +289,11 @@ SWEP.Attachments = {
 		Name = "Muzzle",
 		SortOrder = 3.0,
 		Icon = Material("entities/att/acwatt_uc_muzzle_fhider1.png", "mips smooth"),
-		Slot = Sslot("muzzle_break", "muzzle_suppressor")
+		Slot = Sslot("muzzle_break", "muzzle_suppressor"),
+
+		Bone = "m16_parent",
+		Pos = Vector(-0.35, 0, 19.53),
+		Ang = Angle(90, -90, 0),
 	},
 	{
 		Name = "Tactical",

@@ -185,6 +185,9 @@ local menus = {
 
 			G_CHECKBOX(llist, "Debug Information", "uc_dev_debug")
 			G_HELP(llist, "Enable debug overlays & messages.")
+
+			G_CHECKBOX(llist, "Benchgun", "uc_dev_benchgun")
+			G_HELP(llist, "Keep the weapon model in place.")
 		end
 		do
 			local cat = vgui.Create( "DCollapsibleCategory", panel )
