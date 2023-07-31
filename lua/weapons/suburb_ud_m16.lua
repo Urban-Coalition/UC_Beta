@@ -237,7 +237,12 @@ SWEP.Attachments = {
 		Name = "Rear Sight",
 		SortOrder = 1.0,
 		Icon = Material("entities/att/acwatt_ud_m16_rs_kac.png", "mips smooth"),
-		Slot = "ud_m16_sight_rear"
+		Slot = "ud_m16_rs",
+		ActivateElements = {"flattop"},
+
+		Bone = "m16_parent",
+		Pos = Vector(-1.652, 0, 0.5),
+		Ang = Angle(90, -90, 0)
 	},
 	{
 		Name = "Optical Sight",
@@ -245,15 +250,24 @@ SWEP.Attachments = {
 		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
 		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
 		ActivateElements = {"flattop"},
+
 		Bone = "m16_parent",
-		Pos = Vector(-1.652, 0, 1.5),
+		Pos = Vector(-1.652, 0, 2.0),
 		Ang = Angle(90, -90, 0),
+
+		Pos0 = Vector(-1.652, 0, 0),
+		Pos1 = Vector(-1.652, 0, 5.5),
 	},
 	{
 		Name = "Front Sight",
 		SortOrder = 1.2,
 		Icon = Material("entities/att/acwatt_ud_m16_fs_kac.png", "mips smooth"),
-		Slot = "ud_m16_sight_front"
+		Slot = "ud_m16_fs",
+		ActivateElements = {"nofs"},
+
+		Bone = "m16_parent",
+		Pos = Vector(-1.652, 0, 12.5),
+		Ang = Angle(90, -90, 0)
 	},
 	{
 		Name = "Barrel",
@@ -334,9 +348,19 @@ SWEP.Elements = {
 	}
 }
 
+function SWEP:Hook_PreRegenBGTab()
+	local ae = self.ActivatedElements
+end
+
 function SWEP:Hook_RegenBGTab( bgtab )
 	local ae = self.ActivatedElements
-	if ae["hg_ris"] and (ae["barrel_14"] or ae["barrel_10"]) then
-		bgtab[5] = 5
+	local shortbarrel = (ae["barrel_14"] or ae["barrel_10"])
+	if shortbarrel then
+		if ae["hg_ris"] then
+			bgtab[5] = 5
+		end
+	end
+	if ae["nofs"] then
+		bgtab[6] = 5
 	end
 end

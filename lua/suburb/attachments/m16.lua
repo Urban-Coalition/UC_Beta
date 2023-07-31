@@ -1,6 +1,26 @@
 
 -- Urban Decay: M16
 
+-- Ironsights
+
+local att = {}
+att.Name = "M16 irons - KAC rear"
+att.ShortName = "KAC"
+att.Slot = "ud_m16_rs"
+
+att.Model = "models/weapons/arccw/atts/kac_rs.mdl"
+att.ModelScale = Vector(0.68, 0.68, 0.68)
+Suburb_GenAtt(att, "ud_m16_rs_kac")
+
+local att = {}
+att.Name = "M16 irons - KAC front"
+att.ShortName = "KAC"
+att.Slot = "ud_m16_fs"
+
+att.Model = "models/weapons/arccw/atts/kac_fs.mdl"
+att.ModelScale = Vector(0.68, 0.68, 0.68)
+Suburb_GenAtt(att, "ud_m16_fs_kac")
+
 -- Barrels
 
 local att = {}

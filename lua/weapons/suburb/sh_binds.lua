@@ -170,6 +170,9 @@ if CLIENT then
 		scroller:Dock( FILL )
 
 		for i, v in pairs( Suburb.AttTable ) do
+			if !v.SortOrder then v.SortOrder = 0 end
+		end
+		for i, v in SortedPairsByMemberValue( Suburb.AttTable, "SortOrder", true ) do
 			if i == "BaseClass" then continue end
 
 			local wepsl = wep.Attachments[index]
@@ -201,7 +204,7 @@ if CLIENT then
 
 				surface.SetFont( "ccpanel_tb_8" )
 				surface.SetTextPos( ss(4), ss(4) )
-				surface.DrawText( v.Name )
+				surface.DrawText( v.ShortNameSubtitle or v.Name )
 
 				surface.SetFont( "ccpanel_tb_12" )
 				surface.SetTextPos( ss(4), ss(10) )
@@ -362,8 +365,12 @@ function Quickcheck( wepslot, attslot )
 		if isstring(attslot) then		-- String slot2
 			return wepslot[attslot]
 		else							-- Table slot2
-			print( "Suburb Quickcheck: Table on table check isn't finished yet! FINISH IT FESIUG!!!!!!!!!!!!!!!!" )
-			return true --UNFINISHED
+			for w_i, w_v in pairs(wepslot) do
+				for a_i, a_v in pairs(attslot) do
+					if (w_i == a_i) then return true end
+				end
+			end
+			return false
 		end
 
 	end

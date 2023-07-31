@@ -129,6 +129,7 @@ SWEP.Secondary.Ammo			= "none"
 SWEP.Secondary.ClipMax		= -1
 
 SWEP.ActivatedElements = {}
+SWEP.BGTable = {}
 
 AddCSLuaFile("sh_holdtypes.lua")
 include("sh_holdtypes.lua")
@@ -745,6 +746,7 @@ function SWEP:Think_Shell()
 end
 
 function SWEP:PreDrawViewModel( vm, weapon, ply )
+	self:UseBGTable( vm )
 
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	
@@ -789,6 +791,8 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 			end
 		end
 	end
+
+	self:AttHook( "Hook_PreDrawViewModel", vm, weapon, ply )
 end
 
 function SWEP:PostDrawViewModel( vm, weapon, ply )

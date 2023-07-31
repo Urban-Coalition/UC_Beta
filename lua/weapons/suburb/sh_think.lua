@@ -178,6 +178,7 @@ function SWEP:RegenStats()
 			end
 		end
 	end
+	self:AttHook( "Hook_PreRegenBGTab" )
 
 	-- Put it into effect I think
 	local vm = self:GetOwner()
@@ -202,12 +203,17 @@ function SWEP:RegenStats()
 		end
 		-- Call bgtab modifying function
 		self:AttHook( "Hook_RegenBGTab", bgtab )
-		for i=0, 31 do
-			local tt = bgtab[i] or 0
-			vm:SetBodygroup( i, tt )
-		end
-		vm:SetSkin( self.DefaultSkin or 0 )
+		self.BGTable = bgtab
 	end
+end
+
+function SWEP:UseBGTable( vm )
+	if !self.BGTable then return false end
+	for i=0, 31 do
+		local tt = self.BGTable[i] or 0
+		vm:SetBodygroup( i, tt )
+	end
+	vm:SetSkin( self.DefaultSkin or 0 )
 end
 
 function SWEP:GetEffectiveSources()
@@ -223,10 +229,10 @@ function SWEP:GetEffectiveSources()
 	return sources
 end
 
-function SWEP:AttHook( name, data )
+function SWEP:AttHook( name, ... )
 	for index, att in ipairs(self:GetEffectiveSources()) do
 		if att[name] then
-			att[name]( self, data )
+			att[name]( self, ... )
 		end
 	end
 end
