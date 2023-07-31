@@ -208,6 +208,13 @@ end
 
 function SWEP:Initialize()
 	self._WeaponList = weapons.GetStored( self:GetClass() )
+	for index, attslot in ipairs(self.Attachments) do
+		if index == "BaseClass" then continue end
+		if attslot.DefaultAtt then
+			attslot._Installed = attslot.DefaultAtt
+		end
+	end
+	self:RegenStats()
 end
 
 function SWEP:Reload( automatic )
