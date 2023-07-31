@@ -762,10 +762,19 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 				local bm = vm:GetBoneMatrix( vm:LookupBone( data.Bone ) )
 				if bm then
 					local pos, ang = bm:GetTranslation(), bm:GetAngles()
-					if data.Pos then
-						pos:Add( ang:Right() * data.Pos.x )
-						pos:Add( ang:Forward() * data.Pos.y )
-						pos:Add( ang:Up() * data.Pos.z )
+					local attpos = data.Pos
+					for elem, elemdata in pairs( self.Elements ) do
+						if elem == "BaseClass" then continue end
+						if self.ActivatedElements[elem] then
+							if elemdata.AttPos and elemdata.AttPos[index] then
+								attpos = elemdata.AttPos[index].Pos
+							end
+						end
+					end
+					if attpos then
+						pos:Add( ang:Right() * attpos.x )
+						pos:Add( ang:Forward() * attpos.y )
+						pos:Add( ang:Up() * attpos.z )
 					end
 					if AT.ModelOffset then
 						pos:Add( ang:Right() * AT.ModelOffset.x )

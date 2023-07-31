@@ -9,7 +9,7 @@ att.ShortName = "KAC"
 att.Slot = "ud_m16_rs"
 
 att.Model = "models/weapons/arccw/atts/kac_rs.mdl"
-att.ModelScale = Vector(0.68, 0.68, 0.68)
+att.ModelScale = Vector(0.67, 0.67, 0.67)
 Suburb_GenAtt(att, "ud_m16_rs_kac")
 
 local att = {}
@@ -18,8 +18,64 @@ att.ShortName = "KAC"
 att.Slot = "ud_m16_fs"
 
 att.Model = "models/weapons/arccw/atts/kac_fs.mdl"
-att.ModelScale = Vector(0.68, 0.68, 0.68)
+att.ModelScale = Vector(0.67, 0.67, 0.67)
 Suburb_GenAtt(att, "ud_m16_fs_kac")
+
+local att = {}
+att.Name = "M16 irons - Scalerworks rear"
+att.ShortName = "Scalerworks"
+att.Slot = "ud_m16_rs"
+
+att.Model = "models/weapons/arccw/atts/scalerworks_rs.mdl"
+att.ModelOffset = Vector(0.1, -0.007, -1)
+att.ModelScale = Vector(0.94, 0.94, 0.94)
+Suburb_GenAtt(att, "ud_m16_rs_scalerworks")
+
+local att = {}
+att.Name = "M16 irons - Scalerworks front"
+att.ShortName = "Scalerworks"
+att.Slot = "ud_m16_fs"
+
+att.Model = "models/weapons/arccw/atts/scalerworks_fs.mdl"
+att.ModelOffset = Vector(0.1, -0.007, 0)
+att.ModelScale = Vector(0.94, 0.94, 0.94)
+Suburb_GenAtt(att, "ud_m16_fs_scalerworks")
+
+local att = {}
+att.Name = "M16 irons - Magpul rear"
+att.ShortName = "Magpul"
+att.Slot = "ud_m16_rs"
+
+att.Model = "models/weapons/arccw/atts/magpul_rs.mdl"
+att.ModelScale = Vector(0.67, 0.67, 0.67)
+Suburb_GenAtt(att, "ud_m16_rs_magpul")
+
+local att = {}
+att.Name = "M16 irons - Magpul front"
+att.ShortName = "Magpul"
+att.Slot = "ud_m16_fs"
+
+att.Model = "models/weapons/arccw/atts/magpul_fs.mdl"
+att.ModelScale = Vector(0.67, 0.67, 0.67)
+Suburb_GenAtt(att, "ud_m16_fs_magpul")
+
+local att = {}
+att.Name = "M16 irons - SIG rear"
+att.ShortName = "SIG"
+att.Slot = "ud_m16_rs"
+
+att.Model = "models/weapons/arccw/atts/sig_rs.mdl"
+att.ModelScale = Vector(0.67, 0.67, 0.67)
+Suburb_GenAtt(att, "ud_m16_rs_sig")
+
+local att = {}
+att.Name = "M16 irons - SIG front"
+att.ShortName = "SIG"
+att.Slot = "ud_m16_fs"
+
+att.Model = "models/weapons/arccw/atts/sig_fs.mdl"
+att.ModelScale = Vector(0.67, 0.67, 0.67)
+Suburb_GenAtt(att, "ud_m16_fs_sig")
 
 -- Barrels
 
@@ -58,6 +114,14 @@ att.Slot = "ud_m16_hg"
 
 att.ActivateElements = {"hg_ris"}
 Suburb_GenAtt(att, "ud_m16_hg_ris")
+
+-- uPPER receivers
+
+local att = {}
+att.Name = "M16A1 Upper Receiver"
+att.ShortName = "Classic Upper"
+att.Slot = "ud_m16_ur"
+Suburb_GenAtt(att, "ud_m16_ur_classic")
 
 -- Lower receivers
 

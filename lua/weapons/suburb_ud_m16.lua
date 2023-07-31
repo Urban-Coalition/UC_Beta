@@ -345,6 +345,10 @@ SWEP.Elements = {
 	},
 	["stock_carbine"] = {
 		Bodygroups = { [7] = 7 }
+	},
+	["ud_m16_ur_classic"] = {
+		Bodygroups = { [1] = 3 },
+		AttPos = { [2] = { Pos = Vector( -3.45, 0, 2 ), Ang = Angle( -90, 90, 0 ) } }
 	}
 }
 
@@ -362,5 +366,9 @@ function SWEP:Hook_RegenBGTab( bgtab )
 	end
 	if ae["nofs"] then
 		bgtab[6] = 5
+	end
+	if ae["ud_m16_ur_classic"] and ae["flattop"] then
+		bgtab[3] = 1
+		bgtab[1] = 3
 	end
 end
