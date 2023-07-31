@@ -19,7 +19,7 @@ SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
 SWEP.ViewModelFOV			= 72
 
 SWEP.DefaultBodygroups = "0 3 0 0 1 4 2 7 0 0 0 2"
-SWEP.DefaultBodygroups = "0 1 0 2 1 5 2 7 0 0 0 2"
+SWEP.DefaultBodygroups = "0 0 0 0 1 5 2 7 0 0 0 2"
 SWEP.DefaultSkin = 0
 
 SWEP.ActivePose = {
@@ -244,7 +244,9 @@ SWEP.Attachments = {
 		SortOrder = 1.1,
 		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
 		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
-
+		ActivateElements = {"flattop"}
+	},
+	{
 		Bone = "m16_parent",
 		Pos = Vector(-1.652, 0, 1.5),
 		Ang = Angle(90, -90, 0),
@@ -312,5 +314,8 @@ SWEP.Attachments = {
 SWEP.Elements = {
 	["barrel_10"] = {
 		Bodygroups = { [4] = 2, [11] = 3 }
+	},
+	["flattop"] = {
+		Bodygroups = { [1] = 1, [3] = 2 }
 	}
 }

@@ -157,6 +157,12 @@ function SWEP:RegenStats()
 					self.ActivatedElements[v] = true
 				end
 			end
+
+			if data.ActivateElements then
+				for i, v in ipairs(data.ActivateElements) do
+					self.ActivatedElements[v] = true
+				end
+			end
 		else
 			if CLIENT and data._Model then
 				data._Model:Remove()
