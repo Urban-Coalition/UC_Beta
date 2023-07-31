@@ -206,6 +206,10 @@ function SWEP:SetupDataTables()
 	self:SetLoadAmount(math.huge)
 end
 
+function SWEP:Initialize()
+	self._WeaponList = weapons.GetStored( self:GetClass() )
+end
+
 function SWEP:Reload( automatic )
 	if CurTime() < self:GetNextFire() then
 		return false

@@ -280,8 +280,14 @@ SWEP.Attachments = {
 		Slot = "ud_m16_lr"
 	},
 	{
-		Name = "Magazine",
+		Name = "Stock",
 		SortOrder = 2.4,
+		Icon = Material("entities/att/acwatt_ud_m16_stock_default.png", "mips smooth"),
+		Slot = "ud_m16_stock"
+	},
+	{
+		Name = "Magazine",
+		SortOrder = 2.5,
 		Icon = Material("entities/att/acwatt_ud_m16_mag_30.png", "mips smooth"),
 		Slot = "ud_m16_mag"
 	},
