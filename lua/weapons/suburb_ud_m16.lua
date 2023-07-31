@@ -244,9 +244,7 @@ SWEP.Attachments = {
 		SortOrder = 1.1,
 		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
 		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
-		ActivateElements = {"flattop"}
-	},
-	{
+		ActivateElements = {"flattop"},
 		Bone = "m16_parent",
 		Pos = Vector(-1.652, 0, 1.5),
 		Ang = Angle(90, -90, 0),
