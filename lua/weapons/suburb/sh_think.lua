@@ -130,33 +130,38 @@ function SWEP:Think()
 			end
 		end
 	end
+end
 
-	-- placeholder logic for shit
-	if CLIENT then
-		for index, data in ipairs(self.Attachments) do
-			if index == "BaseClass" then continue end
+function SWEP:RegenStats()
+	table.Empty( self.ActivatedElements )
+	for index, data in ipairs(self.Attachments) do
+		if index == "BaseClass" then continue end
 
-			if data._Installed then
-				local AT = Suburb.AttTable[data._Installed]
-				assert(AT, "Suburb Think: That attachment doesn't exist!!", index, data._Installed)
+		if data._Installed then
+			local AT = Suburb.AttTable[data._Installed]
+			assert(AT, "Suburb Think: That attachment doesn't exist!!", index, data._Installed)
 
-				if AT.Model then
-					if !data._Model then
-						data._Model = ClientsideModel(AT.Model)
-						data._Model:SetNoDraw( true )
-					else
-						if data._Model:GetModel() != AT.Model then
-							data._Model:SetModel(AT.Model)
-						end
+			if CLIENT and AT.Model then
+				if !data._Model then
+					data._Model = ClientsideModel(AT.Model)
+					data._Model:SetNoDraw( true )
+				else
+					if data._Model:GetModel() != AT.Model then
+						data._Model:SetModel(AT.Model)
 					end
 				end
-			else
-				if data._Model then
-					data._Model:Remove()
-					data._Model = nil
+			end
+
+			if AT.ActivateElements then
+				for i, v in ipairs(AT.ActivateElements) do
+					self.ActivatedElements[v] = true
 				end
+			end
+		else
+			if CLIENT and data._Model then
+				data._Model:Remove()
+				data._Model = nil
 			end
 		end
 	end
-
 end

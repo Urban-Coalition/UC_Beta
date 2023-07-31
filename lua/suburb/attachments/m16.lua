@@ -2,6 +2,14 @@
 -- Urban Decay: M16
 
 local att = {}
+att.Name = "M16 10 Inch Barrel"
+att.ShortName = "10.5 inch barrel"
+att.Slot = "ud_m16_barrel"
+
+att.ActivateElements = {"barrel_10"}
+Suburb_GenAtt(att, "ud_m16_barrel")
+
+local att = {}
 att.Name = "M16A3 Automatic Lower Receiver"
 att.ShortName = "Automatic Lower"
 att.Slot = "ud_m16_lr"

@@ -278,6 +278,7 @@ if SERVER then
 			else
 				wep.Attachments[index]._Installed = name
 			end
+			wep:RegenStats()
 		end
 	end)
 else
@@ -294,6 +295,7 @@ else
 			wep:EmitSound( "weapons/arccw/install.wav" )
 			wep.Attachments[index]._Installed = name
 		end
+		wep:RegenStats()
 	end)
 end
 

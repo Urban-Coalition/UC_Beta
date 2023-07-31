@@ -309,4 +309,8 @@ SWEP.Attachments = {
 	},
 }
 
-SWEP.Elements = {}
+SWEP.Elements = {
+	["barrel_10"] = {
+		Bodygroups = { [4] = 2, [11] = 3 }
+	}
+}

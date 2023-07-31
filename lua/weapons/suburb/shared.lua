@@ -100,6 +100,10 @@ SWEP.IronsightPose = {
 }
 SWEP.SwayCorrection = 0.35
 
+SWEP.Animations = {}
+SWEP.Attachments = {}
+SWEP.Elements = {}
+
 -- stuff:
 --		StopSightTime
 --		ReloadingTime
@@ -123,6 +127,8 @@ SWEP.Secondary.DefaultClip	= 0
 SWEP.Secondary.Automatic	= true
 SWEP.Secondary.Ammo			= "none"
 SWEP.Secondary.ClipMax		= -1
+
+SWEP.ActivatedElements = {}
 
 AddCSLuaFile("sh_holdtypes.lua")
 include("sh_holdtypes.lua")
@@ -188,11 +194,6 @@ function SWEP:GetFiremode()
 	--if (!game.SinglePlayer() and CLIENT) then return self.CL_Firemode end
 	return self:GetNWFiremode()
 end
-
-
-SWEP.Animations = {}
-SWEP.Attachments = {}
-SWEP.Elements = {}
 
 function SWEP:SetupDataTables()
 	for i, v in pairs(yep) do
@@ -734,10 +735,22 @@ end
 
 local emptab = {}
 function SWEP:PreDrawViewModel( vm, weapon, ply )
+	PrintTable(self.ActivatedElements)
 	if IsValid(vm) then
 		local bgtab = emptab
 		if self.DefaultBodygroups then
 			bgtab = string.Explode( " ", self.DefaultBodygroups )
+		end
+		if self.Elements then
+			for inde, elem in pairs(self.Elements) do
+				if inde == "BaseClass" then continue end
+				if !self.ActivatedElements[inde] then continue end
+				if elem.Bodygroups then
+					for slot, set in pairs(elem.Bodygroups) do
+						bgtab[slot+1] = set
+					end
+				end
+			end
 		end
 		for i=1, 32 do
 			local tt = bgtab[i] or 0
