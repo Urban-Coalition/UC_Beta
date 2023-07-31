@@ -744,30 +744,7 @@ function SWEP:Think_Shell()
 	end
 end
 
-local emptab = {}
 function SWEP:PreDrawViewModel( vm, weapon, ply )
-	if IsValid(vm) then
-		local bgtab = emptab
-		if self.DefaultBodygroups then
-			bgtab = string.Explode( " ", self.DefaultBodygroups )
-		end
-		if self.Elements then
-			for inde, elem in pairs(self.Elements) do
-				if inde == "BaseClass" then continue end
-				if !self.ActivatedElements[inde] then continue end
-				if elem.Bodygroups then
-					for slot, set in pairs(elem.Bodygroups) do
-						bgtab[slot+1] = set
-					end
-				end
-			end
-		end
-		for i=1, 32 do
-			local tt = bgtab[i] or 0
-			vm:SetBodygroup( i-1, tt )
-		end
-		vm:SetSkin( self.DefaultSkin or 0 )
-	end
 
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	

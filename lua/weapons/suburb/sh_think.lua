@@ -133,7 +133,10 @@ function SWEP:Think()
 end
 
 function SWEP:RegenStats()
+	-- Clear the activated elements list
 	table.Empty( self.ActivatedElements )
+
+	-- Set elements and whatever
 	for index, data in ipairs(self.Attachments) do
 		if index == "BaseClass" then continue end
 
@@ -173,6 +176,57 @@ function SWEP:RegenStats()
 				data._Model:Remove()
 				data._Model = nil
 			end
+		end
+	end
+
+	-- Put it into effect I think
+	local vm = self:GetOwner()
+	if IsValid(vm) then vm = vm:GetViewModel() end
+	if IsValid(vm) then
+		local bgtab = { [0] = 0 }
+		if self.DefaultBodygroups then
+			for i, v in ipairs( string.Explode( " ", self.DefaultBodygroups ) ) do
+				bgtab[i-1] = v
+			end
+		end
+		if self.Elements then
+			for inde, elem in pairs(self.Elements) do
+				if inde == "BaseClass" then continue end
+				if !self.ActivatedElements[inde] then continue end
+				if elem.Bodygroups then
+					for slot, set in pairs(elem.Bodygroups) do
+						bgtab[slot] = set
+					end
+				end
+			end
+		end
+		-- Call bgtab modifying function
+		self:AttHook( "Hook_RegenBGTab", bgtab )
+		for i=0, 31 do
+			local tt = bgtab[i] or 0
+			vm:SetBodygroup( i, tt )
+		end
+		vm:SetSkin( self.DefaultSkin or 0 )
+	end
+end
+
+function SWEP:GetEffectiveSources()
+	local sources = {}
+	table.insert( sources, self:GetTable() )
+	for index, attslot in ipairs(self.Attachments) do
+		if index == "BaseClass" then continue end
+		if attslot._Installed then
+			assert( Suburb.AttTable[attslot._Installed], "Suburb GetEffectiveSources: That attachment does not exist!: ", attslot._Installed )
+			table.insert( sources, Suburb.AttTable[attslot._Installed] )
+		end
+	end
+	return sources
+end
+
+function SWEP:AttHook( name, data )
+	for index, att in ipairs(self:GetEffectiveSources()) do
+		if att[name] then
+			att[name]( self, data )
 		end
 	end
 end

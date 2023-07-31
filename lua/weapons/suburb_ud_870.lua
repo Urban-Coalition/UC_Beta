@@ -193,6 +193,7 @@ SWEP.Animations				= {
 	},
 	["cycle"]	= {
 		Source = "cycle",
+		Time = 0.8,
 		Events = {
 			{s = Ssnd.rottle, t = 0},
 			{s = p1 .. "rack_1.ogg",  t = 0},

@@ -29,6 +29,16 @@ att.Slot = "ud_m16_stock"
 att.ActivateElements = {"stock_carbine"}
 Suburb_GenAtt(att, "ud_m16_stock_carbine")
 
+-- Stocks
+
+local att = {}
+att.Name = "M16 RIS Handguard"
+att.ShortName = "RIS Handguard"
+att.Slot = "ud_m16_hg"
+
+att.ActivateElements = {"hg_ris"}
+Suburb_GenAtt(att, "ud_m16_hg_ris")
+
 -- Lower receivers
 
 local att = {}

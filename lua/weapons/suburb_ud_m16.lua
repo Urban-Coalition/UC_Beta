@@ -266,7 +266,7 @@ SWEP.Attachments = {
 		Name = "Handguard",
 		SortOrder = 2.1,
 		Icon = Material("entities/att/acwatt_ud_m16_hg_ribbed.png", "mips smooth"),
-		Slot = "ud_m16_handguard"
+		Slot = "ud_m16_hg"
 	},
 	{
 		Name = "Upper Receiver",
@@ -326,7 +326,17 @@ SWEP.Elements = {
 	["flattop"] = {
 		Bodygroups = { [1] = 1, [3] = 2 }
 	},
+	["hg_ris"] = {
+		Bodygroups = { [5] = 2 }
+	},
 	["stock_carbine"] = {
 		Bodygroups = { [7] = 7 }
 	}
 }
+
+function SWEP:Hook_RegenBGTab( bgtab )
+	local ae = self.ActivatedElements
+	if ae["hg_ris"] and (ae["barrel_14"] or ae["barrel_10"]) then
+		bgtab[5] = 5
+	end
+end
