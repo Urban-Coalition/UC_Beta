@@ -172,6 +172,7 @@ if CLIENT then
 		for i, v in pairs( Suburb.AttTable ) do
 			if i == "BaseClass" then continue end
 
+			local wepsl = wep.Attachments[index]
 			local wepslot, attslot = wep.Attachments[index].Slot, v.Slot
 			if !wepslot then
 				print( "Suburb: Index #" .. index .. " has no wepslot" )
@@ -190,9 +191,10 @@ if CLIENT then
 				surface.SetDrawColor( CCP_BUTTON )
 				surface.DrawRect( 0, 0, w, h )
 
-				if wepslot.Installed == i or butt:IsHovered() then
+				local inst = wepsl._Installed == i
+				if inst or butt:IsHovered() then
 					surface.SetDrawColor( CCP_BUTTONHOVER )
-					surface.DrawOutlinedRect( 0, 0, w, h, ss(2) )
+					surface.DrawOutlinedRect( 0, 0, w, h, ss(inst and 3 or 2) )
 				end
 
 				surface.SetTextColor( CCP_T )
