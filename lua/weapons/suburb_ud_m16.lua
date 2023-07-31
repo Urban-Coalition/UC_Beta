@@ -19,7 +19,7 @@ SWEP.VMWMClone				= { Pos = Vector(), Ang = Angle(), Size = Vector() }
 SWEP.ViewModelFOV			= 72
 
 SWEP.DefaultBodygroups = "0 3 0 0 1 4 2 7 0 0 0 2"
-SWEP.DefaultBodygroups = "0 0 0 0 1 5 2 7 0 0 0 2"
+SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 0 0 0 1"
 SWEP.DefaultSkin = 0
 
 SWEP.ActivePose = {
@@ -313,7 +313,10 @@ SWEP.Attachments = {
 
 SWEP.Elements = {
 	["barrel_10"] = {
-		Bodygroups = { [4] = 2, [11] = 3 }
+		Bodygroups = { [4] = 2, [5] = 4, [6] = 2, [11] = 3 }
+	},
+	["barrel_14"] = {
+		Bodygroups = { [4] = 1, [5] = 4, [6] = 2, [11] = 2 }
 	},
 	["flattop"] = {
 		Bodygroups = { [1] = 1, [3] = 2 }

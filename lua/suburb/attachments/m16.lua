@@ -7,7 +7,15 @@ att.ShortName = "10.5 inch barrel"
 att.Slot = "ud_m16_barrel"
 
 att.ActivateElements = {"barrel_10"}
-Suburb_GenAtt(att, "ud_m16_barrel")
+Suburb_GenAtt(att, "ud_m16_barrel_10")
+
+local att = {}
+att.Name = "M16 14 Inch Barrel"
+att.ShortName = "14.5 inch barrel"
+att.Slot = "ud_m16_barrel"
+
+att.ActivateElements = {"barrel_14"}
+Suburb_GenAtt(att, "ud_m16_barrel_14")
 
 local att = {}
 att.Name = "M16A3 Automatic Lower Receiver"
