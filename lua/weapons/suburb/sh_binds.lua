@@ -87,7 +87,7 @@ if CLIENT then
 		if SuburbTest then SuburbTest:Remove() end
 		SuburbTest = vgui.Create("DFrame")
 		SuburbTest:SetTitle("Test cust frame")
-		SuburbTest:SetPos( ss(120), ss(120) )
+		SuburbTest:SetPos( ss(10), ss(10) )
 		SuburbTest:SetSize( ss(160), ss(240) )
 		SuburbTest:MakePopup()
 		SuburbTest:SetKeyboardInputEnabled( false )
@@ -175,10 +175,10 @@ if CLIENT then
 			local wepsl = wep.Attachments[index]
 			local wepslot, attslot = wep.Attachments[index].Slot, v.Slot
 			if !wepslot then
-				print( "Suburb: Index #" .. index .. " has no wepslot" )
+				SDeP( "Suburb CCPanel_AttsList: Index #" .. index .. " has no wepslot" )
 			end
 			if !attslot then
-				print( "Suburb: Attachment " .. i .. " has no attslot" )
+				SDeP( "Suburb CCPanel_AttsList: Attachment " .. i .. " has no attslot" )
 			end
 			if !wepslot or !attslot or !Quickcheck( wepslot, attslot ) then continue end
 
@@ -238,16 +238,15 @@ if CLIENT then
 end
 
 function SWEP:ToggleCustomize()
-	if CLIENT then
-		CCPanel()
-	end
-	do return end
-	if SuburbCustDerma then SuburbCustDerma:Remove() end
 	if self:GetCustomizing() then
 		self:SetCustomizing( false )
+		if CLIENT then
+			if SuburbTest then SuburbTest:Remove() end
+			if SuburbTestAtts then SuburbTestAtts:Remove() end
+		end
 	else
 		self:SetCustomizing( true )
-		self:GetOwner():ConCommand("newurb_menu")
+		if CLIENT then CCPanel() end
 	end
 end
 
@@ -327,6 +326,8 @@ function SWEP:TestCompatibility( ply, index, attname )
 	local wepslot, attslot = indet.Slot, namet.Slot
 	assert( wepslot, "Suburb TestCompatibility: The weapon 'slot' doesn't have a Slot!" )
 	assert( attslot, "Suburb TestCompatibility: The attachment doesn't have a Slot!" )
+
+	assert( indet._Installed != attname, "Suburb TestCompatibility: You already have this installed." )
 
 	-- Todo: Add checks for if slot is internal/cannot be removed,
 	-- or for slots that must have a default attachment (cannot just be empty)

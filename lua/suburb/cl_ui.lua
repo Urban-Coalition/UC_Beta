@@ -503,7 +503,7 @@ local letsgo = 0
 moves.test1 = {}
 moves.test1.func = function( data ) ------------------------------------------------
 	local w = data.p:GetActiveWeapon()
-	if IsValid(w) and w.Suburb and w:GetCustomizing() then
+	if false then -- IsValid(w) and w.Suburb and w:GetCustomizing() then
 	local extra = 75
 
 	local potal = Vector()
@@ -737,7 +737,7 @@ local selected2 = 1
 moves.test2 = {}
 moves.test2.func = function( data ) ------------------------------------------------
 	local w = data.p:GetActiveWeapon()
-	if IsValid(w) and w.Suburb and w:GetCustomizing() then
+	if false then -- IsValid(w) and w.Suburb and w:GetCustomizing() then
 	local extra = 75
 
 	local potal = Vector()
