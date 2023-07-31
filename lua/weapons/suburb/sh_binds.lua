@@ -71,6 +71,7 @@ end)
 if CLIENT then
 	local CCP_BG = Color( 0, 0, 0, 200 )
 	local CCP_BUTTON = Color( 200, 200, 200, 127 )
+	local CCP_BUTTONHOVER = Color( 255, 255, 255, 255 )
 	local CCP_T = Color( 255, 255, 255, 255 )
 	local function ss(size)
 		return size * (ScrH() / 480)
@@ -110,6 +111,11 @@ if CLIENT then
 			function butt:Paint( w, h )
 				surface.SetDrawColor( CCP_BUTTON )
 				surface.DrawRect( 0, 0, w, h )
+
+				if butt:IsHovered() then
+					surface.SetDrawColor( CCP_BUTTONHOVER )
+					surface.DrawOutlinedRect( 0, 0, w, h, ss(2) )
+				end
 
 				surface.SetTextColor( CCP_T )
 
@@ -183,6 +189,11 @@ if CLIENT then
 			function butt:Paint( w, h )
 				surface.SetDrawColor( CCP_BUTTON )
 				surface.DrawRect( 0, 0, w, h )
+
+				if wepslot.Installed == i or butt:IsHovered() then
+					surface.SetDrawColor( CCP_BUTTONHOVER )
+					surface.DrawOutlinedRect( 0, 0, w, h, ss(2) )
+				end
 
 				surface.SetTextColor( CCP_T )
 

@@ -735,7 +735,6 @@ end
 
 local emptab = {}
 function SWEP:PreDrawViewModel( vm, weapon, ply )
-	PrintTable(self.ActivatedElements)
 	if IsValid(vm) then
 		local bgtab = emptab
 		if self.DefaultBodygroups then
