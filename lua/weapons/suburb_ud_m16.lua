@@ -348,7 +348,11 @@ SWEP.Elements = {
 	},
 	["ud_m16_ur_classic"] = {
 		Bodygroups = { [1] = 3 },
-		AttPos = { [2] = { Pos = Vector( -3.45, 0, 2 ), Ang = Angle( -90, 90, 0 ) } }
+		AttPos = {
+			[1] = { Pos = Vector( -3.45, 0, 0.9 ), Ang = Angle( -90, 90, 0 ) },
+			[2] = { Pos = Vector( -3.45, 0, 2 ), Ang = Angle( -90, 90, 0 ) },
+			[3] = { Pos = Vector( -3.45, 0, 5.8 ), Ang = Angle( -90, 90, 0 ) },
+		}
 	},
 	["ud_m16_mag_20"] = {
 		Bodygroups = { [2] = 1 },
