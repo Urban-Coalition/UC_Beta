@@ -115,7 +115,37 @@ att.Slot = "ud_m16_hg"
 att.ActivateElements = {"hg_ris"}
 Suburb_GenAtt(att, "ud_m16_hg_ris")
 
--- uPPER receivers
+-- Magazines
+
+local att = {}
+att.Name = "M16 STANAG 100-Round C-Mag"
+att.SortOrder = 100
+att.ShortName = "100-Round C-Mag"
+att.Slot = "ud_m16_mag"
+Suburb_GenAtt(att, "ud_m16_mag_100")
+
+local att = {}
+att.Name = "M16 STANAG 60-Round Casket Magazine"
+att.SortOrder = 60
+att.ShortName = "60-Round Casket Magazine"
+att.Slot = "ud_m16_mag"
+Suburb_GenAtt(att, "ud_m16_mag_60")
+
+local att = {}
+att.Name = "M16 STANAG 40-Round Extended Magazine"
+att.SortOrder = 40
+att.ShortName = "40-Round Extended Magazine"
+att.Slot = "ud_m16_mag"
+Suburb_GenAtt(att, "ud_m16_mag_40")
+
+local att = {}
+att.Name = "M16 STANAG 20-Round Compact Magazine"
+att.SortOrder = 20
+att.ShortName = "20-Round Compact Magazine"
+att.Slot = "ud_m16_mag"
+Suburb_GenAtt(att, "ud_m16_mag_20")
+
+-- Upper receivers
 
 local att = {}
 att.Name = "M16A1 Upper Receiver"
