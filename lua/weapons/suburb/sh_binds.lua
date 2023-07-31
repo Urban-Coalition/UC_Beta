@@ -253,7 +253,7 @@ end
 
 -- Tell the server we want to attach something
 function SWEP:CL_Att_Attach( index, name )
-	if SERVER then print("Suburb: wrong realm on cl att attach") end
+	if SERVER then print("Suburb CL_Att_Attach: wrong realm on cl att attach") end
 	net.Start("Suburb_ATT_Install")
 		net.WriteEntity( self )
 		net.WriteUInt( index, 8 )
@@ -300,7 +300,7 @@ else
 		local index = net.ReadUInt( 8 )
 		local name = net.ReadString()
 
-		print( "Suburb Suburb_ATT_Confirm: Server told me to attach " .. name .. " for index #" .. index, wep )
+		SDeP( "Suburb Suburb_ATT_Confirm: Server told me to attach " .. name .. " for index #" .. index, wep )
 		if name == "" then 
 			wep:EmitSound( "weapons/arccw/uninstall.wav" )
 			wep.Attachments[index]._Installed = nil
@@ -313,7 +313,7 @@ else
 end
 
 function SWEP:TestCompatibility( ply, index, attname )
-	print( "Suburb: Server testing: ", self, index .. " -- " .. attname )
+	SDeP( "Suburb: Server testing: ", self, index .. " -- " .. attname )
 	local indet = self.Attachments[index]
 	local namet = Suburb.AttTable[attname]
 
@@ -332,10 +332,10 @@ function SWEP:TestCompatibility( ply, index, attname )
 	-- or for slots that must have a default attachment (cannot just be empty)
 
 	if Quickcheck( wepslot, attslot ) then
-		print( "Suburb TestCompatibility: Slot fit!" )
+		SDeP( "Suburb TestCompatibility: Slot fit!" )
 		return true
 	else
-		print( "Suburb TestCompatibility: Slot didn't fit!" )
+		SDeP( "Suburb TestCompatibility: Slot didn't fit!" )
 		return false
 	end
 end
