@@ -782,6 +782,7 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 						pos:Add( ang:Up() * AT.ModelOffset.z )
 					end
 
+					-- WIP: Add all those fancy checks for angle and scale.
 					ang:RotateAroundAxis( ang:Right(), data.Ang.p )
 					ang:RotateAroundAxis( ang:Forward(), data.Ang.y )
 					ang:RotateAroundAxis( ang:Up(), data.Ang.r )
