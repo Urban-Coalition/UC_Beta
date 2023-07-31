@@ -249,16 +249,8 @@ SWEP.Animations				= {
 
 SWEP.Attachments = {
 	{
-		Name = "Rear Sight",
+		Name = "Sight",
 		SortOrder = 1.0,
-	},
-	{
-		Name = "Optical Sight",
-		SortOrder = 1.1,
-	},
-	{
-		Name = "Front Sight",
-		SortOrder = 1.2,
 	},
 	{
 		Name = "Barrel",
@@ -269,11 +261,11 @@ SWEP.Attachments = {
 		SortOrder = 2.1,
 	},
 	{
-		Name = "Upper Receiver",
+		Name = "Stock",
 		SortOrder = 2.2,
 	},
 	{
-		Name = "Lower Receiver",
+		Name = "Tube",
 		SortOrder = 2.3,
 	},
 	{

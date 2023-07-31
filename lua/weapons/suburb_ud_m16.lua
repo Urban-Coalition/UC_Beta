@@ -259,7 +259,8 @@ SWEP.Attachments = {
 		Name = "Barrel",
 		SortOrder = 2.0,
 		Icon = Material("entities/att/acwatt_ud_m16_barrel_20.png", "mips smooth"),
-		Slot = "ud_m16_barrel"
+		Slot = "ud_m16_barrel",
+		DefaultAtt = "ud_m16_barrel_14"
 	},
 	{
 		Name = "Handguard",
@@ -324,5 +325,8 @@ SWEP.Elements = {
 	},
 	["flattop"] = {
 		Bodygroups = { [1] = 1, [3] = 2 }
+	},
+	["stock_carbine"] = {
+		Bodygroups = { [7] = 7 }
 	}
 }

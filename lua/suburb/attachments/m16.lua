@@ -1,6 +1,8 @@
 
 -- Urban Decay: M16
 
+-- Barrels
+
 local att = {}
 att.Name = "M16 10 Inch Barrel"
 att.ShortName = "10.5 inch barrel"
@@ -16,6 +18,18 @@ att.Slot = "ud_m16_barrel"
 
 att.ActivateElements = {"barrel_14"}
 Suburb_GenAtt(att, "ud_m16_barrel_14")
+
+-- Stocks
+
+local att = {}
+att.Name = "M16 Carbine Stock"
+att.ShortName = "Carbine Stock"
+att.Slot = "ud_m16_stock"
+
+att.ActivateElements = {"stock_carbine"}
+Suburb_GenAtt(att, "ud_m16_stock_carbine")
+
+-- Lower receivers
 
 local att = {}
 att.Name = "M16A3 Automatic Lower Receiver"
