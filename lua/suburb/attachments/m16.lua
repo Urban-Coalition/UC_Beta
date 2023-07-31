@@ -77,6 +77,34 @@ att.Model = "models/weapons/arccw/atts/sig_fs.mdl"
 att.ModelScale = Vector(0.67, 0.67, 0.67)
 Suburb_GenAtt(att, "ud_m16_fs_sig")
 
+local att = {}
+att.Name = "M16 irons - Colt rear"
+att.ShortName = "COLT"
+att.Slot = "ud_m16_rs"
+
+att.Model = "models/weapons/arccw/atts/colt_rs.mdl"
+att.ModelScale = Vector(0.67, 0.67, 0.67)
+Suburb_GenAtt(att, "ud_m16_rs_colt")
+
+local att = {}
+att.Name = "M16 irons - Colt carry handle"
+att.ShortName = "CARRY HANDLE"
+att.Slot = "ud_m16_rs"
+
+att.Model = "models/weapons/arccw/atts/colt_ch.mdl"
+att.ModelOffset = Vector(0.1, 0, 0.3)
+att.ModelScale = Vector(0.74, 0.74, 0.74)
+Suburb_GenAtt(att, "ud_m16_rs_coltch")
+
+local att = {}
+att.Name = "M16 irons - Colt front"
+att.ShortName = "COLT"
+att.Slot = "ud_m16_fs"
+
+att.Model = "models/weapons/arccw/atts/colt_fs.mdl"
+att.ModelScale = Vector(0.67, 0.67, 0.67)
+Suburb_GenAtt(att, "ud_m16_fs_colt")
+
 -- Barrels
 
 local att = {}
@@ -121,6 +149,7 @@ local att = {}
 att.Name = "M16 STANAG 100-Round C-Mag"
 att.SortOrder = 100
 att.ShortName = "100-Round C-Mag"
+att.ShortNameSubtitle = "100 RND"
 att.Slot = "ud_m16_mag"
 Suburb_GenAtt(att, "ud_m16_mag_100")
 
@@ -128,6 +157,7 @@ local att = {}
 att.Name = "M16 STANAG 60-Round Casket Magazine"
 att.SortOrder = 60
 att.ShortName = "60-Round Casket Magazine"
+att.ShortNameSubtitle = "60 RND"
 att.Slot = "ud_m16_mag"
 Suburb_GenAtt(att, "ud_m16_mag_60")
 
@@ -135,6 +165,7 @@ local att = {}
 att.Name = "M16 STANAG 40-Round Extended Magazine"
 att.SortOrder = 40
 att.ShortName = "40-Round Extended Magazine"
+att.ShortNameSubtitle = "40 RND"
 att.Slot = "ud_m16_mag"
 Suburb_GenAtt(att, "ud_m16_mag_40")
 
@@ -142,6 +173,7 @@ local att = {}
 att.Name = "M16 STANAG 20-Round Compact Magazine"
 att.SortOrder = 20
 att.ShortName = "20-Round Compact Magazine"
+att.ShortNameSubtitle = "20 RND"
 att.Slot = "ud_m16_mag"
 Suburb_GenAtt(att, "ud_m16_mag_20")
 
