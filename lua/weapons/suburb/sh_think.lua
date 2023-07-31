@@ -141,14 +141,19 @@ function SWEP:RegenStats()
 			local AT = Suburb.AttTable[data._Installed]
 			assert(AT, "Suburb Think: That attachment doesn't exist!!", index, data._Installed)
 
-			if CLIENT and AT.Model then
-				if !data._Model then
-					data._Model = ClientsideModel(AT.Model)
-					data._Model:SetNoDraw( true )
-				else
-					if data._Model:GetModel() != AT.Model then
-						data._Model:SetModel(AT.Model)
+			if CLIENT then
+				if AT.Model then
+					if !data._Model then
+						data._Model = ClientsideModel(AT.Model)
+						data._Model:SetNoDraw( true )
+					else
+						if data._Model:GetModel() != AT.Model then
+							data._Model:SetModel(AT.Model)
+						end
 					end
+				elseif !AT.Model and data._Model then
+					data._Model:Remove()
+					data._Model = nil
 				end
 			end
 
