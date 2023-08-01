@@ -139,6 +139,14 @@ att.Slot = "ud_m16_stock"
 att.ActivateElements = {"stock_carbine"}
 Suburb_GenAtt(att, "ud_m16_stock_carbine")
 
+local att = {}
+att.Name = "M16 M231 Wire Stock"
+att.ShortName = "Wire Stock"
+att.Slot = "ud_m16_stock"
+
+att.ActivateElements = {"stock_wire"}
+Suburb_GenAtt(att, "ud_m16_stock_wire")
+
 -- Stocks
 
 local att = {}
