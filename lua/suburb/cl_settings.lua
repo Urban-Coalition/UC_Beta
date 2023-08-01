@@ -201,6 +201,9 @@ local menus = {
 			llist:SetSpaceY( 10 )
 			llist:DockPadding( 5, 2, 5, 2 )
 
+			G_CHECKBOX(llist, "Disable Caching", "uc_dev_disablecache")
+			G_HELP(llist, "Disable attachment caching for development purposes.")
+
 			local button = G_BUTTON(llist, "Reload Attachments")
 			function button:DoClick()
 				RunConsoleCommand("uc_dev_reloadatts")

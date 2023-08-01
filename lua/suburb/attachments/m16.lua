@@ -108,19 +108,25 @@ Suburb_GenAtt(att, "ud_m16_fs_colt")
 -- Barrels
 
 local att = {}
-att.Name = "M16 10 Inch Barrel"
-att.ShortName = "10.5 inch barrel"
+att.Name = "M16 Commando 10.5\" Barrel"
+att.ShortName = "10.5\" Commando Barrel"
 att.Slot = "ud_m16_barrel"
 
 att.ActivateElements = {"barrel_10"}
+
+att.Mult_Delay = 0.8
+att.Mult_SightTime = 0.8
 Suburb_GenAtt(att, "ud_m16_barrel_10")
 
 local att = {}
-att.Name = "M16 14 Inch Barrel"
-att.ShortName = "14.5 inch barrel"
+att.Name = "M16 Carbine 14\" Barrel"
+att.ShortName = "14.5\" Carbine Barrel"
 att.Slot = "ud_m16_barrel"
 
 att.ActivateElements = {"barrel_14"}
+
+att.Mult_Delay = 1.2
+att.Mult_SightTime = 1.9
 Suburb_GenAtt(att, "ud_m16_barrel_14")
 
 -- Stocks

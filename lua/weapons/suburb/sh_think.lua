@@ -12,7 +12,7 @@ function SWEP:Think()
 		if spint then
 			ht = self.HoldTypeSprint
 		end
-		self:SetSprintPer( math.Approach( self:GetSprintPer(), p:IsSprinting() and 1 or 0, FrameTime() / self.SprintTime ) )
+		self:SetSprintPer( math.Approach( self:GetSprintPer(), p:IsSprinting() and 1 or 0, FrameTime() / self:GetStat("SprintTime") ) )
 		self:SetHoldType( ht )
 		self:SetWeaponHoldType( ht )
 
@@ -39,7 +39,7 @@ function SWEP:Think()
 			end
 		end
 		local canaim = (self:GetStopSightTime() <= CurTime()) and !spint
-		self:SetAim( math.Approach( self:GetAim(), self:GetUserSight() and canaim and 1 or 0, FrameTime() / (canaim and self.SightTime or 0.2) ) )
+		self:SetAim( math.Approach( self:GetAim(), self:GetUserSight() and canaim and 1 or 0, FrameTime() / (canaim and self:GetStat("SightTime") or 0.2) ) )
 
 		local trdown = p:KeyDown(IN_ATTACK)
 		if !trdown then
@@ -207,6 +207,54 @@ function SWEP:RegenStats()
 		self:AttHook( "Hook_RegenBGTab", bgtab )
 		self.BGTable = bgtab
 	end
+
+	self.ssources = self:GetEffectiveSources()
+	if self.scache then
+		table.Empty( self.scache )
+	else
+		self.scache = {}
+	end
+end
+
+function SWEP:GetStat( name )
+	-- Caching is very important!
+	if self.scache[ name ] then
+		return self.scache[ name ]
+	end
+
+	local sadd = 0
+	local smul = 1
+	local ssources = self.ssources
+	local result = self:GetTable()[ name ]
+	assert(ssources, "Suburb GetStat: self.ssources doesn't exist!")
+
+	local pric = -math.huge
+	for i, v in ipairs(ssources) do
+		local priv = (v["Override_" .. name .. "_Priority"] or 0)
+		if v["Override_" .. name] and pric <= priv then
+			result = v["Override_" .. name]
+			pric = priv
+		end
+	end
+
+	if isnumber(result) then
+		for i, v in ipairs(ssources) do
+			if v["Add_" .. name] then
+				result = result + v["Add_" .. name]
+			end
+		end
+		for i, v in ipairs(ssources) do
+			if v["Mult_" .. name] then
+				result = result * v["Mult_" .. name]
+			end
+		end
+	end
+	result = (result + sadd) * smul
+
+	-- Cache it
+	self.scache[ name ] = result
+
+	return result
 end
 
 function SWEP:UseBGTable( vm )
@@ -224,9 +272,14 @@ function SWEP:GetEffectiveSources()
 	for index, attslot in ipairs(self.Attachments) do
 		if index == "BaseClass" then continue end
 		if attslot._Installed then
-			assert( Suburb.AttTable[attslot._Installed], "Suburb GetEffectiveSources: That attachment does not exist!: ", attslot._Installed )
+			assert( Suburb.AttTable[attslot._Installed], "Suburb GetEffectiveSources: That attachment does not exist!: " .. attslot._Installed )
 			table.insert( sources, Suburb.AttTable[attslot._Installed] )
 		end
+	end
+	for index, attslot in ipairs(self.Elements) do
+		if index == "BaseClass" then continue end
+		if !self.ActivatedElements[index] then continue end
+		table.insert( sources, attslot )
 	end
 	return sources
 end

@@ -65,7 +65,7 @@ function SWEP:PrimaryAttack()
 		return false
 	end
 
-	self:SetNextFire( CurTime() + self.Delay )
+	self:SetNextFire( CurTime() + self:GetStat("Delay") )
 	self:SetClip1( self:Clip1() - 1 )
 	self:SetBurstCount( self:GetBurstCount() + 1 )
 	if self.ManualAction > 0 then

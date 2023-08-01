@@ -9,7 +9,11 @@ function Suburb_ReloadAtts()
 	Suburb_LoadAtts()
 
 	-- Tell all clients to regenerate their gun's stats
-	-- for i, ply in plys.GetAll() do...
+	--[[ for i, ent in ipairs( ents.GetAll() ) do
+		if ent.Suburb then
+			ent:RegenStats()
+		end
+	end ]]
 end
 
 local attpath = "suburb/attachments/"
@@ -22,6 +26,7 @@ function Suburb_LoadAtts()
 	end
 	print( "Suburb finished generating attachments." )
 end
+Suburb_LoadAtts() -- First time load
 
 function Suburb_GenAtt( tabl, name )
 	assert( name, "No name given!" )
@@ -30,6 +35,10 @@ function Suburb_GenAtt( tabl, name )
 	assert( istable(tabl), "Table given is not a table!" )
 	print( " - " .. name .. " -- " .. tabl.Name or "[no nice name]" )
 
+	-- Occassionally problematic.
+	-- if Suburb.AttTable[name] then
+	-- 	table.Empty( Suburb.AttTable[name] )
+	-- end
 	Suburb.AttTable[name] = tabl
 end
 
@@ -39,6 +48,7 @@ if SERVER then
 	util.AddNetworkString( "Suburb_ATT_Toggle" )
 end
 
+-- Deprecate this QUICK. SOON.
 function Sslot( ... )
 	local args = { ... }
 	local tabb = {}

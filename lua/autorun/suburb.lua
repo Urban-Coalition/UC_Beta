@@ -21,5 +21,3 @@ if SERVER or game.SinglePlayer() then
 		print( "Suburb: Loaded server script " .. v )
 	end
 end
-
-Suburb_LoadAtts() -- First time load

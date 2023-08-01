@@ -73,6 +73,9 @@ if CLIENT then
 	local CCP_BUTTON = Color( 200, 200, 200, 127 )
 	local CCP_BUTTONHOVER = Color( 255, 255, 255, 255 )
 	local CCP_T = Color( 255, 255, 255, 255 )
+
+	local CCP_S_1 = Color( 180, 195, 255, 255 )
+	local CCP_S_2 = Color( 255, 105, 105, 255 )
 	local function ss(size)
 		return size * (ScrH() / 480)
 	end
@@ -84,20 +87,20 @@ if CLIENT then
 		local ply = LocalPlayer()
 		local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon()
 
-		if SuburbTest then SuburbTest:Remove() end
-		SuburbTest = vgui.Create("DFrame")
-		SuburbTest:SetTitle("Test cust frame")
-		SuburbTest:SetPos( ss(10), ss(10) )
-		SuburbTest:SetSize( ss(160), ss(240) )
-		SuburbTest:MakePopup()
-		SuburbTest:SetKeyboardInputEnabled( false )
+		if ST_Slot then ST_Slot:Remove() end
+		ST_Slot = vgui.Create("DFrame")
+		ST_Slot:SetTitle("Test cust frame")
+		ST_Slot:SetPos( ss(10), ss(10) )
+		ST_Slot:SetSize( ss(160), ss(240) )
+		ST_Slot:MakePopup()
+		ST_Slot:SetKeyboardInputEnabled( false )
 		
-		function SuburbTest:Paint( w, h )
+		function ST_Slot:Paint( w, h )
 			surface.SetDrawColor( CCP_BG )
 			surface.DrawRect( 0, 0, w, h )
 		end
 
-		local scroller = vgui.Create( "DScrollPanel", SuburbTest )
+		local scroller = vgui.Create( "DScrollPanel", ST_Slot )
 		scroller:Dock( FILL )
 
 		for i, v in SortedPairsByMemberValue( wep.Attachments, "SortOrder", false ) do
@@ -136,7 +139,7 @@ if CLIENT then
 			end
 
 			function butt:DoClick()
-				return CCPanel_AttsList( SuburbTest, i, v )
+				return CCPanel_AttsList( ST_Slot, i, v )
 			end
 			function butt:DoRightClick()
 				wep:CL_Att_Attach( i, "" )
@@ -150,23 +153,30 @@ if CLIENT then
 		local ply = LocalPlayer()
 		local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon()
 
-		if SuburbTestAtts then SuburbTestAtts:Remove() end
-		SuburbTestAtts = vgui.Create("DFrame")
-		SuburbTestAtts:SetTitle("Attachment list")
+		if ST_Atts then ST_Atts:Remove() end
+		ST_Atts = vgui.Create("DFrame")
+		ST_Atts:SetTitle("Attachment list")
 		do
 			local x, y, w, h = god:GetBounds()
-			SuburbTestAtts:SetPos( x + w + ss(5), y )
+			ST_Atts:SetPos( x + w + ss(5), y )
 		end
-		SuburbTestAtts:SetSize( ss(180), ss(200) )
-		SuburbTestAtts:MakePopup()
-		SuburbTestAtts:SetKeyboardInputEnabled( false )
+		ST_Atts:SetSize( ss(180), ss(200) )
+		ST_Atts:MakePopup()
+		ST_Atts:SetKeyboardInputEnabled( false )
+
+		function ST_Atts:Think()
+			if !IsValid(ST_Slot) then
+				-- wtf am i doing here?
+				ST_Atts:Remove()
+			end
+		end
 		
-		function SuburbTestAtts:Paint( w, h )
+		function ST_Atts:Paint( w, h )
 			surface.SetDrawColor( CCP_BG )
 			surface.DrawRect( 0, 0, w, h )
 		end
 
-		local scroller = vgui.Create( "DScrollPanel", SuburbTestAtts )
+		local scroller = vgui.Create( "DScrollPanel", ST_Atts )
 		scroller:Dock( FILL )
 
 		for i, v in pairs( Suburb.AttTable ) do
@@ -189,6 +199,7 @@ if CLIENT then
 			butt:SetSize( 10, ss(24) )
 			butt:Dock( TOP )
 			butt:DockMargin( 0, 0, 0, ss(4) )
+			butt.AttName = i
 
 			function butt:Paint( w, h )
 				surface.SetDrawColor( CCP_BUTTON )
@@ -234,18 +245,113 @@ if CLIENT then
 			function butt:DoRightClick()
 				wep:CL_Att_Attach( index, "" )
 			end
+			function butt:Think()
+				local ref = ST_Stat
+				local hov = butt:IsHovered()
+				if hov then
+					if IsValid(ref) then
+						ref.AttName = i
+					else
+						CCPanel_AttStat( i )
+					end
+				end
+			end
 			scroller:Add( butt )
 		end
 	end
 
+	function CCPanel_AttStat( name )
+		local ply = LocalPlayer()
+
+		if ST_Stat then ST_Stat:Remove() end
+		ST_Stat = vgui.Create("DFrame")
+		ST_Stat.AttName = "ud_m16_lr_auto"
+		ST_Stat:SetTitle("Attachment statistics")
+		ST_Stat:SetSize( ss(180), ss(200) )
+		do
+			local w, h = ScrW(), ScrH()
+			ST_Stat:SetPos( w - ss(10) - ss(180), ss(10) )
+		end
+		ST_Stat:MakePopup()
+		ST_Stat:SetKeyboardInputEnabled( false )
+
+		function ST_Stat:Think()
+			if !IsValid(ST_Atts) then
+				-- wtf am i doing here?
+				ST_Stat:Remove()
+			end
+		end
+		
+		function ST_Stat:Paint( w, h )
+			surface.SetDrawColor( CCP_BG )
+			surface.DrawRect( 0, 0, w, h )
+		end
+
+		local scroller = vgui.Create( "DScrollPanel", ST_Stat )
+		scroller:Dock( FILL )
+
+		local butt = scroller:Add( "DPanel" )
+		butt:SetSize( 10, ss(200) )
+		butt:Dock( FILL )
+		butt:DockMargin( 0, 0, 0, 0 )
+		butt:SetBackgroundColor( CCP_BG )
+
+		function butt:Paint( w, h )
+			surface.SetDrawColor( CCP_BG )
+			surface.DrawRect( 0, 0, w, h )
+
+			local att = Suburb.AttTable[ST_Stat.AttName]
+			assert( att, "Suburb ST_Stat: That attachment doesn't exist!: " .. ST_Stat.AttName )
+
+			surface.SetTextColor( CCP_T )
+			surface.SetFont( "ccpanel_tb_12" )
+			local tw = surface.GetTextSize( att.Name )
+			surface.SetTextPos( ss(180/2) - (tw/2), ss(8) )
+			surface.DrawText( att.Name )
+
+			if att.ShortName then
+				surface.SetFont( "ccpanel_tb_8" )
+				local tw = surface.GetTextSize( att.ShortName )
+				surface.SetTextPos( ss(180/2) - (tw/2), ss(20) )
+				surface.DrawText( att.ShortName )
+			end
+
+			local boost = 32
+			for i, v in pairs( att ) do
+				if !AutoStats[i] then continue end
+
+				local orig = self:GetTable()[i] or -math.huge
+				surface.SetFont( "ccpanel_tb_12" )
+				surface.SetTextColor( AutoStats[i][2]( v ) and CCP_S_1 or CCP_S_2 )
+				local tex = AutoStats[i][1]( v )
+				local tw = surface.GetTextSize( tex )
+				surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
+				surface.DrawText( tex )
+				boost = boost + 12
+			end
+		end
+
+		scroller:Add( butt )
+	end
+
 end
+
+-- 1: String Format
+-- 2: Is positive better?
+AutoStats = {}
+AutoStats = {
+	["Mult_Delay"] = { function( data ) return string.format( "%+G%% firing speed", (1-data)*100 ) end, function( data ) return data<=1 end },
+	["Mult_SightTime"] = { function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end, function( data ) return data<=1 end },
+	["Mult_SprintTime"] = { function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end, function( data ) return data<=1 end },
+}
 
 function SWEP:ToggleCustomize()
 	if self:GetCustomizing() then
 		self:SetCustomizing( false )
 		if CLIENT then
-			if SuburbTest then SuburbTest:Remove() end
-			if SuburbTestAtts then SuburbTestAtts:Remove() end
+			if ST_Slot then ST_Slot:Remove() end
+			if ST_Atts then ST_Atts:Remove() end
+			if ST_Stat then ST_Stat:Remove() end
 		end
 	else
 		self:SetCustomizing( true )
