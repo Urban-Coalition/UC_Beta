@@ -349,6 +349,15 @@ SWEP.Elements = {
 	["stock_wire"] = {
 		Bodygroups = { [7] = 1 }
 	},
+	["stock_slide"] = {
+		Bodygroups = { [7] = 4 }
+	},
+	["stock_cap"] = {
+		Bodygroups = { [7] = 6 }
+	},
+	["stock_wood"] = {
+		Bodygroups = { [7] = 9 }
+	},
 	["ud_m16_ur_classic"] = {
 		Bodygroups = { [1] = 3 },
 		AttPos = {

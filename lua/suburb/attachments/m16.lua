@@ -140,12 +140,36 @@ att.ActivateElements = {"stock_carbine"}
 Suburb_GenAtt(att, "ud_m16_stock_carbine")
 
 local att = {}
-att.Name = "M16 M231 Wire Stock"
-att.ShortName = "Wire Stock"
+att.Name = "M16 M231 FPW Wire Stock"
+att.ShortName = "M231 Wire Stock"
 att.Slot = "ud_m16_stock"
 
 att.ActivateElements = {"stock_wire"}
 Suburb_GenAtt(att, "ud_m16_stock_wire")
+
+local att = {}
+att.Name = "M16 M607 Slide Stock"
+att.ShortName = "M607 Slide Stock"
+att.Slot = "ud_m16_stock"
+
+att.ActivateElements = {"stock_slide"}
+Suburb_GenAtt(att, "ud_m16_stock_slide")
+
+local att = {}
+att.Name = "M16 M608 Cap Stock"
+att.ShortName = "M608 Cap Stock"
+att.Slot = "ud_m16_stock"
+
+att.ActivateElements = {"stock_cap"}
+Suburb_GenAtt(att, "ud_m16_stock_cap")
+
+local att = {}
+att.Name = "M16 Wooden Stock"
+att.ShortName = "Wooden Stock"
+att.Slot = "ud_m16_stock"
+
+att.ActivateElements = {"stock_wood"}
+Suburb_GenAtt(att, "ud_m16_stock_wood")
 
 -- Stocks
 
