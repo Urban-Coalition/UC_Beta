@@ -6,6 +6,7 @@ function SWEP:SwitchFiremode(prev)
 	end
 	if self:GetFiremode() != nextfm then
 		self:SetFiremode(nextfm)
+		self:RegenStats()
 		if (game.SinglePlayer() and SERVER or !game.SinglePlayer() and true) then
 			self:EmitSound("suburb/firemode.ogg", 60, 100, 0.5, CHAN_STATIC)
 		end
@@ -61,7 +62,8 @@ function SWEP:PrimaryAttack()
 		self:Reload( true ) -- automatic reload
 		return false
 	end
-	if self:GetBurstCount() >= self:GetFiremodeTable().Mode then
+	local ft = self:GetFiremodeTable()
+	if self:GetBurstCount() >= ft.Mode then
 		return false
 	end
 	if self:NeedCycle() then
@@ -74,6 +76,10 @@ function SWEP:PrimaryAttack()
 	self:SetNextFire( CurTime() + self:GetStat("Delay") )
 	self:SetClip1( self:Clip1() - 1 )
 	self:SetBurstCount( self:GetBurstCount() + 1 )
+	if self:GetBurstCount() >= ft.Mode then
+		self:SetCycleDelayTime( CurTime() + self:GetStat("PostBurstDelay", ft.PostBurstDelay or 0) )
+	end
+
 	if self:GetStat("ManualAction") > 0 then
 		self:SetCycleCount( self:GetCycleCount() + 1 )
 	end

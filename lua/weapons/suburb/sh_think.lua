@@ -41,8 +41,12 @@ function SWEP:Think()
 		local canaim = (self:GetStopSightTime() <= CurTime()) and !spint
 		self:SetAim( math.Approach( self:GetAim(), self:GetUserSight() and canaim and 1 or 0, FrameTime() / (canaim and self:GetStat("SightTime") or 0.2) ) )
 
+		local ft = self:GetFiremodeTable()
 		local trdown = p:KeyDown(IN_ATTACK)
 		if !trdown then
+			if self:GetBurstCount() > 0 and self:GetBurstCount() < ft.Mode then
+				self:SetCycleDelayTime( CurTime() + self:GetStat("PostBurstDelay", ft.PostBurstDelay) )
+			end
 			self:SetBurstCount( 0 )
 		end
 		if p:GetViewModel() then
@@ -221,6 +225,7 @@ function SWEP:RegenStats()
 	else
 		self.scache = {}
 	end
+	table.insert( self.ssources, self:GetFiremodeTable() )
 
 	if self._WeaponList and !self.OriginalCapacity then
 		self.OriginalCapacity = self._WeaponList.Primary.ClipSize
@@ -230,9 +235,10 @@ function SWEP:RegenStats()
 	end
 
 	self.Primary.ClipSize = self:GetCapacity()
+
 	
 	-- self:Unload()
-	self:SetFiremode( 1 )
+	-- self:SetFiremode( 1 )
 end
 
 function SWEP:GetStat( name, default )
@@ -303,6 +309,7 @@ function SWEP:GetEffectiveSources()
 		if !self.ActivatedElements[index] then continue end
 		table.insert( sources, attslot )
 	end
+
 	return sources
 end
 

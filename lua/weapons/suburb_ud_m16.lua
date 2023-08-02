@@ -102,6 +102,7 @@ SWEP.Delay					= ( 60 / 900 )
 SWEP.Firemodes				= {
 	{
 		Mode = 3,
+		PostBurstDelay = 0.2
 	},
 	{
 		Mode = 1,
@@ -280,8 +281,7 @@ SWEP.Attachments = {
 		Name = "Barrel",
 		SortOrder = 2.0,
 		Icon = Material("entities/att/acwatt_ud_m16_barrel_20.png", "mips smooth"),
-		Slot = "ud_m16_barrel",
-		DefaultAtt = "ud_m16_barrel_14"
+		Slot = "ud_m16_barrel"
 	},
 	{
 		Name = "Handguard",
