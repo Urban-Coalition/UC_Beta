@@ -102,7 +102,8 @@ SWEP.Delay					= ( 60 / 900 )
 SWEP.Firemodes				= {
 	{
 		Mode = 3,
-		PostBurstDelay = 0.2
+		PostBurstDelay = 0.2,
+		AutoBurst = true
 	},
 	{
 		Mode = 1,

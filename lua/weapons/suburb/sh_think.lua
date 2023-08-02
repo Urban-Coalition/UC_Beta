@@ -42,11 +42,15 @@ function SWEP:Think()
 		self:SetAim( math.Approach( self:GetAim(), self:GetUserSight() and canaim and 1 or 0, FrameTime() / (canaim and self:GetStat("SightTime") or 0.2) ) )
 
 		local ft = self:GetFiremodeTable()
+		local weird = self:GetBurstCount() > 0 and self:GetBurstCount() < ft.Mode
 		local trdown = p:KeyDown(IN_ATTACK)
 		if !trdown then
-			if self:GetBurstCount() > 0 and self:GetBurstCount() < ft.Mode then
+			if weird then
 				self:SetCycleDelayTime( CurTime() + self:GetStat("PostBurstDelay", ft.PostBurstDelay or 0) )
 			end
+			self:SetBurstCount( 0 )
+		end
+		if self:GetStat("AutoBurst", ft.AutoBurst or false) and !weird then
 			self:SetBurstCount( 0 )
 		end
 		if p:GetViewModel() then
@@ -63,7 +67,7 @@ function SWEP:Think()
 					if self:Ammo1() <= 0 or self:Clip1() >= (self:GetMaxClip1() + (self:NeedCycle() and 0 or self.ChamberSize) ) then
 						self:SetReloadingTime( CurTime() )
 						self:SetLoadIn( 0 )
-						if self:NeedCycle() then
+						if self.Animations["sgreload_finish_empty"] and self:NeedCycle() then
 							self:SendAnimChoose("sgreload_finish_empty", "sgfinish")
 							self:SetCycleCount( 0 )
 						else

@@ -45,6 +45,7 @@ SWEP.Delay					= ( 60 / 800 )
 
 SWEP.ShotgunReloading		= false
 SWEP.ManualAction			= 0
+SWEP.ReloadRemovesNeedCycle	= false -- Whether starting a shotgun reload will remove the need to cycle the gun.
 
 SWEP.Firemodes				= {
 	{
@@ -260,8 +261,13 @@ function SWEP:Reload( automatic )
 	self:SetBurstCount( 0 )
 	local shotgun = self.ShotgunReloading
 	if shotgun then
-		self:SendAnimChoose( "sgreload_start", "reload" )
+		if self.Animations["sgreload_start_empty"] and self:Clip1() == 0 then
+			self:SendAnimChoose( "sgreload_start_empty", "reload" )
+		else
+			self:SendAnimChoose( "sgreload_start", "reload" )
+		end
 		self:SetShotgunReloading( true )
+		if self.ReloadRemovesNeedCycle then self:SetCycleCount( 0 ) end
 	else
 		self:SendAnimChoose( "reload", "reload" )
 	end
