@@ -402,9 +402,9 @@ function SWEP:Hook_RegenBGTab( bgtab )
 	local ae = self.ActivatedElements
 	local shortbarrel = (ae["barrel_14"] or ae["barrel_10"])
 	if shortbarrel then
-		if ae["hg_ris"] then
+		if ae["ud_m16_hg_ris"] then
 			bgtab[5] = 5
-		elseif ae["hg_a1"] or ae["hg_wood"] then
+		elseif ae["ud_m16_hg_a1"] or ae["ud_m16_hg_wood"] then
 			-- Mmm the short A1 handguard is a separate model. Damn!
 			-- bgtab[5] = 5
 		end
