@@ -218,6 +218,17 @@ function SWEP:Initialize()
 	self:RegenStats()
 end
 
+-- Some gamers may want an option to unload their mag on command...
+-- Consider an action that plays a unique animation with it too.
+function SWEP:Unload()
+	local tounload = self:Clip1()
+	tounload = math.max( tounload - self:GetStat("ChamberSize"), 0 )
+	if SERVER then
+		self:GetOwner():GiveAmmo( tounload, self:GetPrimaryAmmoType(), false )
+	end
+	self:SetClip1( self:Clip1() - tounload )
+end
+
 function SWEP:Reload( automatic )
 	if CurTime() < self:GetNextFire() then
 		return false
@@ -745,6 +756,8 @@ function SWEP:Think_Shell()
 	end
 end
 
+local v1 = Vector(1, 1, 1)
+
 function SWEP:PreDrawViewModel( vm, weapon, ply )
 	self:UseBGTable( vm )
 
@@ -789,12 +802,11 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 					data._Model:SetPos( pos )
 					data._Model:SetAngles( ang )
 
-					if data.Scale or AT.ModelScale then
-						local may = Matrix()
-						if data.Scale then may:Scale( data.Scale ) end
-						if AT.ModelScale then may:Scale( AT.ModelScale ) end
-						data._Model:EnableMatrix( "RenderMultiply", may )
-					end
+					local may = Matrix()
+					may:SetScale( v1 )
+					if data.Scale then may:Scale( data.Scale ) end
+					if AT.ModelScale then may:Scale( AT.ModelScale ) end
+					data._Model:EnableMatrix( "RenderMultiply", may )
 
 					data._Model:DrawModel()
 				end

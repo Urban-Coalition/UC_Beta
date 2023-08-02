@@ -1,7 +1,7 @@
 function SWEP:SwitchFiremode(prev)
 	-- lol?
 	local nextfm = self:GetFiremode() + 1
-	if #self.Firemodes < nextfm then
+	if nextfm > #self:GetStat("Firemodes") then
 		nextfm = 1
 	end
 	if self:GetFiremode() != nextfm then
@@ -28,11 +28,17 @@ function SWEP:GetFiremodeName(cust)
 end
 
 function SWEP:GetFiremodeTable(cust)
-	return self.Firemodes[cust or self:GetFiremode()] or false
+	local ft = self:GetStat("Firemodes")
+	if cust then
+		assert( isnumber(cust), "Suburb GetFiremodeTable: Var #1 is NOT a number!")
+		assert( cust<=#ft, "Suburb GetFiremodeTable: Var #1 is over firemode table count!")
+	end
+	assert( self:GetFiremode()<=#ft, "Suburb GetFiremodeTable: Current firemode is over firemode table count!")
+	return ft[cust or self:GetFiremode()] or false
 end
 
 function SWEP:NeedCycle()
-	return self.ManualAction > 0 and self:GetCycleCount() >= self.ManualAction
+	return self:GetStat("ManualAction") > 0 and self:GetCycleCount() >= self:GetStat("ManualAction")
 end
 
 function SWEP:PrimaryAttack()
@@ -68,7 +74,7 @@ function SWEP:PrimaryAttack()
 	self:SetNextFire( CurTime() + self:GetStat("Delay") )
 	self:SetClip1( self:Clip1() - 1 )
 	self:SetBurstCount( self:GetBurstCount() + 1 )
-	if self.ManualAction > 0 then
+	if self:GetStat("ManualAction") > 0 then
 		self:SetCycleCount( self:GetCycleCount() + 1 )
 	end
 	self:SetTotalShotCount( self:GetTotalShotCount() + 1 )

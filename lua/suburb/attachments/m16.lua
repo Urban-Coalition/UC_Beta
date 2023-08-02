@@ -135,40 +135,30 @@ local att = {}
 att.Name = "M16 Carbine Stock"
 att.ShortName = "Carbine Stock"
 att.Slot = "ud_m16_stock"
-
-att.ActivateElements = {"stock_carbine"}
 Suburb_GenAtt(att, "ud_m16_stock_carbine")
 
 local att = {}
 att.Name = "M16 M231 FPW Wire Stock"
 att.ShortName = "M231 Wire Stock"
 att.Slot = "ud_m16_stock"
-
-att.ActivateElements = {"stock_wire"}
 Suburb_GenAtt(att, "ud_m16_stock_wire")
 
 local att = {}
 att.Name = "M16 M607 Slide Stock"
 att.ShortName = "M607 Slide Stock"
 att.Slot = "ud_m16_stock"
-
-att.ActivateElements = {"stock_slide"}
 Suburb_GenAtt(att, "ud_m16_stock_slide")
 
 local att = {}
 att.Name = "M16 M608 Cap Stock"
 att.ShortName = "M608 Cap Stock"
 att.Slot = "ud_m16_stock"
-
-att.ActivateElements = {"stock_cap"}
 Suburb_GenAtt(att, "ud_m16_stock_cap")
 
 local att = {}
 att.Name = "M16 Wooden Stock"
 att.ShortName = "Wooden Stock"
 att.Slot = "ud_m16_stock"
-
-att.ActivateElements = {"stock_wood"}
 Suburb_GenAtt(att, "ud_m16_stock_wood")
 
 -- Handguards
@@ -177,24 +167,18 @@ local att = {}
 att.Name = "M16 RIS Handguard"
 att.ShortName = "RIS Handguard"
 att.Slot = "ud_m16_hg"
-
-att.ActivateElements = {"hg_ris"}
 Suburb_GenAtt(att, "ud_m16_hg_ris")
 
 local att = {}
 att.Name = "M16A1 Handguard"
 att.ShortName = "A1 Handguard"
 att.Slot = "ud_m16_hg"
-
-att.ActivateElements = {"hg_a1"}
 Suburb_GenAtt(att, "ud_m16_hg_a1")
 
 local att = {}
 att.Name = "M16 Wooden Handguard"
 att.ShortName = "Wooden Handguard"
 att.Slot = "ud_m16_hg"
-
-att.ActivateElements = {"hg_wood"}
 Suburb_GenAtt(att, "ud_m16_hg_wood")
 
 -- Magazines
@@ -257,16 +241,38 @@ local att = {}
 att.Name = "M16A3 Automatic Lower Receiver"
 att.ShortName = "Automatic Lower"
 att.Slot = "ud_m16_lr"
+
+att.Override_Firemodes = {
+	{
+		Mode = math.huge,
+	},
+	{
+		Mode = 1,
+	},
+}
 Suburb_GenAtt(att, "ud_m16_lr_auto")
 
 local att = {}
 att.Name = "AR-15 Sporter Lower Receiver"
 att.ShortName = "Sporter Lower"
 att.Slot = "ud_m16_lr"
+
+att.Override_Firemodes = {
+	{
+		Mode = 1,
+	},
+}
 Suburb_GenAtt(att, "ud_m16_lr_semi")
 
 local att = {}
 att.Name = "AR-15GB Manual-Action Lower Receiver"
 att.ShortName = "Manual-Action Lower"
 att.Slot = "ud_m16_lr"
+
+att.Override_ManualAction = 1
+att.Override_Firemodes = {
+	{
+		Mode = 1,
+	},
+}
 Suburb_GenAtt(att, "ud_m16_lr_bolt")

@@ -70,7 +70,7 @@ function SWEP:Think()
 						self:SendAnimChoose("sgreload_insert", "sginsert")
 					end
 				end
-			elseif self.ManualAction and self:GetCycleDelayTime() <= CurTime() and self:NeedCycle() and self:Clip1() > 0 and !trdown then
+			elseif self:GetStat("ManualAction") and self:GetCycleDelayTime() <= CurTime() and self:NeedCycle() and self:Clip1() > 0 and !trdown then
 				self:SetCycleCount(0)
 				self:SendAnimChoose("cycle", "cycle")
 			end
@@ -133,7 +133,7 @@ function SWEP:Think()
 end
 
 function SWEP:GetCapacity()
-	return math.Round( self:GetStat( "Capacity", self._WeaponList.Primary.ClipSize ) )
+	return math.Round( self:GetStat( "Capacity", self.OriginalCapacity ) )
 end
 
 function SWEP:RegenStats()
@@ -230,6 +230,9 @@ function SWEP:RegenStats()
 	end
 
 	self.Primary.ClipSize = self:GetCapacity()
+	
+	-- self:Unload()
+	self:SetFiremode( 1 )
 end
 
 function SWEP:GetStat( name, default )
@@ -267,8 +270,8 @@ function SWEP:GetStat( name, default )
 				result = result * v["Mult_" .. name]
 			end
 		end
+		result = (result + sadd) * smul
 	end
-	result = (result + sadd) * smul
 
 	-- Cache it
 	self.scache[ name ] = result

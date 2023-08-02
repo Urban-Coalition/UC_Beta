@@ -101,9 +101,6 @@ SWEP.Delay					= ( 60 / 900 )
 
 SWEP.Firemodes				= {
 	{
-		Mode = math.huge,
-	},
-	{
 		Mode = 3,
 	},
 	{
@@ -187,6 +184,16 @@ SWEP.Animations				= {
 		Source = "fire_empty",
 		ShellEjectTime = 0,
 	},
+	["cycle"] = {
+		Source = "fix",
+		Time = 1,
+		ShellEjectTime = 0.3,
+		Events = {
+			{ t = 0.05,			s = p1 .. "chback.ogg" },
+			{ t = 0.2,			s = p0 .. "cloth_4.ogg" },
+			{ t = 0.3,			s = p1 .. "chamber.ogg" },
+		},
+	},
 	["reload"]	= {
 		Source = "reload",
 		Time = 2.4,
@@ -252,7 +259,7 @@ SWEP.Attachments = {
 		ActivateElements = {"flattop"},
 
 		Bone = "m16_parent",
-		Pos = Vector(-1.652, 0, 2.0),
+		Pos = Vector(-1.652, 0, 1.5),
 		Ang = Angle(90, -90, 0),
 
 		Pos0 = Vector(-1.652, 0, 0),
@@ -340,29 +347,29 @@ SWEP.Elements = {
 	["flattop"] = {
 		Bodygroups = { [1] = 1, [3] = 2 }
 	},
-	["hg_ris"] = {
+	["ud_m16_hg_ris"] = {
 		Bodygroups = { [5] = 2 }
 	},
-	["hg_a1"] = {
+	["ud_m16_hg_a1"] = {
 		Bodygroups = { [5] = 1 }
 	},
-	["hg_wood"] = {
+	["ud_m16_hg_wood"] = {
 		Bodygroups = { [5] = 1 },
 		Skin = 1
 	},
-	["stock_carbine"] = {
+	["ud_m16_stock_carbine"] = {
 		Bodygroups = { [7] = 7 }
 	},
-	["stock_wire"] = {
+	["ud_m16_stock_wire"] = {
 		Bodygroups = { [7] = 1 }
 	},
-	["stock_slide"] = {
+	["ud_m16_stock_slide"] = {
 		Bodygroups = { [7] = 4 }
 	},
-	["stock_cap"] = {
+	["ud_m16_stock_cap"] = {
 		Bodygroups = { [7] = 6 }
 	},
-	["stock_wood"] = {
+	["ud_m16_stock_wood"] = {
 		Bodygroups = { [7] = 9, [8] = 3 }
 	},
 	["ud_m16_ur_classic"] = {

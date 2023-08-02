@@ -317,9 +317,6 @@ if CLIENT then
 			for item, ass in SortedPairsByMemberValue( AutoStats, 3, true ) do
 				if !att[item] then continue end
 
-				PrintTable( att )
-
-
 				local orig = self:GetTable()[i] or -math.huge
 				surface.SetFont( "ccpanel_tb_10" )
 				surface.SetTextColor( ass[2]( att[item], self ) and CCP_S_1 or CCP_S_2 )

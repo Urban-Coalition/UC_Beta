@@ -8,6 +8,9 @@ att.SortOrder = 2
 att.ShortName = "Sure Shot"
 att.ShortNameSubtitle = "REFLEX"
 att.Slot = "optic_short"
+
+att.Model = "models/weapons/arccw/atts/uc_sureshot.mdl"
+att.ModelScale = Vector(0.9, 0.9, 0.9)
 Suburb_GenAtt(att, "uc_optic_sureshot")
 
 local att = {}
@@ -17,8 +20,9 @@ att.ShortName = "Holosun"
 att.ShortNameSubtitle = "REFLEX"
 att.Slot = "optic_short"
 
-att.Model = "models/editor/axis_helper.mdl"
-att.ModelScale = Vector(0.1, 0.1, 0.1)
+att.Model = "models/weapons/arccw/atts/uc_holosun2.mdl"
+att.ModelOffset = Vector( 0, 0, -1 )
+att.ModelScale = Vector(1.5, 1.5, 1.5)
 Suburb_GenAtt(att, "uc_optic_holosun")
 
 -- Hybrid
