@@ -26,7 +26,6 @@ function Suburb_LoadAtts()
 	end
 	print( "Suburb finished generating attachments." )
 end
-Suburb_LoadAtts() -- First time load
 
 function Suburb_GenAtt( tabl, name )
 	assert( name, "No name given!" )
