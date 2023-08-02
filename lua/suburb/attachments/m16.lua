@@ -112,8 +112,6 @@ att.Name = "M16 Commando 10.5\" Barrel"
 att.ShortName = "10.5\" Commando Barrel"
 att.Slot = "ud_m16_barrel"
 
-att.ActivateElements = {"barrel_10"}
-
 att.Mult_Delay = 0.9
 att.Mult_SightTime = 0.8
 Suburb_GenAtt(att, "ud_m16_barrel_10")
@@ -122,8 +120,6 @@ local att = {}
 att.Name = "M16 Carbine 14\" Barrel"
 att.ShortName = "14.5\" Carbine Barrel"
 att.Slot = "ud_m16_barrel"
-
-att.ActivateElements = {"barrel_14"}
 
 att.Mult_Delay = 0.9
 att.Mult_SightTime = 0.9

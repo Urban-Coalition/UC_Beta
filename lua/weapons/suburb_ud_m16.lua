@@ -273,7 +273,7 @@ SWEP.Attachments = {
 		ActivateElements = {"nofs"},
 
 		Bone = "m16_parent",
-		Pos = Vector(-1.652, 0, 12.5),
+		Pos = Vector(-1.652, 0, 17),
 		Ang = Angle(90, -90, 0)
 	},
 	{
@@ -338,11 +338,23 @@ SWEP.Attachments = {
 }
 
 SWEP.Elements = {
-	["barrel_10"] = {
-		Bodygroups = { [4] = 2, [5] = 4, [6] = 2, [11] = 3 }
+	["ud_m16_barrel_10"] = {
+		Bodygroups = { [4] = 2, [5] = 4, [6] = 2, [11] = 3 },
+		AttPos = {
+			[3] = {
+				Pos = Vector(-1.652, 0, 12.5),
+				Ang = Angle(90, -90, 0),
+			},
+		},
 	},
-	["barrel_14"] = {
-		Bodygroups = { [4] = 1, [5] = 4, [6] = 2, [11] = 2 }
+	["ud_m16_barrel_14"] = {
+		Bodygroups = { [4] = 1, [5] = 4, [6] = 2, [11] = 2 },
+		AttPos = {
+			[3] = {
+				Pos = Vector(-1.652, 0, 12.5),
+				Ang = Angle(90, -90, 0),
+			},
+		},
 	},
 	["flattop"] = {
 		Bodygroups = { [1] = 1, [3] = 2 }
@@ -375,7 +387,7 @@ SWEP.Elements = {
 	["ud_m16_ur_classic"] = {
 		Bodygroups = { [1] = 3 },
 		AttPos = {
-			[1] = { Pos = Vector( -3.45, 0, 0.9 ), Ang = Angle( -90, 90, 0 ) },
+			[1] = { Pos = Vector( -3.45, 0, 1.25 ), Ang = Angle( -90, 90, 0 ) },
 			[2] = { Pos = Vector( -3.45, 0, 2 ), Ang = Angle( -90, 90, 0 ) },
 			[3] = { Pos = Vector( -3.45, 0, 5.8 ), Ang = Angle( -90, 90, 0 ) },
 		}
@@ -400,7 +412,7 @@ end
 
 function SWEP:Hook_RegenBGTab( bgtab )
 	local ae = self.ActivatedElements
-	local shortbarrel = (ae["barrel_14"] or ae["barrel_10"])
+	local shortbarrel = (ae["ud_m16_barrel_14"] or ae["ud_m16_barrel_10"])
 	if shortbarrel then
 		if ae["ud_m16_hg_ris"] then
 			bgtab[5] = 5
