@@ -234,7 +234,7 @@ function SWEP:Reload( automatic )
 	if runawayburst and self:GetBurstCount() > 0 then
 		return false
 	end
-	if self:Clip1() >= (self.Primary.ClipSize+self.ChamberSize) then
+	if self:Clip1() >= (self:GetCapacity()+self:GetStat("ChamberSize")) then
 		return false
 	end
 	if self:Ammo1() <= 0 then

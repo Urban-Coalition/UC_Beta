@@ -92,8 +92,8 @@ att.ShortName = "CARRY HANDLE"
 att.Slot = "ud_m16_rs"
 
 att.Model = "models/weapons/arccw/atts/colt_ch.mdl"
-att.ModelOffset = Vector(0.1, 0, 0.3)
-att.ModelScale = Vector(0.74, 0.74, 0.74)
+att.ModelOffset = Vector(0.1, 0, 0.2)
+att.ModelScale = Vector(0.78, 0.74, 0.74)
 Suburb_GenAtt(att, "ud_m16_rs_coltch")
 
 local att = {}
@@ -114,7 +114,7 @@ att.Slot = "ud_m16_barrel"
 
 att.ActivateElements = {"barrel_10"}
 
-att.Mult_Delay = 0.8
+att.Mult_Delay = 0.9
 att.Mult_SightTime = 0.8
 Suburb_GenAtt(att, "ud_m16_barrel_10")
 
@@ -125,8 +125,8 @@ att.Slot = "ud_m16_barrel"
 
 att.ActivateElements = {"barrel_14"}
 
-att.Mult_Delay = 1.2
-att.Mult_SightTime = 1.9
+att.Mult_Delay = 0.9
+att.Mult_SightTime = 0.9
 Suburb_GenAtt(att, "ud_m16_barrel_14")
 
 -- Stocks
@@ -171,7 +171,7 @@ att.Slot = "ud_m16_stock"
 att.ActivateElements = {"stock_wood"}
 Suburb_GenAtt(att, "ud_m16_stock_wood")
 
--- Stocks
+-- Handguards
 
 local att = {}
 att.Name = "M16 RIS Handguard"
@@ -181,6 +181,22 @@ att.Slot = "ud_m16_hg"
 att.ActivateElements = {"hg_ris"}
 Suburb_GenAtt(att, "ud_m16_hg_ris")
 
+local att = {}
+att.Name = "M16A1 Handguard"
+att.ShortName = "A1 Handguard"
+att.Slot = "ud_m16_hg"
+
+att.ActivateElements = {"hg_a1"}
+Suburb_GenAtt(att, "ud_m16_hg_a1")
+
+local att = {}
+att.Name = "M16 Wooden Handguard"
+att.ShortName = "Wooden Handguard"
+att.Slot = "ud_m16_hg"
+
+att.ActivateElements = {"hg_wood"}
+Suburb_GenAtt(att, "ud_m16_hg_wood")
+
 -- Magazines
 
 local att = {}
@@ -189,6 +205,9 @@ att.SortOrder = 100
 att.ShortName = "100-Round C-Mag"
 att.ShortNameSubtitle = "100 RND"
 att.Slot = "ud_m16_mag"
+
+att.Mult_Capacity = ( 100 / 30 )
+att.Mult_SightTime = 2
 Suburb_GenAtt(att, "ud_m16_mag_100")
 
 local att = {}
@@ -197,6 +216,9 @@ att.SortOrder = 60
 att.ShortName = "60-Round Casket Magazine"
 att.ShortNameSubtitle = "60 RND"
 att.Slot = "ud_m16_mag"
+
+att.Mult_Capacity = ( 60 / 30 )
+att.Mult_SightTime = 1.5
 Suburb_GenAtt(att, "ud_m16_mag_60")
 
 local att = {}
@@ -205,6 +227,9 @@ att.SortOrder = 40
 att.ShortName = "40-Round Extended Magazine"
 att.ShortNameSubtitle = "40 RND"
 att.Slot = "ud_m16_mag"
+
+att.Mult_Capacity = ( 40 / 30 )
+att.Mult_SightTime = 1.2
 Suburb_GenAtt(att, "ud_m16_mag_40")
 
 local att = {}
@@ -213,6 +238,9 @@ att.SortOrder = 20
 att.ShortName = "20-Round Compact Magazine"
 att.ShortNameSubtitle = "20 RND"
 att.Slot = "ud_m16_mag"
+
+att.Mult_Capacity = ( 20 / 30 )
+att.Mult_SightTime = 0.9
 Suburb_GenAtt(att, "ud_m16_mag_20")
 
 -- Upper receivers

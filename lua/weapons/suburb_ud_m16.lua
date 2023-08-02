@@ -343,6 +343,13 @@ SWEP.Elements = {
 	["hg_ris"] = {
 		Bodygroups = { [5] = 2 }
 	},
+	["hg_a1"] = {
+		Bodygroups = { [5] = 1 }
+	},
+	["hg_wood"] = {
+		Bodygroups = { [5] = 1 },
+		Skin = 1
+	},
 	["stock_carbine"] = {
 		Bodygroups = { [7] = 7 }
 	},
@@ -356,7 +363,7 @@ SWEP.Elements = {
 		Bodygroups = { [7] = 6 }
 	},
 	["stock_wood"] = {
-		Bodygroups = { [7] = 9 }
+		Bodygroups = { [7] = 9, [8] = 3 }
 	},
 	["ud_m16_ur_classic"] = {
 		Bodygroups = { [1] = 3 },
@@ -390,6 +397,9 @@ function SWEP:Hook_RegenBGTab( bgtab )
 	if shortbarrel then
 		if ae["hg_ris"] then
 			bgtab[5] = 5
+		elseif ae["hg_a1"] or ae["hg_wood"] then
+			-- Mmm the short A1 handguard is a separate model. Damn!
+			-- bgtab[5] = 5
 		end
 	end
 	if ae["nofs"] then

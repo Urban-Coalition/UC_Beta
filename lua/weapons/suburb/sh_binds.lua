@@ -34,11 +34,7 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 				end
 
 				if cmd:GetImpulse() == 152 then
-					if ply.AttachmentRadial then
-						ply.AttachmentRadial = false
-					else
-						ply.AttachmentRadial = true
-					end
+					wep:ToggleRadio()
 				end
 			end
 			if SERVER and ply:FlashlightIsOn() then ply:Flashlight() end
@@ -80,6 +76,7 @@ if CLIENT then
 		return size * (ScrH() / 480)
 	end
 	surface.CreateFont( "ccpanel_tb_8", { font = "Verdana", size = ss(8), weight = 0 } )
+	surface.CreateFont( "ccpanel_tb_10", { font = "Verdana", size = ss(10), weight = 0 } )
 	surface.CreateFont( "ccpanel_tb_12", { font = "Verdana", size = ss(12), weight = 0 } )
 	surface.CreateFont( "ccpanel_tb_16", { font = "Verdana", size = ss(16), weight = 0 } )
 
@@ -317,13 +314,16 @@ if CLIENT then
 			end
 
 			local boost = 32
-			for i, v in pairs( att ) do
-				if !AutoStats[i] then continue end
+			for item, ass in SortedPairsByMemberValue( AutoStats, 3, true ) do
+				if !att[item] then continue end
+
+				PrintTable( att )
+
 
 				local orig = self:GetTable()[i] or -math.huge
-				surface.SetFont( "ccpanel_tb_12" )
-				surface.SetTextColor( AutoStats[i][2]( v ) and CCP_S_1 or CCP_S_2 )
-				local tex = AutoStats[i][1]( v )
+				surface.SetFont( "ccpanel_tb_10" )
+				surface.SetTextColor( ass[2]( att[item], self ) and CCP_S_1 or CCP_S_2 )
+				local tex = ass[1]( att[item] )
 				local tw = surface.GetTextSize( tex )
 				surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
 				surface.DrawText( tex )
@@ -338,11 +338,34 @@ end
 
 -- 1: String Format
 -- 2: Is positive better?
-AutoStats = {}
+-- 3: Sort order, bigger numbers are higher
 AutoStats = {
-	["Mult_Delay"] = { function( data ) return string.format( "%+G%% firing speed", (1-data)*100 ) end, function( data ) return data<=1 end },
-	["Mult_SightTime"] = { function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end, function( data ) return data<=1 end },
-	["Mult_SprintTime"] = { function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end, function( data ) return data<=1 end },
+	["Override_Capacity"] = {
+		function( data ) return string.format( "%+g%% clip size", math.Round((data-1)*100) ) end,
+		function( data, orig ) return data<=0 end,
+		999,
+	},
+	["Mult_Capacity"] = {
+		function( data ) return string.format( "%+g%% clip size", math.Round((data-1)*100) ) end,
+		function( data, orig ) return data>1 end,
+		998,
+	},
+
+	["Mult_Delay"] = {
+		function( data ) return string.format( "%+G%% firing speed", (1-data)*100 ) end,
+		function( data ) return data<=1 end,
+		899,
+	},
+	["Mult_SightTime"] = {
+		function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end,
+		function( data ) return data<=1 end,
+		799,
+	},
+	["Mult_SprintTime"] = {
+		function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end,
+		function( data ) return data<=1 end,
+		798,
+	},
 }
 
 function SWEP:ToggleCustomize()
@@ -481,3 +504,139 @@ function Quickcheck( wepslot, attslot )
 
 	end
 end
+
+
+do -- Attachment radio
+
+function SWEP:ToggleRadio()
+	if !CLIENT then return end
+	if IsValid(AR_Menu) then
+		AR_Menu:Remove()
+	else
+		AR_OpenMenu()
+	end
+end
+
+local CCP_BG = Color( 0, 0, 0, 200 )
+local CCP_BUTTON = Color( 200, 200, 200, 127 )
+local CCP_BUTTONHOVER = Color( 255, 255, 255, 255 )
+local CCP_TEXT = Color( 255, 255, 255, 255 )
+
+local function ss(size)
+	return size * (ScrH() / 480)
+end
+
+local items = {
+	{
+		Name = "Alt. Weapon",
+	},
+	{
+		Name = "Thermal Sight",
+		Options = {
+			"WHOT",
+			"BHOT",
+			"OFF",
+		},
+	},
+	{
+		Name = "Combo Module",
+		Options = {
+			"LASER + LIGHT",
+			"LASER",
+			"LIGHT",
+			"OFF",
+		},
+	},
+	{
+		Name = "Grenade Launcher",
+		Options = {
+			"HIGH EXPLOSIVE",
+			"BUCKSHOT",
+			"SMOKE",
+		},
+	},
+	{
+		Name = "Stock",
+		Options = {
+			"EXTENDED",
+			"COLLAPSED",
+		},
+	},
+}
+
+function AR_OpenMenu()
+	local ply = LocalPlayer()
+	local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon()
+	local sw, sh = ScrW(), ScrH()
+
+	if AR_Menu then AR_Menu:Remove() end
+	AR_Menu = vgui.Create("DFrame")
+	AR_Menu:SetSize( sh, sh )
+	AR_Menu:Center()
+	AR_Menu:MakePopup()
+	AR_Menu:SetKeyboardInputEnabled( false )
+
+	function AR_Menu:Paint( w, h )
+		surface.SetDrawColor( CCP_BG )
+		surface.DrawRect( 0, 0, w, h )
+	end
+
+	local x, y = sh/2, sh/2
+	local interval = 360/#items
+	for index, item in ipairs(items) do
+		local de = 0 - ( index * interval ) + interval
+		de = math.rad( de + 180 )
+		local dist = ss( Lerp( math.TimeFraction( 3, 6, #items ), 60, 100 ) )
+		local ox, oy = math.sin( de ) * dist * 1.8, math.cos( de ) * dist
+		local rx, ry = x + ox, y + oy
+		local bx, by = ss( 180 ), ss( 18 )
+		local r2x, r2y = rx - (bx/2), ry - (by/2)
+
+		local button = AR_Menu:Add( "DButton" )
+		button:SetPos( r2x, r2y )
+		button:SetSize( bx, by )
+		button:SetText( item.Name )
+
+		item.Selected = 1
+
+		function button:Paint( w, h )
+			self:NoClipping( true )
+
+			surface.SetDrawColor( self:IsHovered() and CCP_BUTTONHOVER or CCP_BUTTON )
+			surface.DrawRect( 0, 0, w, h )
+			
+			local boost = 18+2
+			if item.Options then
+				for hindex, option in ipairs(item.Options) do
+					local sel = item.Selected == hindex
+					option = (sel and ">> " or "") .. option .. (sel and " <<" or "")
+					surface.SetFont( "ccpanel_tb_12" )
+					surface.SetTextColor( CCP_TEXT )
+					local tw = surface.GetTextSize( option )
+					surface.SetTextPos( (w/2) - (tw/2), ss(boost) )
+					surface.DrawText( option )
+					boost = boost + 12
+				end
+			end
+		end
+
+		function button:DoClick()
+			if !item.Options then return end
+			item.Selected = item.Selected + 1
+			if item.Selected > #item.Options then
+				item.Selected = 1
+			end
+		end
+
+		function button:DoRightClick()
+			if !item.Options then return end
+			item.Selected = item.Selected - 1
+			if item.Selected <= 0 then
+				item.Selected = #item.Options
+			end
+		end
+
+	end
+end
+
+end -- Attachment radio

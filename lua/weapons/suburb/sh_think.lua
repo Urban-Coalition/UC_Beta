@@ -79,7 +79,7 @@ function SWEP:Think()
 		self:Think_Shell()
 
 		if self:GetLoadIn() != 0 and self:GetLoadIn() <= CurTime() then
-			local needtoload = math.min( self.Primary.ClipSize - self:Clip1(), self:Ammo1() )
+			local needtoload = math.min( self:GetCapacity() - self:Clip1(), self:Ammo1() )
 			local sgr = self:GetShotgunReloading()
 			if (!sgr or sgr and !self:NeedCycle()) then needtoload = needtoload + math.Clamp( self:Clip1(), 0, self.ChamberSize ) end
 			needtoload = math.min(self:GetLoadAmount(), needtoload)
@@ -130,6 +130,10 @@ function SWEP:Think()
 			end
 		end
 	end
+end
+
+function SWEP:GetCapacity()
+	return math.Round( self:GetStat( "Capacity", self._WeaponList.Primary.ClipSize ) )
 end
 
 function SWEP:RegenStats()
@@ -201,6 +205,9 @@ function SWEP:RegenStats()
 						bgtab[slot] = set
 					end
 				end
+				if elem.Skin then
+					bgtab[-1] = elem.Skin
+				end
 			end
 		end
 		-- Call bgtab modifying function
@@ -214,9 +221,18 @@ function SWEP:RegenStats()
 	else
 		self.scache = {}
 	end
+
+	if self._WeaponList and !self.OriginalCapacity then
+		self.OriginalCapacity = self._WeaponList.Primary.ClipSize
+	end
+	if !self.OriginalCapacity then
+		print( "Suburb RegenStats: Unfortunately, we were unable to cache the original ClipSize of the weapon.")
+	end
+
+	self.Primary.ClipSize = self:GetCapacity()
 end
 
-function SWEP:GetStat( name )
+function SWEP:GetStat( name, default )
 	-- Caching is very important!
 	if self.scache[ name ] then
 		return self.scache[ name ]
@@ -226,6 +242,9 @@ function SWEP:GetStat( name )
 	local smul = 1
 	local ssources = self.ssources
 	local result = self:GetTable()[ name ]
+	if !result then
+		result = default
+	end
 	assert(ssources, "Suburb GetStat: self.ssources doesn't exist!")
 
 	local pric = -math.huge
@@ -263,7 +282,7 @@ function SWEP:UseBGTable( vm )
 		local tt = self.BGTable[i] or 0
 		vm:SetBodygroup( i, tt )
 	end
-	vm:SetSkin( self.DefaultSkin or 0 )
+	vm:SetSkin( self.BGTable[-1] or self.DefaultSkin or 0 )
 end
 
 function SWEP:GetEffectiveSources()
