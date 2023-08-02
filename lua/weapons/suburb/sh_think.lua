@@ -45,7 +45,7 @@ function SWEP:Think()
 		local trdown = p:KeyDown(IN_ATTACK)
 		if !trdown then
 			if self:GetBurstCount() > 0 and self:GetBurstCount() < ft.Mode then
-				self:SetCycleDelayTime( CurTime() + self:GetStat("PostBurstDelay", ft.PostBurstDelay) )
+				self:SetCycleDelayTime( CurTime() + self:GetStat("PostBurstDelay", ft.PostBurstDelay or 0) )
 			end
 			self:SetBurstCount( 0 )
 		end
