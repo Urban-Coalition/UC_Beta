@@ -48,7 +48,7 @@ if SERVER then
 end
 
 -- Deprecate this QUICK. SOON.
-function Sslot( ... )
+function QT( ... )
 	local args = { ... }
 	local tabb = {}
 	for i, v in ipairs( args ) do

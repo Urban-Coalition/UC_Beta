@@ -316,6 +316,7 @@ if CLIENT then
 			local boost = 32
 			for item, ass in SortedPairsByMemberValue( AutoStats, 3, true ) do
 				if !att[item] then continue end
+				if att.HideAutoStats and att.HideAutoStats[item] then continue end
 
 				local orig = self:GetTable()[i] or -math.huge
 				surface.SetFont( "ccpanel_tb_10" )
@@ -349,24 +350,39 @@ AutoStats = {
 	},
 
 	["Mult_Delay"] = {
-		function( data ) return string.format( "%+G%% firing speed", (1-data)*100 ) end,
+		function( data ) return string.format( "%+G%% firing speed", math.Round((1-data)*100) ) end,
 		function( data ) return data<=1 end,
 		899,
 	},
+	["Mult_PostBurstDelay"] = {
+		function( data ) return string.format( "%+G%% firing burst speed", math.Round((1-data)*100) ) end,
+		function( data ) return data<=1 end,
+		898,
+	},
 	["Mult_ReloadTime"] = {
-		function( data ) return string.format( "%+G%% reload time", (data-1)*100 ) end,
+		function( data ) return string.format( "%+G%% reload time", math.Round((data-1)*100) ) end,
 		function( data ) return data<=1 end,
 		799,
 	},
 	["Mult_SightTime"] = {
-		function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end,
+		function( data ) return string.format( "%+G%% sight time", math.Round((data-1)*100) ) end,
 		function( data ) return data<=1 end,
 		798,
 	},
 	["Mult_SprintTime"] = {
-		function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end,
+		function( data ) return string.format( "%+G%% sight time", math.Round((data-1)*100) ) end,
 		function( data ) return data<=1 end,
 		797,
+	},
+	["Mult_Range"] = {
+		function( data ) return string.format( "%+G%% effective range", math.Round((data-1)*100) ) end,
+		function( data ) return data>1 end, -- Consider inverse falloff weapons
+		499,
+	},
+	["Mult_RangeMin"] = {
+		function( data ) return string.format( "%+G%% minimum range", math.Round((data-1)*100) ) end,
+		function( data ) return data>1 end, -- Consider inverse falloff weapons
+		498,
 	},
 }
 

@@ -6,7 +6,7 @@ function SWEP:SwitchFiremode(prev)
 	end
 	if self:GetFiremode() != nextfm then
 		self:SetFiremode(nextfm)
-		self:RegenStats()
+		timer.Simple(0, function() self:RegenStats() end) -- HACK: Some weird shit happens with AutoBurst...
 		if (game.SinglePlayer() and SERVER or !game.SinglePlayer() and true) then
 			self:EmitSound("suburb/firemode.ogg", 60, 100, 0.5, CHAN_STATIC)
 		end

@@ -108,22 +108,30 @@ Suburb_GenAtt(att, "ud_m16_fs_colt")
 -- Barrels
 
 local att = {}
-att.Name = "M16 Commando 10.5\" Barrel"
-att.ShortName = "10.5\" Commando Barrel"
-att.Slot = "ud_m16_barrel"
-
-att.Mult_Delay = 0.9
-att.Mult_SightTime = 0.8
-Suburb_GenAtt(att, "ud_m16_barrel_10")
-
-local att = {}
 att.Name = "M16 Carbine 14\" Barrel"
+att.SortOrder = 14
 att.ShortName = "14.5\" Carbine Barrel"
 att.Slot = "ud_m16_barrel"
+att.HideAutoStats = QT("Mult_PostBurstDelay")
 
 att.Mult_Delay = 0.9
+att.Mult_PostBurstDelay = 0.9
 att.Mult_SightTime = 0.9
+att.Mult_Range = 0.75
 Suburb_GenAtt(att, "ud_m16_barrel_14")
+
+local att = {}
+att.Name = "M16 Commando 10.5\" Barrel"
+att.SortOrder = 10
+att.ShortName = "10.5\" Commando Barrel"
+att.Slot = "ud_m16_barrel"
+att.HideAutoStats = QT("Mult_PostBurstDelay")
+
+att.Mult_Delay = 0.9
+att.Mult_PostBurstDelay = 0.9
+att.Mult_SightTime = 0.8
+att.Mult_Range = 0.5
+Suburb_GenAtt(att, "ud_m16_barrel_10")
 
 -- Stocks
 
@@ -188,7 +196,7 @@ att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 100 / 30 )
 att.Mult_SightTime = 2
-att.Mult_ReloadTime = 2
+att.Mult_ReloadTime = 1+(2/3)
 Suburb_GenAtt(att, "ud_m16_mag_100")
 
 local att = {}
@@ -200,7 +208,7 @@ att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 60 / 30 )
 att.Mult_SightTime = 1.5
-att.Mult_ReloadTime = 1.5
+att.Mult_ReloadTime = 1+(1/3)
 Suburb_GenAtt(att, "ud_m16_mag_60")
 
 local att = {}
@@ -212,7 +220,7 @@ att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 40 / 30 )
 att.Mult_SightTime = 1.2
-att.Mult_ReloadTime = 1.2
+att.Mult_ReloadTime = 1.15
 Suburb_GenAtt(att, "ud_m16_mag_40")
 
 local att = {}
@@ -223,8 +231,8 @@ att.ShortNameSubtitle = "20 RND"
 att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 20 / 30 )
-att.Mult_SightTime = 0.9
-att.Mult_ReloadTime = 0.75
+att.Mult_SightTime = 0.85
+att.Mult_ReloadTime = 0.85
 Suburb_GenAtt(att, "ud_m16_mag_20")
 
 -- Upper receivers

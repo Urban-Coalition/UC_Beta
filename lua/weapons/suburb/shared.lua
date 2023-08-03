@@ -231,8 +231,13 @@ function SWEP:Unload( camount )
 	if camount then
 		tounload = math.max( camount, 0 )
 	end
+	if tounload <= 0 then return false end -- Don't waste time
 	if SERVER then
-		self:GetOwner():GiveAmmo( tounload, self:GetPrimaryAmmoType(), false )
+		if IsValid(self:GetOwner()) then
+			self:GetOwner():GiveAmmo( tounload, self:GetPrimaryAmmoType(), false )
+		else
+			print( "Suburb: Just tried to Unload " .. (camount or tounload) .. " rounds, but the owner doesn't exist.", self )
+		end
 	end
 	self:SetClip1( self:Clip1() - tounload )
 end

@@ -230,7 +230,7 @@ SWEP.Attachments = {
 	{
 		Name = "Optical Sight",
 		SortOrder = 1.1,
-		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
+		Slot = QT("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
 
 		Bone = "1014_parent",
 		Pos = Vector(-1.392, 0, 2.0),

@@ -380,6 +380,7 @@ SWEP.Animations				= {
 			{ t = 0.2,			s = p1.."magout_empty.ogg" },
 			{ t = 1.0,			s = p1.."struggle.ogg" },
 			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.55,			s = p1.."magtap.ogg" },
 			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
 			{ t = 1.8,			s = p0.."shoulder.ogg" },
 
@@ -433,7 +434,7 @@ SWEP.Attachments = {
 		Name = "Optical Sight",
 		SortOrder = 1.1,
 		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
-		Slot = Sslot("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
+		Slot = QT("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
 		ActivateElements = {"flattop"},
 
 		Bone = "m16_parent",
@@ -494,7 +495,7 @@ SWEP.Attachments = {
 		Name = "Muzzle",
 		SortOrder = 3.0,
 		Icon = Material("entities/att/acwatt_uc_muzzle_fhider1.png", "mips smooth"),
-		Slot = Sslot("muzzle_break", "muzzle_suppressor"),
+		Slot = QT("muzzle_break", "muzzle_suppressor"),
 
 		Bone = "m16_parent",
 		Pos = Vector(-0.35, 0, 19.53),
