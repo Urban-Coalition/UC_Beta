@@ -353,15 +353,20 @@ AutoStats = {
 		function( data ) return data<=1 end,
 		899,
 	},
+	["Mult_ReloadTime"] = {
+		function( data ) return string.format( "%+G%% reload time", (data-1)*100 ) end,
+		function( data ) return data<=1 end,
+		799,
+	},
 	["Mult_SightTime"] = {
 		function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end,
 		function( data ) return data<=1 end,
-		799,
+		798,
 	},
 	["Mult_SprintTime"] = {
 		function( data ) return string.format( "%+G%% sight time", (data-1)*100 ) end,
 		function( data ) return data<=1 end,
-		798,
+		797,
 	},
 }
 

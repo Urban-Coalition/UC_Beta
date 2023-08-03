@@ -219,11 +219,18 @@ function SWEP:Initialize()
 	self:RegenStats()
 end
 
+function SWEP:OnReloaded()
+	self:RegenStats()
+end
+
 -- Some gamers may want an option to unload their mag on command...
 -- Consider an action that plays a unique animation with it too.
-function SWEP:Unload()
+function SWEP:Unload( camount )
 	local tounload = self:Clip1()
 	tounload = math.max( tounload - self:GetStat("ChamberSize"), 0 )
+	if camount then
+		tounload = math.max( camount, 0 )
+	end
 	if SERVER then
 		self:GetOwner():GiveAmmo( tounload, self:GetPrimaryAmmoType(), false )
 	end
@@ -260,16 +267,17 @@ function SWEP:Reload( automatic )
 	self:SetLoadIn( CurTime() + 1 )
 	self:SetBurstCount( 0 )
 	local shotgun = self.ShotgunReloading
+	local multi = self:GetStat( "ReloadTime", 1 )
 	if shotgun then
 		if self.Animations["sgreload_start_empty"] and self:Clip1() == 0 then
-			self:SendAnimChoose( "sgreload_start_empty", "reload" )
+			self:SendAnimChoose( "sgreload_start_empty", "sgreload", multi )
 		else
-			self:SendAnimChoose( "sgreload_start", "reload" )
+			self:SendAnimChoose( "sgreload_start", "sgreload", multi )
 		end
 		self:SetShotgunReloading( true )
 		if self.ReloadRemovesNeedCycle then self:SetCycleCount( 0 ) end
 	else
-		self:SendAnimChoose( "reload", "reload" )
+		self:SendAnimChoose( "reload", "reload", multi )
 	end
 	return true
 end
@@ -632,29 +640,38 @@ function SWEP:GetViewModelPosition(pos, ang)
 end
 
 -- Animating
-function SWEP:SendAnimChoose( act, hold, send )
+function SWEP:SendAnimChoose( act, hold, mul, spy )
 	assert( self.Animations, "SendAnimChoose: No animations table?!" )
 
-	local retong = act
+	local test = { anim = act, mult = mul or 1 }
+	self:AttHook( "TranslateAnimation", test )
+	local final = test.anim
+	local fmult = test.mult
 
 	if !self.Animations[act] then
+		print( "Suburb SendAnimChoose: Check 1: " .. act .. " is not in the Animations table. Stopping.." )
 		return false
 	end
 
 	if self:GetAim() > 0.5 and self.Animations[act .. "_sight"] then
-		retong = retong .. "_sight"
+		final = final .. "_sight"
 	end
 
 	if self:Clip1() == 0 and self.Animations[act .. "_empty"] then
-		retong = retong .. "_empty"
+		final = final .. "_empty"
 	end
 
-	return ( send and retong ) or self:SendAnim( retong, hold )
+	if !self.Animations[final] then
+		print( "Suburb SendAnimChoose: Check 2: " .. final .. " is not in the Animations table. Stopping.." )
+		return false
+	end
+
+	return ( spy and final ) or self:SendAnim( final, hold, fmult )
 end
 local fallback = {
 	Mult = 1,
 }
-function SWEP:SendAnim( act, hold )
+function SWEP:SendAnim( act, hold, imult )
 	local anim = fallback
 	local anim = self.Animations
 	assert( anim, "SendAnim: No animations table?!" )
@@ -667,23 +684,25 @@ function SWEP:SendAnim( act, hold )
 	else
 		anim = self.Animations[act]
 	end
-	local mult = anim.Mult or 1
 	local seqc = self:LookupSequence( Suburb.quickie( anim.Source ) )
 	local vm = self:GetOwner():GetViewModel()
 	vm:SendViewModelMatchingSequence( seqc )
-	mult = vm:SequenceDuration() / (anim.Time or vm:SequenceDuration())
+	local mult = vm:SequenceDuration() / (anim.Time or vm:SequenceDuration())
+	mult = mult / (anim.Mult or 1)
+	mult = mult / (imult or 1)
 	vm:SetPlaybackRate( mult )
-	local seqdur = (vm:SequenceDuration() / mult)
+	local seqdur_p = vm:SequenceDuration()
+	local seqdur = (seqdur_p / mult)
 	if hold == "idle" then
 		hold = false
 	else
 		self:SetIdleIn( CurTime() + seqdur )
 	end
 
-	local stopsight = hold and hold != "reload" and hold != "sginsert" and hold != "sgfinish" and hold != "cycle"
+	local stopsight = hold and hold != "reload" and hold != "sgreload" and hold != "sginsert" and hold != "sgfinish" and hold != "cycle"
 	local reloadtime = hold and hold != "cycle"
-	local loadin = hold == "reload" or hold == "sginsert"
-	local shotgunreloadingtime = hold == "reload" or hold == "sginsert"
+	local loadin = hold == "sgreload" or hold == "reload" or hold == "sginsert"
+	local shotgunreloadingtime = hold == "sgreload" or hold == "sginsert"
 	local cycledelaytime = hold == "cycle" or hold == "fire"
 	local attacktime = false
 	local holstertime = hold == "holster"
@@ -718,35 +737,35 @@ function SWEP:SendAnim( act, hold )
 	end
 
 	if reloadtime then
-		self:SetReloadingTime( CurTime() + (anim.ReloadingTime or seqdur) )
+		self:SetReloadingTime( CurTime() + (anim.ReloadingTime or seqdur_p)*imult )
 	end
 	if stopsight then
-		self:SetStopSightTime( CurTime() + (anim.StopSightTime or seqdur) )
+		self:SetStopSightTime( CurTime() + (anim.StopSightTime or seqdur_p)*imult )
 	end
 	if loadin then
-		self:SetLoadIn( CurTime() + (anim.LoadIn or seqdur) )
+		self:SetLoadIn( CurTime() + (anim.LoadIn or seqdur_p)*imult )
 	end
 	if shotgunreloadingtime then
-		self:SetShotgunReloadingTime( CurTime() + (anim.ShotgunReloadingTime or seqdur) )
+		self:SetShotgunReloadingTime( CurTime() + (anim.ShotgunReloadingTime or seqdur_p)*imult )
 	end
 	if cycledelaytime then
-		self:SetCycleDelayTime( CurTime() + (anim.CycleDelayTime or seqdur) )
+		self:SetCycleDelayTime( CurTime() + (anim.CycleDelayTime or seqdur_p)*imult )
 	end
 	if attacktime then
-		self:SetNextMechFire( CurTime() + (anim.AttackTime or seqdur) )
+		self:SetNextMechFire( CurTime() + (anim.AttackTime or seqdur_p)*imult )
 	end
 	if holstertime then
-		self:SetHolster_Time( CurTime() + (anim.HolsterTime or seqdur) )
+		self:SetHolster_Time( CurTime() + (anim.HolsterTime or seqdur_p)*imult )
 	end
 	if shelleject and CLIENT and IsFirstTimePredicted() then
-		self.ShellEjectTime = ( CurTime() + anim.ShellEjectTime )
+		self.ShellEjectTime = ( CurTime() + (anim.ShellEjectTime*imult) )
 	end
 	self:SetLoadAmount( anim.AmountToLoad or 300 )
 
 	if anim.Events then
 		for i, v in pairs(anim.Events) do
 			v.PLAYED = false
-			v.STARTTIME = CurTime() + v.t
+			v.STARTTIME = CurTime() + (v.t*imult)
 		end
 	end
 	self:SetCurrentAnim(act)

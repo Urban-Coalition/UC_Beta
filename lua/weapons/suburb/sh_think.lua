@@ -240,8 +240,7 @@ function SWEP:RegenStats()
 
 	self.Primary.ClipSize = self:GetCapacity()
 
-	
-	-- self:Unload()
+	self:Unload( self:Clip1()-self:GetCapacity() )
 	-- self:SetFiremode( 1 )
 end
 

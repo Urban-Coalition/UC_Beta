@@ -239,6 +239,182 @@ SWEP.Animations				= {
 		ReloadingTime = 2.4,
 		LoadIn = 2.0,
 	},
+	-- 20 rnd
+	["reload_20"]	= {
+		Source = "reload_20",
+		Time = 2.4,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 1.0,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
+			{ t = 1.8,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.0,
+		LoadIn = 1.5,
+	},
+	["reload_20_empty"] = {
+		Source = "reload_empty_20",
+		Time = 2.9,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 0.95,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.7,			s = p1.."boltdrop.ogg" },
+			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.3,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.4,
+		LoadIn = 2.0,
+	},
+	-- 40 rnd
+	["reload_40"]	= {
+		Source = "reload_40",
+		Time = 2.4,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 1.0,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
+			{ t = 1.8,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.0,
+		LoadIn = 1.5,
+	},
+	["reload_40_empty"] = {
+		Source = "reload_empty_40",
+		Time = 2.9,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 0.95,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.7,			s = p1.."boltdrop.ogg" },
+			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.3,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.4,
+		LoadIn = 2.0,
+	},
+	-- 60 rnd
+	["reload_60"]	= {
+		Source = "reload_60",
+		Time = 2.4,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 1.0,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
+			{ t = 1.8,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.0,
+		LoadIn = 1.5,
+	},
+	["reload_60_empty"] = {
+		Source = "reload_empty_60",
+		Time = 2.9,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 0.95,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.7,			s = p1.."boltdrop.ogg" },
+			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.3,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.4,
+		LoadIn = 2.0,
+	},
+	-- 100 rnd
+	["reload_100"]	= {
+		Source = "reload_100",
+		Time = 2.4,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 1.0,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
+			{ t = 1.8,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.0,
+		LoadIn = 1.5,
+	},
+	["reload_100_empty"] = {
+		Source = "reload_empty_100",
+		Time = 2.9,
+		Events = {
+			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
+			{ t = 0.2,			s = p1.."magout_empty.ogg" },
+			{ t = 0.95,			s = p1.."struggle.ogg" },
+			{ t = 0.95,			s = p1.."magin.ogg" },
+			{ t = 1.7,			s = p1.."boltdrop.ogg" },
+			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.3,			s = p0.."shoulder.ogg" },
+
+			{ t = 0.0,			s = Ssnd.rottle },
+			{ t = 0.25,			s = Ssnd.rattle },
+			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 1.1,			s = Ssnd.rattle },
+			{ t = 1.39,			s = Ssnd.rottle },
+			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		ReloadingTime = 2.4,
+		LoadIn = 2.0,
+	},
 }
 
 SWEP.Attachments = {
@@ -428,5 +604,20 @@ function SWEP:Hook_RegenBGTab( bgtab )
 	if ae["ud_m16_ur_classic"] and ae["flattop"] then
 		bgtab[3] = 1
 		bgtab[1] = 3
+	end
+end
+
+function SWEP:TranslateAnimation( data )
+	local ae = self.ActivatedElements
+	if data.anim == "reload" then
+		if ae["ud_m16_mag_40"] then
+			data.anim = "reload_40"
+		elseif ae["ud_m16_mag_60"] then
+			data.anim = "reload_60"
+		elseif ae["ud_m16_mag_20"] then
+			data.anim = "reload_20"
+		elseif ae["ud_m16_mag_100"] then
+			data.anim = "reload_100"
+		end
 	end
 end
