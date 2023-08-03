@@ -329,7 +329,7 @@ function SWEP:GetEffectiveSources()
 			table.insert( sources, Suburb.AttTable[attslot._Installed] )
 		end
 	end
-	for index, attslot in ipairs(self.Elements) do
+	for index, attslot in pairs(self.Elements) do
 		if index == "BaseClass" then continue end
 		if !self.ActivatedElements[index] then continue end
 		table.insert( sources, attslot )
