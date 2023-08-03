@@ -500,9 +500,10 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local si = self:GetAim()
 		local ss_si = math.ease.InOutSine( si )
+		local ipose = self:GetStat("IronsightPose")
 
-		b_pos:Add( self.IronsightPose.Pos )
-		b_ang:Add( self.IronsightPose.Ang )
+		b_pos:Add( ipose.Pos )
+		b_ang:Add( ipose.Ang )
 		b_pos:Mul( ss_si )
 		b_ang:Mul( ss_si )
 		opos:Add( b_pos )
@@ -512,8 +513,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local xi = ss_si
 		xi = math.sin( math.rad( 90 * xi * 2 ) )
 
-		b_pos:Add( self.IronsightPose.MidPos or vector_origin )
-		b_ang:Add( self.IronsightPose.MidAng or angle_zero )
+		b_pos:Add( ipose.MidPos or vector_origin )
+		b_ang:Add( ipose.MidAng or angle_zero )
 		b_pos:Mul( xi )
 		b_ang:Mul( xi )
 
@@ -793,7 +794,8 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, self.IronsightPose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
+	local ipose = self:GetStat("IronsightPose")
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
 	cam.IgnoreZ(true)
 
 	for index, data in pairs( self.Attachments ) do
@@ -858,8 +860,9 @@ end
 function SWEP:TranslateFOV(fov)
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
-	if self.IronsightPose and self.IronsightPose.Magnification then
-		mag = self.IronsightPose.Magnification
+	local ipose = self:GetStat("IronsightPose")
+	if ipose and ipose.Magnification then
+		mag = ipose.Magnification
 	end
 	return Lerp( self:GetAim(), fov, fov or 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
 end
@@ -867,8 +870,9 @@ end
 function SWEP:AdjustMouseSensitivity()
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
-	if self.IronsightPose and self.IronsightPose.Magnification then
-		mag = self.IronsightPose.Magnification
+	local ipose = self:GetStat("IronsightPose")
+	if ipose and ipose.Magnification then
+		mag = ipose.Magnification
 	end
 	return 1 / Lerp( math.ease.InQuad( self:GetAim() * device ), 1, mag )
 end
