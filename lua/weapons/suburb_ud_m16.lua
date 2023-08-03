@@ -498,7 +498,7 @@ SWEP.Attachments = {
 		Slot = QT("muzzle_break", "muzzle_suppressor"),
 
 		Bone = "m16_parent",
-		Pos = Vector(-0.35, 0, 19.53),
+		Pos = Vector(-0.35, 0, 25.9),
 		Ang = Angle(90, -90, 0),
 	},
 	{
@@ -523,6 +523,10 @@ SWEP.Elements = {
 				Pos = Vector(-1.652, 0, 12.5),
 				Ang = Angle(90, -90, 0),
 			},
+			[10] = {
+				Pos = Vector(-0.35, 0, 18.3),
+				Ang = Angle(90, -90, 0),
+			},
 		},
 	},
 	["ud_m16_barrel_14"] = {
@@ -530,6 +534,10 @@ SWEP.Elements = {
 		AttPos = {
 			[3] = {
 				Pos = Vector(-1.652, 0, 12.5),
+				Ang = Angle(90, -90, 0),
+			},
+			[10] = {
+				Pos = Vector(-0.35, 0, 21.6),
 				Ang = Angle(90, -90, 0),
 			},
 		},
