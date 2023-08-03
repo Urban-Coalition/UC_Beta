@@ -658,11 +658,11 @@ function SWEP:SendAnimChoose( act, hold, mul, spy )
 		return false
 	end
 
-	if self:GetAim() > 0.5 and self.Animations[act .. "_sight"] then
+	if self:GetAim() > 0.5 and self.Animations[final .. "_sight"] then
 		final = final .. "_sight"
 	end
 
-	if self:Clip1() == 0 and self.Animations[act .. "_empty"] then
+	if self:Clip1() == 0 and self.Animations[final .. "_empty"] then
 		final = final .. "_empty"
 	end
 

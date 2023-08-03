@@ -108,6 +108,7 @@ function cf_get( name, size )
 		size = size,
 		weight = 0,
 		antialias = true,
+		extended = false -- Enable when better font?
 	})
 	genfonts[name][size] = true
 	return this

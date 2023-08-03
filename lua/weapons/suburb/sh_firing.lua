@@ -240,29 +240,34 @@ function SWEP:Attack_Sound()
 	local shotthing3 = CHAN_VOICE2 -- 158+((self:GetTotalShotCount()+2)%4)
 	local shotthing4 = CHAN_STREAM -- 162+((self:GetTotalShotCount()+3)%4)
 
-	if #self.Sound_Blast > 0 then
-		self.Sound_Blast["BaseClass"] = nil
-		local detail = self.Sound_Blast[math.Round(util.SharedRandom("Suburb_SoundBlast1", 1, #self.Sound_Blast))]
+	local snd_blast = self:GetStat("Sound_Blast")
+	local snd_mech = self:GetStat("Sound_Mech")
+	local snd_tailext = self:GetStat("Sound_TailEXT")
+	local snd_tailint = self:GetStat("Sound_TailINT")
+
+	if #snd_blast > 0 then
+		snd_blast["BaseClass"] = nil
+		local detail = snd_blast[math.Round(util.SharedRandom("Suburb_SoundBlast1", 1, #snd_blast))]
 		starvingchildren( self, detail, 1, 90, shotthing1 )
 	end
 
-	if #self.Sound_Mech > 0 then
-		self.Sound_Mech["BaseClass"] = nil
-		local detail = self.Sound_Mech[math.Round(util.SharedRandom("Suburb_SoundBlast2", 1, #self.Sound_Mech))]
+	if #snd_mech > 0 then
+		snd_mech["BaseClass"] = nil
+		local detail = snd_mech[math.Round(util.SharedRandom("Suburb_SoundBlast2", 1, #snd_mech))]
 		starvingchildren( self, detail, Lerp( self:GetAim(), 0.5, 1 ), 70, shotthing2 )
 	end
 
 	local innyouty = self:InnyOuty()
 
-	if #self.Sound_TailEXT > 0 then
-		self.Sound_TailEXT["BaseClass"] = nil
-		local detail = self.Sound_TailEXT[math.Round(util.SharedRandom("Suburb_SoundBlast3", 1, #self.Sound_TailEXT))]
+	if #snd_tailext > 0 then
+		snd_tailext["BaseClass"] = nil
+		local detail = snd_tailext[math.Round(util.SharedRandom("Suburb_SoundBlast3", 1, #snd_tailext))]
 		starvingchildren( self, detail, innyouty, 160, shotthing3 )
 	end
 
-	if #self.Sound_TailINT > 0 then
-		self.Sound_TailINT["BaseClass"] = nil
-		local detail = self.Sound_TailINT[math.Round(util.SharedRandom("Suburb_SoundBlast4", 1, #self.Sound_TailINT))]
+	if #snd_tailint > 0 then
+		snd_tailint["BaseClass"] = nil
+		local detail = snd_tailint[math.Round(util.SharedRandom("Suburb_SoundBlast4", 1, #snd_tailint))]
 		starvingchildren( self, detail, 1-innyouty, 160, shotthing4 )
 	end
 end

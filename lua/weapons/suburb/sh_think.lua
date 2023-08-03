@@ -293,6 +293,13 @@ function SWEP:GetStat( name, default )
 		result = (result + sadd) * smul
 	end
 
+	-- WIP Hook system
+	-- for i, v in ipairs(ssources) do
+	-- 	if v[ "Hook_" .. name ] then
+	-- 		v[ "Hook_" .. name ]( self )
+	-- 	end
+	-- end
+
 	-- Cache it
 	self.scache[ name ] = result
 
