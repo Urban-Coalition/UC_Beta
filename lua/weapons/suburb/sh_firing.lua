@@ -143,9 +143,9 @@ function SWEP:PrimaryAttack()
 	if game.SinglePlayer() and GetConVar("uc_cl_hellfire"):GetInt() > 0 then
 		self:CallOnClient("Hellfire")
 	elseif SERVER then
-		net.Start("Suburb_Hellfire")
-			net.WriteEntity(self)
-		net.SendPVS( self:GetOwner():GetPos() )
+		-- net.Start("Suburb_Hellfire")
+		-- 	net.WriteEntity(self)
+		-- net.SendPVS( self:GetOwner():GetPos() )
 	else
 		if GetConVar("uc_cl_hellfire"):GetInt() > 0 then
 			self:Hellfire()
@@ -175,12 +175,19 @@ function SWEP:Hellfire()
 		local pa_R = pa:Right()
 		local pa_U = pa:Up()
 		local lamp = ProjectedTexture() -- Create a projected texture
+		if IsValid(self.lamp) then self.lamp:Remove() end
+		self.lamp = lamp
+
+		self.lamp_starttime = UnPredictedCurTime()
+		self.lamp_endtime = UnPredictedCurTime() + 0.06
 
 		-- Set it all up
 		lamp:SetTexture( "suburb/muzzleflash_light" )
 		lamp:SetFarZ( 600 ) -- How far the light should shine
-		lamp:SetFOV( math.Rand( 120, 130 ) )
-		lamp:SetBrightness( math.Rand( 1, 2 ) * GetConVar("uc_cl_hellfire_intensity"):GetFloat() )
+		lamp:SetFOV( 130 )
+		local st = math.Rand( 1, 2 ) * GetConVar("uc_cl_hellfire_intensity"):GetFloat()
+		self.lamp_startbrightness = st
+		lamp:SetBrightness( st )
 		lamp:SetShadowFilter( 1 )
 		lamp:SetEnableShadows( true )
 
@@ -200,7 +207,7 @@ function SWEP:Hellfire()
 		lamp:SetAngles( ttr2.Normal:Angle() + Angle( math.Rand(-3, 3), math.Rand(-3, 3), math.Rand(0, 360) ) )
 		lamp:Update()
 		
-		timer.Simple( 0.08, function()
+		timer.Simple( 0.06, function()
 			if IsValid( lamp ) then
 				lamp:Remove()
 			end

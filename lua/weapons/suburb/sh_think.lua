@@ -138,6 +138,17 @@ function SWEP:Think()
 			end
 		end
 	end
+
+	local lamp = self.lamp
+	if CLIENT and IsValid(lamp) then
+		if self.lamp_endtime <= UnPredictedCurTime() then
+			lamp:Remove()
+		else
+			lamp:SetBrightness( math.Remap( UnPredictedCurTime(), self.lamp_starttime, self.lamp_endtime, self.lamp_startbrightness, 0 ) )
+			lamp:SetFOV( math.Remap( UnPredictedCurTime(), self.lamp_starttime, self.lamp_endtime, 130, 60 ) )
+			lamp:Update()
+		end
+	end
 end
 
 function SWEP:GetCapacity()
