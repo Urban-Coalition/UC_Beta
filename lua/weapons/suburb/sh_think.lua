@@ -43,8 +43,9 @@ function SWEP:Think()
 
 		local ft = self:GetFiremodeTable()
 		local weird = self:GetBurstCount() > 0 and self:GetBurstCount() < ft.Mode
+		local runaway = ft.RunawayBurst or self:GetStat("RunawayBurst", false)
 		local trdown = p:KeyDown(IN_ATTACK)
-		if !trdown then
+		if !trdown and !runaway then
 			if weird then
 				self:SetCycleDelayTime( CurTime() + self:GetStat("PostBurstDelay", ft.PostBurstDelay or 0) )
 			end
@@ -52,6 +53,9 @@ function SWEP:Think()
 		end
 		if self:GetStat("AutoBurst", ft.AutoBurst or false) and !weird then
 			self:SetBurstCount( 0 )
+		end
+		if runaway and self:GetBurstCount() > 0 then
+			self:PrimaryAttack()
 		end
 		if p:GetViewModel() then
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
