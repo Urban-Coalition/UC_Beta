@@ -810,9 +810,9 @@ if CLIENT then
 	
 	hook.Add("PreRender", "Suburb_PreRender", function()
 		local p = LocalPlayer()
-		local w = p:GetActiveWeapon()
+		local wpn = p:GetActiveWeapon()
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if IsValid(w) and w.Suburb and !cheapscope:GetBool() and w:GetAim() != 0 then -- and w:GetUserSight() then
+		if IsValid(wpn) and wpn.Suburb and !cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then -- and w:GetUserSight() then
 			-- print("Suburb: Dual-render scope is being done.")
 			render.PushRenderTarget(rtmat)
 			cam.Start2D()
@@ -830,7 +830,7 @@ if CLIENT then
 		local p = LocalPlayer()
 		local wpn = p:GetActiveWeapon()
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if IsValid(wpn) and wpn.Suburb and cheapscope:GetBool() and wpn:GetAim() != 0 then
+		if IsValid(wpn) and wpn.Suburb and cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then
 			-- print("Suburb: Cheap scope is being done.")
 			local fov = p:GetFOV()
 			local w, h = ScrW(), ScrH()
@@ -1010,7 +1010,7 @@ function SWEP:GenerateSightPosition( pos, ang, bone, upos, uang )
 		GOAT = ClientsideModel( self.ViewModel )
 		GOAT:SetPos( vector_origin )
 		GOAT:SetAngles( angle_zero )
-		GOAT:SetNoDraw( false )
+		GOAT:SetNoDraw( true )
 		GOAT:ResetSequence( "idle" )
 		GOAT:SetPlaybackRate( 0 )
 		GOAT:SetupBones()
