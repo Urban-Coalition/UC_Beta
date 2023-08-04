@@ -260,14 +260,22 @@ function SWEP:RegenStats()
 end
 
 function SWEP:GetStat( name, default )
+	local hooked = false
+	
+	local ssources = self.ssources
+	for i, v in ipairs( ssources ) do
+		if v[ "Hook_" .. name ] then
+			hooked = true
+		end
+	end
+
 	-- Caching is very important!
-	if self.scache[ name ] then
+	if !hooked and self.scache[ name ] then
 		return self.scache[ name ]
 	end
 
 	local sadd = 0
 	local smul = 1
-	local ssources = self.ssources
 	local result = self:GetTable()[ name ]
 	if !result then
 		result = default
@@ -298,14 +306,16 @@ function SWEP:GetStat( name, default )
 	end
 
 	-- WIP Hook system
-	-- for i, v in ipairs(ssources) do
-	-- 	if v[ "Hook_" .. name ] then
-	-- 		v[ "Hook_" .. name ]( self )
-	-- 	end
-	-- end
+	for i, v in ipairs( ssources ) do
+		if v[ "Hook_" .. name ] then
+			return v[ "Hook_" .. name ]( self, result, default )
+		end
+	end
 
 	-- Cache it
-	self.scache[ name ] = result
+	if !hooked then
+		self.scache[ name ] = result
+	end
 
 	return result
 end
