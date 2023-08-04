@@ -163,7 +163,7 @@ local menus = {
 			llist:DockPadding( 5, 2, 5, 2 )
 
 			G_CHECKBOX(llist, "Cheap Scopes", "uc_cl_cheapscopes")
-			G_HELP(llist, "Scopes will zoom in your viewport instead of dual-rendering.")
+			G_HELP(llist, "Scopes will use your viewport and zoom it in instead of dual-rendering.")
 			G_CHECKBOX(llist, "Cheap Muzzle Effects", "uc_cl_cheapmuzzles")
 			G_HELP(llist, "Low-quality muzzle effects.")
 		end

@@ -55,9 +55,9 @@ Suburb_GenAtt(att, "uc_optic_eotech552")
 -- Medium
 local att = {}
 att.Name = "Trijicon Advanced Combat Optical Gunsight"
-att.SortOrder = 4
+att.SortOrder = 3
 att.ShortName = "ACOG"
-att.ShortNameSubtitle = "OPTICAL 4x"
+att.ShortNameSubtitle = "OPTICAL 3x"
 att.Slot = "optic_medium"
 
 att.Model = "models/weapons/arccw/atts/ud_acog.mdl"
@@ -67,14 +67,12 @@ att.Sights = {
 	{
 		RTScope = true,
 		RTScopeMat = 1,
-		RTScopeMagnfiication = 4,
+		RTScopeMagnification = 3,
 		RTScopeAtt_Center = 1,
 		RTScopeAtt_Bottom = 2,
 		RTScopeOverlay = Material("hud/scopes/uc_acog_reticle.png", "smooth"),
 
-		Pos = Vector( -2.809, -4.7, 1.01 ),
-		Ang = Angle( 0, 0, 0 ),
-		Pos = Vector( 0, 0, 0 ),
+		Pos = Vector( 0, -8, 1.49 ),
 		Ang = Angle( 0, 0, 0 ),
 		MidPos = Vector( -1.15, 2, -0.4 ), -- See if I can inherit this from the weapon.
 		MidAng = Angle( -0.5, 0, -6 ),
@@ -97,12 +95,12 @@ att.Sights = {
 	{
 		RTScope = true,
 		RTScopeMat = 2,
-		RTScopeMagnfiication = 2.5,
+		RTScopeMagnification = 2.5,
 		RTScopeAtt_Center = 1,
 		RTScopeAtt_Bottom = 2,
 		RTScopeOverlay = Material("hud/scopes/uc_elcan.png", "smooth"),
 
-		Pos = Vector( -2.809, -4.7, 0.98 ),
+		Pos = Vector( 0, -8, 1.515 ),
 		Ang = Angle( 0, 0, 0 ),
 		MidPos = Vector( -1.15, 2, -0.4 ),
 		MidAng = Angle( -0.5, 0, -6 ),

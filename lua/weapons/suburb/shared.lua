@@ -917,7 +917,8 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 							local y1, y2, h = a1.Pos:ToScreen(), a2.Pos:ToScreen(), ScrH()/2
 							y1, y2 = y1.y, y2.y
 							scofov = (y2-y1)/h
-							scofov = scofov / 2
+							scofov = scofov / SIGHT.RTScopeMagnification
+							-- scofov = math.min( 1, scofov )
 						
 							if self:GetAim() != 0 then
 								if SIGHT.RTScopeOverlay then
@@ -971,17 +972,84 @@ end
 
 function SWEP:BuildSightList()
 	local silist = {}
-	for i, att in ipairs(self:GetEffectiveSources()) do
+	for i, slot in ipairs( self.Attachments ) do
+		if !slot._Installed then continue end
+		local att = Suburb.AttTable[slot._Installed]
 		if !att.Sights then continue end
 		-- print(i .. " : " .. (att.Name or "elem") .. " count: " .. #att.Sights )
 		for k, sit in ipairs( att.Sights ) do
 			local thing = table.Copy( sit )
 			thing._Att = att.Class
+
+			if CLIENT then
+				local r1, r2 = self:GenerateSightPosition( slot.Pos, slot.Ang, slot.Bone, sit.Pos, sit.Ang )
+				thing.Pos = r1
+				local x,y,z = r1.x,r1.y,r1.z
+				r1.x = y
+				r1.y = -x
+				r1.z = -z
+				thing.Ang = r2
+				r2.x = -r2.x
+				r2.y = -r2.y
+				r2.z = -r2.z
+			end
 			table.insert( silist, thing )
 		end
 	end
 
 	return silist
+end
+
+local col_bone = Color( 155, 0, 0 )
+local col_sight = Color( 30, 30, 155 )
+
+function SWEP:GenerateSightPosition( pos, ang, bone, upos, uang )
+	if CLIENT then
+		-- print( "Suburb GenerateSightPosition: Let's generate a sight position" )
+		if IsValid(GOAT) then GOAT:Remove() end
+		GOAT = ClientsideModel( self.ViewModel )
+		GOAT:SetPos( vector_origin )
+		GOAT:SetAngles( angle_zero )
+		GOAT:SetNoDraw( false )
+		GOAT:ResetSequence( "idle" )
+		GOAT:SetPlaybackRate( 0 )
+		GOAT:SetupBones()
+
+		local mat = GOAT:GetBoneMatrix( GOAT:LookupBone( bone ) )
+		if !mat then print( "Suburb GenerateSightPosition: Failed to get the bone matrix" ) return false end
+		local m_p, m_a = mat:GetTranslation(), mat:GetAngles()
+
+		GOAT:Remove()
+
+		-- debugoverlay.Axis( vector_origin, angle_zero, 4, 0, true )
+		--debugoverlay.Axis( m_p, m_a, 8, 0, true )
+
+		local t_pos, t_ang = m_p, m_a
+
+		-- Slot
+		t_pos:Add( t_ang:Forward() *			pos.y )
+		t_pos:Add( t_ang:Right() *				pos.x )
+		t_pos:Add( t_ang:Up() *					pos.z )
+
+		t_ang:RotateAroundAxis( t_ang:Right(),		ang.p )
+		t_ang:RotateAroundAxis( t_ang:Forward(),	ang.y )
+		t_ang:RotateAroundAxis( t_ang:Up(),			ang.r )
+
+		-- Sight
+		t_pos:Add( t_ang:Forward() *			upos.y )
+		t_pos:Add( t_ang:Up() *					upos.z )
+		t_pos:Add( t_ang:Right() *				upos.x )
+
+		t_ang:RotateAroundAxis( t_ang:Right(),		uang.p )
+		t_ang:RotateAroundAxis( t_ang:Forward(),	uang.y )
+		t_ang:RotateAroundAxis( t_ang:Up(),			uang.r )
+
+		-- debugoverlay.Axis( t_pos, t_ang, 16, 0, true )
+
+		return t_pos, t_ang
+	else
+		print( "Suburb GenerateSightPosition: Why are you, as the server, calling this?" )
+	end
 end
 
 local silist
