@@ -789,13 +789,78 @@ end
 
 local v1 = Vector(1, 1, 1)
 
+local rtmat, rtsurf, rttemp, scofov
+local cheapscope
+if CLIENT then
+	scofov = 1
+	rtmat = GetRenderTarget("suburb_scope", 512, 512, false)
+	rtsurf = Material( "suburb/rt" )
+	rttemp = {
+		origin = vector_origin,
+		angles = angle_zero,
+		x = 0,
+		y = 0,
+		w = 512,
+		h = 512,
+		drawviewmodel = false,
+		fov = 90,
+		--znear = 1,
+		--zfar = 1000,
+	}
+	
+	hook.Add("PreRender", "Suburb_PreRender", function()
+		local p = LocalPlayer()
+		local w = p:GetActiveWeapon()
+		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
+		if IsValid(w) and w.Suburb and !cheapscope:GetBool() then -- and w:GetUserSight() then
+			render.PushRenderTarget(rtmat)
+			cam.Start2D()
+				render.Clear( 0, 0, 0, 0 )
+				rttemp.origin = p:EyePos()
+				rttemp.angles = p:EyeAngles()
+				rttemp.fov = Suburb.FOVix( p:GetFOV() * scofov, 1, 1 )
+				render.RenderView( rttemp )
+			cam.End2D()
+			render.PopRenderTarget()
+		end
+	end)
+
+	hook.Add("PreDrawViewModels", "Suburb_PreDrawViewModels", function()
+		local p = LocalPlayer()
+		local wpn = p:GetActiveWeapon()
+		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
+		if wpn.Suburb and cheapscope:GetBool() then
+			local fov = p:GetFOV()
+			local w, h = ScrW(), ScrH()
+			local rat = w/h
+			local rot = w-h
+			fov = Suburb.FOVix( p:GetFOV(), ScrW(), ScrH() )
+			
+			render.UpdateScreenEffectTexture()
+			render.UpdateFullScreenDepthTexture()
+			local screen = render.GetScreenEffectTexture()
+
+			render.PushRenderTarget(rtmat)
+				render.Clear( 0, 0, 0, 0 )
+				local wtf = -((w*rat)-w)*0.5
+				local ma = 1/scofov
+				local aw = (w-(w*ma))*0.5
+				local ah = (h-(h*ma))*0.5
+				render.DrawTextureToScreenRect(screen, wtf+(aw*rat), ah, w*rat*ma, h*ma)
+			render.PopRenderTarget()
+		end
+	end)
+
+end
+
 function SWEP:PreDrawViewModel( vm, weapon, ply )
 	self:UseBGTable( vm )
 
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	
 	local ipose = self:GetStat("IronsightPose")
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
+	local silly -- = Lerp( math.abs( math.sin( CurTime() * math.pi * 0.5 ) ), 10, 90 )
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, silly or ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
 	cam.IgnoreZ(true)
 
 	for index, data in pairs( self.Attachments ) do
@@ -807,6 +872,7 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 				local bm = vm:GetBoneMatrix( vm:LookupBone( data.Bone ) )
 				if bm then
 					local pos, ang = bm:GetTranslation(), bm:GetAngles()
+					local md = data._Model
 					local attpos = data.Pos
 					for elem, elemdata in pairs( self.Elements ) do
 						if elem == "BaseClass" then continue end
@@ -831,14 +897,43 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 					ang:RotateAroundAxis( ang:Right(), data.Ang.p )
 					ang:RotateAroundAxis( ang:Forward(), data.Ang.y )
 					ang:RotateAroundAxis( ang:Up(), data.Ang.r )
-					data._Model:SetPos( pos )
-					data._Model:SetAngles( ang )
+					md:SetPos( pos )
+					md:SetAngles( ang )
 
 					local may = Matrix()
 					may:SetScale( v1 )
 					if data.Scale then may:Scale( data.Scale ) end
 					if AT.ModelScale then may:Scale( AT.ModelScale ) end
-					data._Model:EnableMatrix( "RenderMultiply", may )
+					md:EnableMatrix( "RenderMultiply", may )
+
+					if CLIENT then
+						if AT.RTScope then
+							rtsurf:SetTexture("$basetexture", rtmat)
+
+							a1, a2 = md:GetAttachment( 1 ), md:GetAttachment( 2 )
+							y1, y2 = a1.Pos:ToScreen(), a2.Pos:ToScreen()
+
+							local y1, y2, h = y1.y, y2.y, ScrH()/2
+
+							scofov = (y2-y1)/h
+							scofov = scofov
+						
+							if true or self:GetUserSight() then
+								if AT.RTScopeOverlay then
+									render.PushRenderTarget( rtmat )
+										cam.Start2D()
+										surface.SetDrawColor( 255, 0, 0, 255 )
+										surface.SetMaterial( AT.RTScopeOverlay )
+										surface.DrawTexturedRect( 0, 0, 512, 512 )
+										cam.End2D()
+									render.PopRenderTarget()
+								end
+								md:SetSubMaterial( AT.RTScopeMat, "suburb/rt" )
+							else
+								md:SetSubMaterial( AT.RTScopeMat )
+							end
+						end
+					end
 
 					data._Model:DrawModel()
 				end
@@ -848,6 +943,20 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 
 	self:AttHook( "Hook_PreDrawViewModel", vm, weapon, ply )
 end
+
+hook.Add("HUDPaint", "Suburb_Test_HUDPaint", function()
+	local w, h, p = ScrW(), ScrH(), LocalPlayer()
+	local wep = LocalPlayer():GetActiveWeapon()
+	if false and IsValid(wep) and wep.Suburb then
+		surface.SetDrawColor( color_white )
+		
+		surface.DrawLine( y1.x - 2, y1.y - 2, y1.x + 2, y1.y + 2 )
+		surface.DrawLine( y1.x - 2, y1.y + 2, y1.x + 2, y1.y - 2 )
+
+		surface.DrawLine( y2.x - 2, y2.y - 2, y2.x + 2, y2.y + 2 )
+		surface.DrawLine( y2.x - 2, y2.y + 2, y2.x + 2, y2.y - 2 )
+	end
+end)
 
 function SWEP:PostDrawViewModel( vm, weapon, ply )
 	cam.End3D()

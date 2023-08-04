@@ -62,6 +62,10 @@ att.Slot = "optic_medium"
 
 att.Model = "models/weapons/arccw/atts/ud_acog.mdl"
 att.ModelScale = Vector(1.15, 1.15, 1.15)
+
+att.RTScope = true
+att.RTScopeMat = 1
+att.RTScopeOverlay = Material("hud/scopes/uc_acog_reticle.png", "smooth")
 Suburb_GenAtt(att, "uc_optic_acog")
 
 local att = {}
