@@ -89,26 +89,8 @@ SWEP.Sound_Blast_Supp = {
     { s = p1.."fire-sup-05.ogg" },
     { s = p1.."fire-sup-06.ogg" }
 }
-SWEP.Sound_TailEXT_Supp = {
-    { s = p0.."sup-tail-01.ogg" },
-    { s = p0.."sup-tail-02.ogg" },
-    { s = p0.."sup-tail-03.ogg" },
-    { s = p0.."sup-tail-04.ogg" },
-    { s = p0.."sup-tail-05.ogg" },
-    { s = p0.."sup-tail-06.ogg" },
-    { s = p0.."sup-tail-07.ogg" },
-    { s = p0.."sup-tail-08.ogg" },
-    { s = p0.."sup-tail-09.ogg" },
-    { s = p0.."sup-tail-10.ogg" }
-}
-SWEP.Sound_TailINT_Supp = {
-    { s = p0.."fire-dist-int-pistol-light-01.ogg" },
-    { s = p0.."fire-dist-int-pistol-light-02.ogg" },
-    { s = p0.."fire-dist-int-pistol-light-03.ogg" },
-    { s = p0.."fire-dist-int-pistol-light-04.ogg" },
-    { s = p0.."fire-dist-int-pistol-light-05.ogg" },
-    { s = p0.."fire-dist-int-pistol-light-06.ogg" }
-}
+SWEP.Sound_TailEXT_Supp = UC.sounds.supptailext
+SWEP.Sound_TailINT_Supp = UC.sounds.supptailint
 
 SWEP.MuzzleEffect						= "muzzleflash_1"
 SWEP.QCA_Muzzle							= 1
