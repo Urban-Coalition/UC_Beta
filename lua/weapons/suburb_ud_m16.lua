@@ -40,14 +40,6 @@ SWEP.IronsightPose = {
 	ViewModelFOV = 65,
 	Magnification = 1.3,
 }
-SWEP.IronsightPose = {
-	Pos = Vector( -2.809, -4.7, 1.01 ),
-	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -1.15, 2, -0.4 ),
-	MidAng = Angle( -0.5, 0, -6 ),
-	ViewModelFOV = 30,
-	Magnification = 1.3,
-}
 
 SWEP.HoldTypeHip			= "ar2"
 SWEP.HoldTypeSight			= "rpg"
