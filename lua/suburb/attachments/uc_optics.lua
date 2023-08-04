@@ -63,9 +63,23 @@ att.Slot = "optic_medium"
 att.Model = "models/weapons/arccw/atts/ud_acog.mdl"
 att.ModelScale = Vector(1.15, 1.15, 1.15)
 
-att.RTScope = true
-att.RTScopeMat = 1
-att.RTScopeOverlay = Material("hud/scopes/uc_acog_reticle.png", "smooth")
+att.Sights = {
+	{
+		RTScope = true,
+		RTScopeMat = 1,
+		RTScopeMagnfiication = 2.5,
+		RTScopeAtt_Center = 1,
+		RTScopeAtt_Bottom = 2,
+		RTScopeOverlay = Material("hud/scopes/uc_acog_reticle.png", "smooth"),
+
+		Pos = Vector( -2.809, -4.7, 1.01 ),
+		Ang = Angle( 0, 0, 0 ),
+		MidPos = Vector( -1.15, 2, -0.4 ), -- See if I can inherit this from the weapon.
+		MidAng = Angle( -0.5, 0, -6 ),
+		ViewModelFOV = 30,
+		Magnification = 1.3,
+	},
+}
 Suburb_GenAtt(att, "uc_optic_acog")
 
 local att = {}
@@ -76,6 +90,24 @@ att.ShortNameSubtitle = "OPTICAL 2.5x"
 att.Slot = "optic_medium"
 
 att.Model = "models/weapons/arccw/atts/uc_gso_elcan.mdl"
+
+att.Sights = {
+	{
+		RTScope = true,
+		RTScopeMat = 2,
+		RTScopeMagnfiication = 2.5,
+		RTScopeAtt_Center = 1,
+		RTScopeAtt_Bottom = 2,
+		RTScopeOverlay = Material("hud/scopes/uc_elcan.png", "smooth"),
+
+		Pos = Vector( -2.809, -4.7, 1.01 ),
+		Ang = Angle( 0, 0, 0 ),
+		MidPos = Vector( -1.15, 2, -0.4 ),
+		MidAng = Angle( -0.5, 0, -6 ),
+		ViewModelFOV = 30,
+		Magnification = 1.3,
+	},
+}
 Suburb_GenAtt(att, "uc_optic_elcan")
 
 -- Long

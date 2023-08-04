@@ -500,7 +500,7 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local si = self:GetAim()
 		local ss_si = math.ease.InOutSine( si )
-		local ipose = self:GetStat("IronsightPose")
+		local ipose = self:GetCurrentSight()
 
 		b_pos:Add( ipose.Pos )
 		b_ang:Add( ipose.Ang )
@@ -812,10 +812,11 @@ if CLIENT then
 		local p = LocalPlayer()
 		local w = p:GetActiveWeapon()
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if IsValid(w) and w.Suburb and !cheapscope:GetBool() then -- and w:GetUserSight() then
+		if IsValid(w) and w.Suburb and !cheapscope:GetBool() and w:GetAim() != 0 then -- and w:GetUserSight() then
+			-- print("Suburb: Dual-render scope is being done.")
 			render.PushRenderTarget(rtmat)
 			cam.Start2D()
-				render.Clear( 0, 0, 0, 0 )
+				render.Clear( 0, 0, 0, 255 )
 				rttemp.origin = p:EyePos()
 				rttemp.angles = p:EyeAngles()
 				rttemp.fov = Suburb.FOVix( p:GetFOV() * scofov, 1, 1 )
@@ -829,7 +830,8 @@ if CLIENT then
 		local p = LocalPlayer()
 		local wpn = p:GetActiveWeapon()
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if wpn.Suburb and cheapscope:GetBool() then
+		if IsValid(wpn) and wpn.Suburb and cheapscope:GetBool() and wpn:GetAim() != 0 then
+			-- print("Suburb: Cheap scope is being done.")
 			local fov = p:GetFOV()
 			local w, h = ScrW(), ScrH()
 			local rat = w/h
@@ -841,7 +843,7 @@ if CLIENT then
 			local screen = render.GetScreenEffectTexture()
 
 			render.PushRenderTarget(rtmat)
-				render.Clear( 0, 0, 0, 0 )
+				render.Clear( 0, 0, 0, 255 )
 				local wtf = -((w*rat)-w)*0.5
 				local ma = 1/scofov
 				local aw = (w-(w*ma))*0.5
@@ -858,7 +860,7 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	
-	local ipose = self:GetStat("IronsightPose")
+	local ipose = self:GetCurrentSight()
 	local silly -- = Lerp( math.abs( math.sin( CurTime() * math.pi * 0.5 ) ), 10, 90 )
 	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, silly or ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
 	cam.IgnoreZ(true)
@@ -907,30 +909,32 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 					md:EnableMatrix( "RenderMultiply", may )
 
 					if CLIENT then
-						if AT.RTScope then
+						local SIGHT = self:GetCurrentSight()
+						if SIGHT.RTScope then
 							rtsurf:SetTexture("$basetexture", rtmat)
 
-							a1, a2 = md:GetAttachment( 1 ), md:GetAttachment( 2 )
+							a1, a2 = md:GetAttachment( SIGHT.RTScopeAtt_Center ), md:GetAttachment( SIGHT.RTScopeAtt_Bottom )
 							y1, y2 = a1.Pos:ToScreen(), a2.Pos:ToScreen()
 
 							local y1, y2, h = y1.y, y2.y, ScrH()/2
-
 							scofov = (y2-y1)/h
-							scofov = scofov
+							scofov = scofov / 2
 						
-							if true or self:GetUserSight() then
-								if AT.RTScopeOverlay then
+							if self:GetAim() != 0 then
+								if SIGHT.RTScopeOverlay then
 									render.PushRenderTarget( rtmat )
 										cam.Start2D()
-										surface.SetDrawColor( 255, 0, 0, 255 )
-										surface.SetMaterial( AT.RTScopeOverlay )
-										surface.DrawTexturedRect( 0, 0, 512, 512 )
+											surface.SetDrawColor( 255, 0, 0, 255 )
+											surface.SetMaterial( SIGHT.RTScopeOverlay )
+											surface.DrawTexturedRect( 0, 0, 512, 512 )
+											-- surface.SetDrawColor( 0, 0, 0, 255*(1-self:GetAim()) )
+											-- surface.DrawRect( 0, 0, 512, 512 )
 										cam.End2D()
 									render.PopRenderTarget()
 								end
-								md:SetSubMaterial( AT.RTScopeMat, "suburb/rt" )
+								md:SetSubMaterial( SIGHT.RTScopeMat, "suburb/rt" )
 							else
-								md:SetSubMaterial( AT.RTScopeMat )
+								md:SetSubMaterial( SIGHT.RTScopeMat )
 							end
 						end
 					end
@@ -966,10 +970,29 @@ function SWEP:GetAimAlt()
 	return math.Clamp( math.TimeFraction( 0.5, 1, self:GetAim() ), 0, 1 )
 end
 
+function SWEP:BuildSightList()
+	local silist = {}
+	for i, att in ipairs(self:GetEffectiveSources()) do
+		if !att.Sights then continue end
+		-- print(i .. " : " .. (att.Name or "elem") .. " count: " .. #att.Sights )
+		for i, sit in ipairs( att.Sights ) do
+			table.insert( silist, sit )
+		end
+	end
+
+	return silist
+end
+
+local silist
+function SWEP:GetCurrentSight()
+	silist = siliest or self:BuildSightList()
+	return silist[1] or self:GetStat("IronsightPose")
+end
+
 function SWEP:TranslateFOV(fov)
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
-	local ipose = self:GetStat("IronsightPose")
+	local ipose = self:GetCurrentSight()
 	if ipose and ipose.Magnification then
 		mag = ipose.Magnification
 	end
@@ -979,7 +1002,7 @@ end
 function SWEP:AdjustMouseSensitivity()
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
-	local ipose = self:GetStat("IronsightPose")
+	local ipose = self:GetCurrentSight()
 	if ipose and ipose.Magnification then
 		mag = ipose.Magnification
 	end
