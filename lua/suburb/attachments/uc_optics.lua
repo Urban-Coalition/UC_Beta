@@ -4,7 +4,7 @@
 -- Short
 local att = {}
 att.Name = "Sightmark Sure Shot"
-att.SortOrder = 2
+att.SortOrder = 1
 att.ShortName = "Sure Shot"
 att.ShortNameSubtitle = "REFLEX"
 att.Slot = "optic_short"
@@ -15,7 +15,7 @@ Suburb_GenAtt(att, "uc_optic_sureshot")
 
 local att = {}
 att.Name = "Holosun HS510C"
-att.SortOrder = 2
+att.SortOrder = 1
 att.ShortName = "Holosun"
 att.ShortNameSubtitle = "REFLEX"
 att.Slot = "optic_short"
@@ -28,7 +28,7 @@ Suburb_GenAtt(att, "uc_optic_holosun")
 -- Hybrid
 local att = {}
 att.Name = "EOTech 553 + G33"
-att.SortOrder = 4
+att.SortOrder = 2
 att.ShortName = "EOTech 553 + G33"
 att.ShortNameSubtitle = "HOLO / OPTICAL 2x"
 att.Slot = "optic_hybrid"
@@ -41,7 +41,7 @@ Suburb_GenAtt(att, "uc_optic_eotech553")
 
 local att = {}
 att.Name = "EOTech 552"
-att.SortOrder = 3
+att.SortOrder = 1
 att.ShortName = "EOTech 552"
 att.ShortNameSubtitle = "HOLO"
 att.Slot = "optic_short"
@@ -55,7 +55,7 @@ Suburb_GenAtt(att, "uc_optic_eotech552")
 -- Medium
 local att = {}
 att.Name = "Trijicon Advanced Combat Optical Gunsight"
-att.SortOrder = 5
+att.SortOrder = 4
 att.ShortName = "ACOG"
 att.ShortNameSubtitle = "OPTICAL 4x"
 att.Slot = "optic_medium"
@@ -67,12 +67,14 @@ att.Sights = {
 	{
 		RTScope = true,
 		RTScopeMat = 1,
-		RTScopeMagnfiication = 2.5,
+		RTScopeMagnfiication = 4,
 		RTScopeAtt_Center = 1,
 		RTScopeAtt_Bottom = 2,
 		RTScopeOverlay = Material("hud/scopes/uc_acog_reticle.png", "smooth"),
 
 		Pos = Vector( -2.809, -4.7, 1.01 ),
+		Ang = Angle( 0, 0, 0 ),
+		Pos = Vector( 0, 0, 0 ),
 		Ang = Angle( 0, 0, 0 ),
 		MidPos = Vector( -1.15, 2, -0.4 ), -- See if I can inherit this from the weapon.
 		MidAng = Angle( -0.5, 0, -6 ),
@@ -84,7 +86,7 @@ Suburb_GenAtt(att, "uc_optic_acog")
 
 local att = {}
 att.Name = "ELCAN C79"
-att.SortOrder = 5
+att.SortOrder = 2.5
 att.ShortName = "ELCAN"
 att.ShortNameSubtitle = "OPTICAL 2.5x"
 att.Slot = "optic_medium"
@@ -100,7 +102,7 @@ att.Sights = {
 		RTScopeAtt_Bottom = 2,
 		RTScopeOverlay = Material("hud/scopes/uc_elcan.png", "smooth"),
 
-		Pos = Vector( -2.809, -4.7, 1.01 ),
+		Pos = Vector( -2.809, -4.7, 0.98 ),
 		Ang = Angle( 0, 0, 0 ),
 		MidPos = Vector( -1.15, 2, -0.4 ),
 		MidAng = Angle( -0.5, 0, -6 ),
@@ -114,9 +116,9 @@ Suburb_GenAtt(att, "uc_optic_elcan")
 
 local att = {}
 att.Name = "Trijicon TARS"
-att.SortOrder = 6
+att.SortOrder = 8
 att.ShortName = "TARS"
-att.ShortNameSubtitle = "OPTICAL 10x"
+att.ShortNameSubtitle = "OPTICAL 8x"
 att.Slot = "optic_short"
 
 att.Model = "models/weapons/arccw/atts/uc_trijicon_tars.mdl"

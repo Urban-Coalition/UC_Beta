@@ -910,13 +910,12 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 
 					if CLIENT then
 						local SIGHT = self:GetCurrentSight()
-						if SIGHT.RTScope then
+						if (SIGHT._Att == data._Installed) and SIGHT.RTScope then
 							rtsurf:SetTexture("$basetexture", rtmat)
 
-							a1, a2 = md:GetAttachment( SIGHT.RTScopeAtt_Center ), md:GetAttachment( SIGHT.RTScopeAtt_Bottom )
-							y1, y2 = a1.Pos:ToScreen(), a2.Pos:ToScreen()
-
-							local y1, y2, h = y1.y, y2.y, ScrH()/2
+							local a1, a2 = md:GetAttachment( SIGHT.RTScopeAtt_Center ), md:GetAttachment( SIGHT.RTScopeAtt_Bottom )
+							local y1, y2, h = a1.Pos:ToScreen(), a2.Pos:ToScreen(), ScrH()/2
+							y1, y2 = y1.y, y2.y
 							scofov = (y2-y1)/h
 							scofov = scofov / 2
 						
@@ -927,8 +926,8 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 											surface.SetDrawColor( 255, 0, 0, 255 )
 											surface.SetMaterial( SIGHT.RTScopeOverlay )
 											surface.DrawTexturedRect( 0, 0, 512, 512 )
-											-- surface.SetDrawColor( 0, 0, 0, 255*(1-self:GetAim()) )
-											-- surface.DrawRect( 0, 0, 512, 512 )
+											surface.SetDrawColor( 0, 0, 0, 255*math.Remap(self:GetAim(), 1, 0.5, 0, 1) )
+											surface.DrawRect( 0, 0, 512, 512 )
 										cam.End2D()
 									render.PopRenderTarget()
 								end
@@ -975,8 +974,10 @@ function SWEP:BuildSightList()
 	for i, att in ipairs(self:GetEffectiveSources()) do
 		if !att.Sights then continue end
 		-- print(i .. " : " .. (att.Name or "elem") .. " count: " .. #att.Sights )
-		for i, sit in ipairs( att.Sights ) do
-			table.insert( silist, sit )
+		for k, sit in ipairs( att.Sights ) do
+			local thing = table.Copy( sit )
+			thing._Att = att.Class
+			table.insert( silist, thing )
 		end
 	end
 

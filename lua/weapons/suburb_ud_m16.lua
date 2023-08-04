@@ -457,6 +457,20 @@ SWEP.Attachments = {
 		Pos1 = Vector(-1.652, 0, 5.5),
 	},
 	{
+		Name = "Optical Sight 2",
+		SortOrder = 1.15,
+		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
+		Slot = QT("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
+		ActivateElements = {"flattop"},
+
+		Bone = "m16_parent",
+		Pos = Vector(-1.652, 3, 1.5),
+		Ang = Angle(90, -90, 0),
+
+		Pos0 = Vector(-1.652, 0, 0),
+		Pos1 = Vector(-1.652, 0, 5.5),
+	},
+	{
 		Name = "Front Sight",
 		SortOrder = 1.2,
 		Icon = Material("entities/att/acwatt_ud_m16_fs_kac.png", "mips smooth"),

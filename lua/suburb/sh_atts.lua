@@ -39,6 +39,7 @@ function Suburb_GenAtt( tabl, name )
 	-- 	table.Empty( Suburb.AttTable[name] )
 	-- end
 	Suburb.AttTable[name] = tabl
+	tabl.Class = name
 end
 
 if SERVER then
