@@ -238,6 +238,8 @@ function SWEP:RegenStats()
 		self.BGTable = bgtab
 	end
 
+	self.SightList = nil
+
 	self.ssources = self:GetEffectiveSources()
 	if self.scache then
 		table.Empty( self.scache )

@@ -972,7 +972,9 @@ function SWEP:GetAimAlt()
 end
 
 function SWEP:BuildSightList()
-	local silist = {}
+	if self.SightList then return self.SightList end
+	self.SightList = {}
+	local silist = self.SightList
 	for i, slot in ipairs( self.Attachments ) do
 		if !slot._Installed then continue end
 		local att = Suburb.AttTable[slot._Installed]
