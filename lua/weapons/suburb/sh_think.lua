@@ -57,7 +57,7 @@ function SWEP:Think()
 		if runaway and self:GetBurstCount() > 0 then
 			self:PrimaryAttack()
 		end
-		if p:GetViewModel() then
+		if ((game.SinglePlayer()) or (!game.SinglePlayer() and CLIENT)) and p:GetViewModel() then
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
 		end
 		if CLIENT then
