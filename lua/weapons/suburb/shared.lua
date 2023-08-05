@@ -793,6 +793,7 @@ local rtmat, rtsurf, rttemp, scofov
 local cheapscope
 if CLIENT then
 	scofov = 1
+	scomag = 1
 	rtmat = GetRenderTarget("suburb_scope", 512, 512, false)
 	rtsurf = Material( "suburb/rt" )
 	rttemp = {
@@ -811,6 +812,7 @@ if CLIENT then
 	hook.Add("PreRender", "Suburb_PreRender", function()
 		local p = LocalPlayer()
 		local wpn = p:GetActiveWeapon()
+		local diff = ((4/3)/(ScrW()/ScrH()))
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
 		if IsValid(wpn) and wpn.Suburb and !cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then -- and w:GetUserSight() then
 			-- print("Suburb: Dual-render scope is being done.")
@@ -819,7 +821,7 @@ if CLIENT then
 				render.Clear( 0, 0, 0, 255 )
 				rttemp.origin = p:EyePos()
 				rttemp.angles = p:EyeAngles()
-				rttemp.fov = Suburb.FOVix( p:GetFOV() * scofov, 1, 1 )
+				rttemp.fov = Suburb.FOVix( p:GetFOV() * ((scofov/scomag)/diff), 1, 1 )
 				render.RenderView( rttemp )
 			cam.End2D()
 			render.PopRenderTarget()
@@ -832,11 +834,10 @@ if CLIENT then
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
 		if IsValid(wpn) and wpn.Suburb and cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then
 			-- print("Suburb: Cheap scope is being done.")
-			local fov = p:GetFOV()
 			local w, h = ScrW(), ScrH()
 			local rat = w/h
-			local rot = w-h
-			fov = Suburb.FOVix( p:GetFOV(), ScrW(), ScrH() )
+
+			local weh = Suburb.FOVix( 1, 1, 1 )
 			
 			render.UpdateScreenEffectTexture()
 			render.UpdateFullScreenDepthTexture()
@@ -845,7 +846,7 @@ if CLIENT then
 			render.PushRenderTarget(rtmat)
 				render.Clear( 0, 0, 0, 255 )
 				local wtf = -((w*rat)-w)*0.5
-				local ma = 1/scofov
+				local ma = 1/scofov*weh
 				local aw = (w-(w*ma))*0.5
 				local ah = (h-(h*ma))*0.5
 				render.DrawTextureToScreenRect(screen, wtf+(aw*rat), ah, w*rat*ma, h*ma)
@@ -917,7 +918,7 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 							local y1, y2, h = a1.Pos:ToScreen(), a2.Pos:ToScreen(), ScrH()/2
 							y1, y2 = y1.y, y2.y
 							scofov = (y2-y1)/h
-							scofov = scofov / SIGHT.RTScopeMagnification
+							scomag = SIGHT.RTScopeMagnification
 							-- scofov = math.min( 1, scofov )
 						
 							if self:GetAim() != 0 then
@@ -1064,8 +1065,12 @@ function SWEP:TranslateFOV(fov)
 	local ipose = self:GetCurrentSight()
 	if ipose and ipose.Magnification then
 		mag = ipose.Magnification
+		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
+		if ipose.RTScopeMagnification and CLIENT and cheapscope:GetBool() then
+			mag = mag*ipose.RTScopeMagnification
+		end
 	end
-	return Lerp( self:GetAim(), fov, fov or 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
+	return Lerp( self:GetAim(), fov, 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
 end
 
 function SWEP:AdjustMouseSensitivity()
@@ -1074,8 +1079,13 @@ function SWEP:AdjustMouseSensitivity()
 	local ipose = self:GetCurrentSight()
 	if ipose and ipose.Magnification then
 		mag = ipose.Magnification
+		if ipose.RTScopeMagnification then
+			mag = mag*ipose.RTScopeMagnification
+		end
 	end
-	return 1 / Lerp( math.ease.InQuad( self:GetAim() * device ), 1, mag )
+	local dfov = GetConVar("fov_desired"):GetInt()
+	local normalfov = Lerp( self:GetAim(), dfov, 90 ) / dfov
+	return (normalfov or 1) / Lerp( math.ease.InQuad( self:GetAim() * device ), 1, mag )
 end
 
 function SWEP:CalcView( ply, pos, ang, fov )
