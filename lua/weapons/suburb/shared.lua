@@ -295,6 +295,7 @@ function SWEP:Reload( automatic )
 	return true
 end
 
+-- This is to fix an issue in Multiplayer when spawning a weapon from the spawnmenu.
 if SERVER then
 	util.AddNetworkString("suburb_firstdeployfix")
 else
@@ -321,6 +322,7 @@ function SWEP:Deploy()
 	self:SetHolster_Entity(NULL)
 	self:GetOwner():SetSaveValue("m_flNextAttack", 0)
 
+	-- This is to fix an issue in Multiplayer when spawning a weapon from the spawnmenu.
 	if CLIENT then self.ClientDeployedCorrectly = true end
 	if (!game.SinglePlayer() and SERVER) then net.Start("suburb_firstdeployfix") net.Send( self:GetOwner() ) end
 
