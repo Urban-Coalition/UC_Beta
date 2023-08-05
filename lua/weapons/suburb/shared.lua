@@ -1122,3 +1122,29 @@ function SWEP:CalcView( ply, pos, ang, fov )
 	end
 	return pos, ang, fov
 end
+
+-- Worldmodel
+
+function SWEP:DrawWorldModel( flags )
+	if CLIENT then
+
+	local p = LocalPlayer()
+			
+	local boneid = p:LookupBone("ValveBiped.Bip01_R_Hand")
+	if !boneid then return end
+	local matrix = p:GetBoneMatrix(boneid)
+	if !matrix then return end
+
+	local offsetVec = Vector(-10, -3.5, -6.5)
+	local offsetAng = Angle(0, 0, 180)
+
+	local newPos, newAng = LocalToWorld(offsetVec, offsetAng, matrix:GetTranslation(), matrix:GetAngles())
+
+	self:RemoveEffects( EF_BONEMERGE )
+	self:RemoveEffects( EF_BONEMERGE_FASTCULL )
+	self:SetPos( newPos )
+	self:SetAngles( newAng )
+	self:DrawModel( flags )
+
+	end
+end
