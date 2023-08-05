@@ -226,7 +226,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.0,
+		ReloadingTime = 2.1,
 		LoadIn = 1.5,
 	},
 	["reload_empty"] = {
@@ -248,7 +248,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.4,
+		ReloadingTime = 2.5,
 		LoadIn = 2.0,
 	},
 	-- 20 rnd
@@ -270,7 +270,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.0,
+		ReloadingTime = 2.1,
 		LoadIn = 1.5,
 	},
 	["reload_20_empty"] = {
@@ -292,7 +292,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.4,
+		ReloadingTime = 2.5,
 		LoadIn = 2.0,
 	},
 	-- 40 rnd
@@ -314,7 +314,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.0,
+		ReloadingTime = 2.1,
 		LoadIn = 1.5,
 	},
 	["reload_40_empty"] = {
@@ -336,7 +336,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.4,
+		ReloadingTime = 2.5,
 		LoadIn = 2.0,
 	},
 	-- 60 rnd
@@ -358,7 +358,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.0,
+		ReloadingTime = 2.1,
 		LoadIn = 1.5,
 	},
 	["reload_60_empty"] = {
@@ -380,7 +380,7 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.4,
+		ReloadingTime = 2.5,
 		LoadIn = 2.0,
 	},
 	-- 100 rnd
@@ -393,18 +393,18 @@ SWEP.Animations				= {
 			{ t = 1.0,			s = p1.."struggle.ogg" },
 			{ t = 0.95,			s = p1.."magin.ogg" },
 			{ t = 1.55,			s = p1.."magtap.ogg" },
-			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
-			{ t = 1.8,			s = p0.."shoulder.ogg" },
+			{ t = 1.97,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.1,			s = p0.."shoulder.ogg" },
 
 			{ t = 0.0,			s = Ssnd.rottle },
 			{ t = 0.25,			s = Ssnd.rattle },
 			{ t = 0.5,			s = Ssnd.rattle },
 			{ t = 1.1,			s = Ssnd.rattle },
-			{ t = 1.39,			s = Ssnd.rottle },
-			{ t = 1.9,			s = Ssnd.rattle },
+			{ t = 1.79,			s = Ssnd.rottle },
+			{ t = 2.1,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.0,
-		LoadIn = 1.5,
+		ReloadingTime = 2.2,
+		LoadIn = 1.7,
 	},
 	["reload_100_empty"] = {
 		Source = "reload_empty_100",
@@ -412,21 +412,24 @@ SWEP.Animations				= {
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
 			{ t = 0.2,			s = p1.."magout_empty.ogg" },
-			{ t = 0.95,			s = p1.."struggle.ogg" },
-			{ t = 0.95,			s = p1.."magin.ogg" },
-			{ t = 1.7,			s = p1.."boltdrop.ogg" },
-			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
-			{ t = 2.3,			s = p0.."shoulder.ogg" },
+			{ t = 1.0,			s = p1.."struggle.ogg" },
+			{ t = 1.05,			s = p1.."magin.ogg" },
+			{ t = 1.6,			s = p1.."magtap.ogg" },
+			{ t = 2.0,			s = p1.."chback.ogg" },
+			{ t = 2.2,			s = p1.."chamber.ogg" },
+			{ t = 2.5,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.6,			s = p0.."shoulder.ogg" },
 
 			{ t = 0.0,			s = Ssnd.rottle },
 			{ t = 0.25,			s = Ssnd.rattle },
-			{ t = 0.5,			s = Ssnd.rattle },
+			{ t = 0.8,			s = Ssnd.rattle },
 			{ t = 1.1,			s = Ssnd.rattle },
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
+			{ t = 2.1,			s = Ssnd.rattle },
 		},
-		ReloadingTime = 2.4,
-		LoadIn = 2.0,
+		ReloadingTime = 2.7,
+		LoadIn = 2.3,
 	},
 }
 
@@ -464,7 +467,7 @@ SWEP.Attachments = {
 		ActivateElements = {"nofs"},
 
 		Bone = "m16_parent",
-		Pos = Vector(-1.652, 0, 17),
+		Pos = Vector(0, 17, 1.652),
 		Ang = Angle(90, -90, 0)
 	},
 	{
@@ -548,7 +551,7 @@ SWEP.Elements = {
 		Bodygroups = { [4] = 2, [5] = 4, [6] = 2, [11] = 3 },
 		AttPos = {
 			[3] = {
-				Pos = Vector(-1.652, 0, 12.5),
+				Pos = Vector(0, 12.5, 1.652),
 				Ang = Angle(90, -90, 0),
 			},
 			[10] = {
@@ -561,7 +564,7 @@ SWEP.Elements = {
 		Bodygroups = { [4] = 1, [5] = 4, [6] = 2, [11] = 2 },
 		AttPos = {
 			[3] = {
-				Pos = Vector(-1.652, 0, 12.5),
+				Pos = Vector(0, 12.5, 1.652),
 				Ang = Angle(90, -90, 0),
 			},
 			[10] = {
