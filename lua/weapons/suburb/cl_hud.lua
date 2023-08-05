@@ -45,7 +45,7 @@ function SWEP:DoDrawCrosshair()
 	local ps_x, ps_y = pl_x, pl_y
 
 	local dispersion = math.rad(self:GetDispersion())
-	local accuracy = math.rad(self.Accuracy)
+	local accuracy = math.rad(self:GetStat("Accuracy"))
 	cam.Start3D()
 		local lool = ( EyePos() + ( EyeAngles():Forward() * 8192 * 4 ) + ( dispersion * EyeAngles():Up() * 8192 * 4 ) ):ToScreen()
 		local lool2 = ( EyePos() + ( EyeAngles():Forward() * 8192 * 4 ) + ( accuracy * EyeAngles():Up() * 8192 * 4 ) ):ToScreen()

@@ -113,10 +113,10 @@ function SWEP:PrimaryAttack()
 	local dir_disp = Angle( dir.p, dir.y, 0 ):Forward()
 	self:ApplyRandomSpread( dir_disp, 1*(self:GetDispersion()/90) )
 
-	for i=1, self.Pellets or 1 do
+	for i=1, self:GetStat("Pellets", 1) do
 		local p = self:GetOwner()
 		local dir_acc = dir_disp:Angle():Forward()
-		self:ApplyRandomSpread( dir_acc, 1*(self.Accuracy/90), i )
+		self:ApplyRandomSpread( dir_acc, 1*(self:GetStat("Accuracy")/90), i )
 
 		self:FireBullets({
 			Attacker = IsValid(p) and p or self,
@@ -223,7 +223,7 @@ function SWEP:ApplyRandomSpread( dir, spread, pellet )
 	local x = radius * math.sin(theta)
 	local y = radius * math.cos(theta)
 
-	dir:Set(dir + right * spread * x + up * spread * y)
+	dir:Set(dir + (right * spread * x) + (up * spread * y))
 end
 
 function SWEP:SecondaryAttack()
@@ -315,13 +315,13 @@ function SWEP:Attack_Effects_Shell()
 end
 
 function SWEP:GetDispersion()
-	local disp = self.Dispersion
+	local disp = self:GetStat("Dispersion")
 
-	disp = Lerp( self:GetAim(), disp, disp * self.Dispersion_Sights )
+	disp = Lerp( self:GetAim(), disp, disp * self:GetStat("Dispersion_Sights") )
 
-	disp = Lerp( self:GetDISP_Crouch(), disp, disp * self.Dispersion_Crouch )
-	disp = disp + ( self:GetDISP_Move() * self.Dispersion_Move )
-	disp = disp + ( self:GetDISP_Air() * self.Dispersion_Air )
+	disp = Lerp( self:GetDISP_Crouch(), disp, disp * self:GetStat("Dispersion_Crouch") )
+	disp = disp + ( self:GetDISP_Move() * self:GetStat("Dispersion_Move") )
+	disp = disp + ( self:GetDISP_Air() * self:GetStat("Dispersion_Air") )
 
 	return disp
 end
