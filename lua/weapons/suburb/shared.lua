@@ -367,9 +367,12 @@ local tempsprintpos, tempsprintang = Vector( 1, 0, 0.5 ), Angle( -15, 10, -10 )
 local tempcustpos, tempcustang = Vector( 3, 0, -1 ), Angle( 15, 15, 15 )
 
 local lastpos, lastang = Vector(), Angle()
+local ccvar_benchgun
+local ccvar_aimcorrect
 
 function SWEP:GetViewModelPosition(pos, ang)
-	if GetConVar("uc_dev_benchgun"):GetBool() then
+	ccvar_benchgun = ccvar_benchgun or GetConVar("uc_dev_benchgun")
+	if ccvar_benchgun:GetBool() then
 		return lastpos, lastang
 	end
 	local opos, oang = Vector(), Angle()
@@ -461,7 +464,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local mult = 0.08
 		local mult_aim = 0.2
 		local correct = Lerp( sii, 0.12, self.SwayCorrection )
-		local test = GetConVar("uc_dev_aimcorrect"):GetInt()
+		ccvar_aimcorrect = ccvar_aimcorrect or GetConVar("uc_dev_aimcorrect")
+		local test = ccvar_aimcorrect:GetInt()
 		if test == 1 then
 			ox = (math.sin(CurTime()*3))*90
 		elseif test == 2 then
@@ -790,7 +794,7 @@ end
 local v1 = Vector(1, 1, 1)
 
 local rtmat, rtsurf, rttemp, scofov
-local cheapscope
+local ccvar_cheapscope
 if CLIENT then
 	scofov = 1
 	scomag = 1
@@ -813,8 +817,8 @@ if CLIENT then
 		local p = LocalPlayer()
 		local wpn = p:GetActiveWeapon()
 		local diff = ((4/3)/(ScrW()/ScrH()))
-		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if IsValid(wpn) and wpn.Suburb and !cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then -- and w:GetUserSight() then
+		ccvar_cheapscope = ccvar_cheapscope or GetConVar("uc_cl_cheapscopes")
+		if IsValid(wpn) and wpn.Suburb and !ccvar_cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then -- and w:GetUserSight() then
 			-- print("Suburb: Dual-render scope is being done.")
 			render.PushRenderTarget(rtmat)
 			cam.Start2D()
@@ -831,8 +835,8 @@ if CLIENT then
 	hook.Add("PreDrawViewModels", "Suburb_PreDrawViewModels", function()
 		local p = LocalPlayer()
 		local wpn = p:GetActiveWeapon()
-		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if IsValid(wpn) and wpn.Suburb and cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then
+		ccvar_cheapscope = ccvar_cheapscope or GetConVar("uc_cl_cheapscopes")
+		if IsValid(wpn) and wpn.Suburb and ccvar_cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then
 			-- print("Suburb: Cheap scope is being done.")
 			local w, h = ScrW(), ScrH()
 			local rat = w/h
@@ -885,6 +889,13 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 							end
 						end
 					end
+
+					-- WIP: Add all those fancy checks for angle and scale.
+					ang:RotateAroundAxis( ang:Right(), data.Ang.p )
+					ang:RotateAroundAxis( ang:Forward(), data.Ang.y )
+					ang:RotateAroundAxis( ang:Up(), data.Ang.r )
+					md:SetAngles( ang )
+
 					if attpos then
 						pos:Add( ang:Right() * attpos.x )
 						pos:Add( ang:Forward() * attpos.y )
@@ -895,13 +906,7 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 						pos:Add( ang:Forward() * AT.ModelOffset.y )
 						pos:Add( ang:Up() * AT.ModelOffset.z )
 					end
-
-					-- WIP: Add all those fancy checks for angle and scale.
-					ang:RotateAroundAxis( ang:Right(), data.Ang.p )
-					ang:RotateAroundAxis( ang:Forward(), data.Ang.y )
-					ang:RotateAroundAxis( ang:Up(), data.Ang.r )
 					md:SetPos( pos )
-					md:SetAngles( ang )
 
 					local may = Matrix()
 					may:SetScale( v1 )
@@ -924,13 +929,15 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 							if self:GetAim() != 0 then
 								if SIGHT.RTScopeOverlay then
 									render.PushRenderTarget( rtmat )
-										cam.Start2D()
-											surface.SetDrawColor( 255, 0, 0, 255 )
-											surface.SetMaterial( SIGHT.RTScopeOverlay )
-											surface.DrawTexturedRect( 0, 0, 512, 512 )
-											surface.SetDrawColor( 0, 0, 0, 255*math.Remap(self:GetAim(), 1, 0.5, 0, 1) )
-											surface.DrawRect( 0, 0, 512, 512 )
-										cam.End2D()
+									cam.Start2D()
+									-- render.Clear( 255, 0, 255, 255 )
+									render.ClearDepth()
+										surface.SetDrawColor( 255, 0, 0, 255 )
+										surface.SetMaterial( SIGHT.RTScopeOverlay )
+										surface.DrawTexturedRect( 0, 0, 512, 512 )
+										surface.SetDrawColor( 0, 0, 0, 255*math.Remap(self:GetAim(), 1, 0.5, 0, 1) )
+										surface.DrawRect( 0, 0, 512, 512 )
+									cam.End2D()
 									render.PopRenderTarget()
 								end
 								md:SetSubMaterial( SIGHT.RTScopeMat, "suburb/rt" )
@@ -971,8 +978,10 @@ function SWEP:GetAimAlt()
 	return math.Clamp( math.TimeFraction( 0.5, 1, self:GetAim() ), 0, 1 )
 end
 
+local ccvar_disablecache
 function SWEP:BuildSightList()
-	if self.SightList then return self.SightList end
+	ccvar_disablecache = ccvar_disablecache or GetConVar("uc_dev_disablecache")
+	if self.SightList and !ccvar_disablecache:GetBool() then return self.SightList end
 	self.SightList = {}
 	local silist = self.SightList
 	for i, slot in ipairs( self.Attachments ) do
@@ -988,9 +997,9 @@ function SWEP:BuildSightList()
 				local r1, r2 = self:GenerateSightPosition( slot.Pos, slot.Ang, slot.Bone, sit.Pos, sit.Ang )
 				thing.Pos = r1
 				local x,y,z = r1.x,r1.y,r1.z
-				r1.x = y
 				r1.y = -x
 				r1.z = -z
+				r1.x = y
 				thing.Ang = r2
 				r2.x = -r2.x
 				r2.y = -r2.y
@@ -1030,22 +1039,22 @@ function SWEP:GenerateSightPosition( pos, ang, bone, upos, uang )
 		local t_pos, t_ang = m_p, m_a
 
 		-- Slot
-		t_pos:Add( t_ang:Forward() *			pos.y )
-		t_pos:Add( t_ang:Right() *				pos.x )
-		t_pos:Add( t_ang:Up() *					pos.z )
 
 		t_ang:RotateAroundAxis( t_ang:Right(),		ang.p )
 		t_ang:RotateAroundAxis( t_ang:Forward(),	ang.y )
 		t_ang:RotateAroundAxis( t_ang:Up(),			ang.r )
+		t_pos:Add( t_ang:Forward() *			pos.y )
+		t_pos:Add( t_ang:Right() *				pos.x )
+		t_pos:Add( t_ang:Up() *					pos.z )
 
 		-- Sight
-		t_pos:Add( t_ang:Forward() *			upos.y )
-		t_pos:Add( t_ang:Up() *					upos.z )
-		t_pos:Add( t_ang:Right() *				upos.x )
 
 		t_ang:RotateAroundAxis( t_ang:Right(),		uang.p )
 		t_ang:RotateAroundAxis( t_ang:Forward(),	uang.y )
 		t_ang:RotateAroundAxis( t_ang:Up(),			uang.r )
+		t_pos:Add( t_ang:Forward() *			upos.y )
+		t_pos:Add( t_ang:Up() *					upos.z )
+		t_pos:Add( t_ang:Right() *				upos.x )
 
 		-- debugoverlay.Axis( t_pos, t_ang, 16, 0, true )
 
@@ -1092,6 +1101,10 @@ function SWEP:CalcView( ply, pos, ang, fov )
 	if self.QCA_Camera then
 		if !(Suburb_CL1 and IsValid(Suburb_CL1)) then
 			Suburb_CL1 = ClientsideModel( "models/weapons/c_pistol.mdl" )
+			Suburb_CL1.Garbage_Owner = self
+			Suburb_CL1.Garbage_PlayerOwner = self:GetOwner()
+			Suburb_CL1.Garbage_Name = "Camera Reference"
+			Suburb_GC( Suburb_CL1 )
 			Suburb_CL1:SetNoDraw( true )
 		end
 		local vm = ply:GetViewModel()

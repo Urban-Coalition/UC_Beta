@@ -21,7 +21,7 @@ att.ShortNameSubtitle = "REFLEX"
 att.Slot = "optic_short"
 
 att.Model = "models/weapons/arccw/atts/uc_holosun2.mdl"
-att.ModelOffset = Vector( 0, 0, -1 )
+att.ModelOffset = Vector( 0, 0, 0 )
 att.ModelScale = Vector(1.5, 1.5, 1.5)
 Suburb_GenAtt(att, "uc_optic_holosun")
 
@@ -47,9 +47,20 @@ att.ShortNameSubtitle = "HOLO"
 att.Slot = "optic_short"
 
 att.Model = "models/weapons/arccw/atts/uc_eotech552.mdl"
-att.ModelOffset = Vector(0.07, 0, 0)
+att.ModelOffset = Vector(0, 0, -0.07)
 att.ModelAngle = Angle(0, 0, 0)
 att.ModelScale = Vector(0.6, 0.6, 0.6)
+
+att.Sights = {
+	{
+		Pos = Vector( 0, -15, 1.38 ),
+		Ang = Angle( 0, 0, 0 ),
+		MidPos = Vector( -1.15, 2, -0.4 ), -- See if I can inherit this from the weapon.
+		MidAng = Angle( -0.5, 0, -6 ),
+		ViewModelFOV = 30,
+		Magnification = 1.3,
+	},
+}
 Suburb_GenAtt(att, "uc_optic_eotech552")
 
 -- Medium

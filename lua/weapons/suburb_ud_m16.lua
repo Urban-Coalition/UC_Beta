@@ -439,7 +439,7 @@ SWEP.Attachments = {
 		ActivateElements = {"flattop"},
 
 		Bone = "m16_parent",
-		Pos = Vector(-1.652, 0, 0.5),
+		Pos = Vector(0, 0.5, 1.652),
 		Ang = Angle(90, -90, 0)
 	},
 	{
@@ -450,25 +450,11 @@ SWEP.Attachments = {
 		ActivateElements = {"flattop"},
 
 		Bone = "m16_parent",
-		Pos = Vector(-1.652, 0, 1.5),
+		Pos = Vector(0, 1.5, 1.652),
 		Ang = Angle(90, -90, 0),
 
-		Pos0 = Vector(-1.652, 0, 0),
-		Pos1 = Vector(-1.652, 0, 5.5),
-	},
-	{
-		Name = "Optical Sight 2",
-		SortOrder = 1.15,
-		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
-		Slot = QT("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
-		ActivateElements = {"flattop"},
-
-		Bone = "m16_parent",
-		Pos = Vector(-1.652, 3, 1.5),
-		Ang = Angle(90, -90, 0),
-
-		Pos0 = Vector(-1.652, 0, 0),
-		Pos1 = Vector(-1.652, 0, 5.5),
+		Pos0 = Vector(0, 0, 1.652),
+		Pos1 = Vector(0, 5.5, 1.652),
 	},
 	{
 		Name = "Front Sight",
@@ -524,7 +510,7 @@ SWEP.Attachments = {
 		Slot = QT("muzzle_break", "muzzle_suppressor"),
 
 		Bone = "m16_parent",
-		Pos = Vector(-0.35, 0, 25.9),
+		Pos = Vector(0, 25.9, 0.35),
 		Ang = Angle(90, -90, 0),
 	},
 	{
@@ -539,6 +525,22 @@ SWEP.Attachments = {
 		Icon = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth"),
 		Slot = "underbarrel"
 	},
+
+	-- testing
+	{
+		Name = "Optical Sight 2",
+		SortOrder = 1.15,
+		Icon = Material("entities/att/acwatt_uc_optic_comp_m2.png", "mips smooth"),
+		Slot = QT("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
+		ActivateElements = {"flattop"},
+
+		Bone = "m16_parent",
+		Pos = Vector(-1.652, 3, 1.5),
+		Ang = Angle(90, -90, 0),
+
+		Pos0 = Vector(-1.652, 0, 0),
+		Pos1 = Vector(-1.652, 0, 5.5),
+	},
 }
 
 SWEP.Elements = {
@@ -550,7 +552,7 @@ SWEP.Elements = {
 				Ang = Angle(90, -90, 0),
 			},
 			[10] = {
-				Pos = Vector(-0.35, 0, 18.3),
+				Pos = Vector(0, 18.3, 0.35),
 				Ang = Angle(90, -90, 0),
 			},
 		},
@@ -563,7 +565,7 @@ SWEP.Elements = {
 				Ang = Angle(90, -90, 0),
 			},
 			[10] = {
-				Pos = Vector(-0.35, 0, 21.6),
+				Pos = Vector(0, 21.6, 0.35),
 				Ang = Angle(90, -90, 0),
 			},
 		},
