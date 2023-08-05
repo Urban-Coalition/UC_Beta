@@ -338,6 +338,7 @@ end
 -- 2: Is positive better?
 -- 3: Sort order, bigger numbers are higher
 AutoStats = {
+	-- 900
 	["Override_Capacity"] = {
 		function( data ) return string.format( "%+g%% clip size", math.Round((data-1)*100) ) end,
 		function( data, orig ) return data<=0 end,
@@ -349,6 +350,7 @@ AutoStats = {
 		998,
 	},
 
+	-- 800
 	["Mult_Delay"] = {
 		function( data ) return string.format( "%+G%% firing speed", math.Round((1-data)*100) ) end,
 		function( data ) return data<=1 end,
@@ -359,6 +361,8 @@ AutoStats = {
 		function( data ) return data<=1 end,
 		898,
 	},
+
+	-- 700
 	["Mult_ReloadTime"] = {
 		function( data ) return string.format( "%+G%% reload time", math.Round((data-1)*100) ) end,
 		function( data ) return data<=1 end,
@@ -374,15 +378,49 @@ AutoStats = {
 		function( data ) return data<=1 end,
 		797,
 	},
+
+	-- 500
 	["Mult_Range"] = {
 		function( data ) return string.format( "%+G%% effective range", math.Round((data-1)*100) ) end,
 		function( data ) return data>1 end, -- Consider inverse falloff weapons
-		499,
+		579,
 	},
 	["Mult_RangeMin"] = {
 		function( data ) return string.format( "%+G%% minimum range", math.Round((data-1)*100) ) end,
 		function( data ) return data>1 end, -- Consider inverse falloff weapons
-		498,
+		578,
+	},
+
+	-- 400
+	["Mult_Accuracy"] = {
+		function( data ) return string.format( "%+G%% precision", math.Round((data-1)*100) ) end,
+		function( data ) return data<1 end,
+		499,
+	},
+	["Mult_Dispersion"] = {
+		function( data ) return string.format( "%+G%% dispersion", math.Round((data-1)*100) ) end,
+		function( data ) return data<1 end,
+		489,
+	},
+	["Mult_Dispersion_Move"] = {
+		function( data ) return string.format( "%+G%% dispersion while moving", math.Round((data-1)*100) ) end,
+		function( data ) return data<1 end,
+		488,
+	},
+	["Mult_Dispersion_Air"] = {
+		function( data ) return string.format( "%+G%% dispersion while midair", math.Round((data-1)*100) ) end,
+		function( data ) return data<1 end,
+		487,
+	},
+	["Mult_Dispersion_Crouch"] = {
+		function( data ) return string.format( "%+G%% dispersion while ducking", math.Round((data-1)*100) ) end,
+		function( data ) return data<1 end,
+		486,
+	},
+	["Mult_Dispersion_Sights"] = {
+		function( data ) return string.format( "%+G%% dispersion while sights", math.Round((data-1)*100) ) end,
+		function( data ) return data<1 end,
+		485,
 	},
 }
 
