@@ -685,8 +685,6 @@ function SWEP:SendAnimChoose( act, hold, mul, spy )
 		return false
 	end
 
-	print( final )
-
 	return ( spy and final ) or self:SendAnim( final, hold, fmult )
 end
 local fallback = {
