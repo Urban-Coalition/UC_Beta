@@ -173,8 +173,12 @@ function SWEP:RegenStats()
 
 			if CLIENT then
 				if AT.Model then
-					if !data._Model then
+					if !IsValid(data._Model) then
 						data._Model = ClientsideModel(AT.Model)
+						data._Model.Garbage_Owner = self
+						data._Model.Garbage_PlayerOwner = self:GetOwner()
+						data._Model.Garbage_Name = "Attachment Model: " .. AT.Model
+						Suburb_GC( data._Model )
 						data._Model:SetNoDraw( true )
 					else
 						if data._Model:GetModel() != AT.Model then
