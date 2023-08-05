@@ -161,7 +161,7 @@ SWEP.Animations				= {
 			{ t = 0.7,			s = p1.."sliderel_deact.ogg" },
 			{ t = 0.9,			s = p1.."slide_rel_new.ogg" },
 		},
-		ReloadingTime = 1.0,
+		ReloadingTime = 1.4,
 		StopSightTime = 1.1,
 	},
 	["draw"]	= {

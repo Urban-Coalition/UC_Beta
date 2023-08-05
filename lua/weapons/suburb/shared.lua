@@ -154,7 +154,7 @@ local yep = {
 		"Customizing",
 		"ShotgunReloading",
 		"NeedCycle",
-		"Readied",
+		--"Readied",
 	},
 	["Int"] = {
 		"BurstCount",
@@ -195,6 +195,14 @@ end
 function SWEP:GetFiremode()
 	--if (!game.SinglePlayer() and CLIENT) then return self.CL_Firemode end
 	return self:GetNWFiremode()
+end
+
+function SWEP:SetReadied(x)
+	self.Readied = x
+end
+
+function SWEP:GetReadied()
+	return self.Readied or false
 end
 
 function SWEP:SetupDataTables()
@@ -311,9 +319,10 @@ function SWEP:Deploy()
 	self:SetAim(0)
 	self:SetSprintPer(0)
 	self:SetHolster_Entity(NULL)
+	self:GetOwner():SetSaveValue("m_flNextAttack", 0)
 
-	if (!game.SinglePlayer() and SERVER) then net.Start("suburb_firstdeployfix") net.Send( self:GetOwner() ) end
 	if CLIENT then self.ClientDeployedCorrectly = true end
+	if (!game.SinglePlayer() and SERVER) then net.Start("suburb_firstdeployfix") net.Send( self:GetOwner() ) end
 
 	if !self:GetReadied() and self.Animations["ready"] then
 		self:SendAnimChoose( "ready", "draw" )
@@ -675,6 +684,8 @@ function SWEP:SendAnimChoose( act, hold, mul, spy )
 		print( "Suburb SendAnimChoose: Check 2: " .. final .. " is not in the Animations table. Stopping.." )
 		return false
 	end
+
+	print( final )
 
 	return ( spy and final ) or self:SendAnim( final, hold, fmult )
 end
