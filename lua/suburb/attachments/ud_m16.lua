@@ -118,6 +118,8 @@ att.Mult_Delay = 0.9
 att.Mult_PostBurstDelay = 0.9
 att.Mult_SightTime = 0.9
 att.Mult_Range = 0.75
+att.Mult_Accuracy = 1.5
+att.Mult_Dispersion_Move = 0.85
 Suburb_GenAtt(att, "ud_m16_barrel_14")
 
 local att = {}
@@ -131,6 +133,9 @@ att.Mult_Delay = 0.9
 att.Mult_PostBurstDelay = 0.9
 att.Mult_SightTime = 0.8
 att.Mult_Range = 0.5
+att.Mult_Accuracy = 2
+att.Mult_Dispersion_Move = 0.75
+att.Mult_Dispersion_Air = 0.5
 Suburb_GenAtt(att, "ud_m16_barrel_10")
 
 -- Stocks
