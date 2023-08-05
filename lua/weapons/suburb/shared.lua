@@ -1055,10 +1055,8 @@ function SWEP:GenerateSightPosition( pos, ang, bone, upos, uang )
 	end
 end
 
-local silist
 function SWEP:GetCurrentSight()
-	silist = siliest or self:BuildSightList()
-	return silist[1] or self:GetStat("IronsightPose")
+	return self:BuildSightList()[1] or self:GetStat("IronsightPose")
 end
 
 function SWEP:TranslateFOV(fov)
