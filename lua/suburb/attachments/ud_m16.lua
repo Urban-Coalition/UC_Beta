@@ -224,7 +224,7 @@ att.ShortNameSubtitle = "40 RND"
 att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 40 / 30 )
-att.Mult_SightTime = 1.2
+att.Mult_SightTime = 1.15
 att.Mult_ReloadTime = 1.15
 Suburb_GenAtt(att, "ud_m16_mag_40")
 
