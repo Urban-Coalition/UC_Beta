@@ -74,3 +74,88 @@ end
 function UC.func.sound_tailint( wep, result, default )
 	return wep.Sound_TailINT_Supp
 end
+
+-- Garbage collector
+
+
+if CLIENT then
+suburb_garbagelist = suburb_garbagelist or {}
+function Suburb_GC( item )
+	table.insert( suburb_garbagelist, item )
+	print( "Added #" .. #suburb_garbagelist .. (item.Garbage_Name and (", " .. item.Garbage_Name) or "") .. " to the garbage list." )
+end
+local function collect()
+	local ti = string.FormattedTime( CurTime() )
+	print( string.format( "[%02i:%02i:%02i] ", ti.h, ti.m, ti.s ) .. "Suburb is garbage collecting... " )
+	local destroyed = 0
+	for index, item in pairs( suburb_garbagelist ) do
+		if !IsValid( item ) then
+			print( "#" .. index .. ": This item isn't valid, removing from list." )
+			suburb_garbagelist[index] = nil
+			continue
+		end
+		print( "#" .. index .. (item.Garbage_Name and (", " .. item.Garbage_Name) or "") )
+		if item.Garbage_Owner and !IsValid( item.Garbage_Owner ) then
+			print( "\tInvalid owner." )
+		elseif item.Garbage_PlayerOwner and !IsValid( item.Garbage_PlayerOwner ) then
+			print( "\tInvalid player owner." )
+		elseif item.Garbage_PlayerOwner and item.Garbage_Owner:GetOwner() != item.Garbage_PlayerOwner then
+			print( "\tOwner doesn't own this anymore." )
+		else
+			print( "\tThis item is safe." )
+			continue
+		end
+		print( "\tRemoved!" )
+		suburb_garbagelist[index] = nil
+		item:Remove()
+		destroyed = destroyed + 1
+	end
+	print( "Suburb found " .. destroyed .. " objects to destroy." )
+end
+
+if timer.Exists( "Suburb_GarbageCollector" ) then timer.Remove( "Suburb_GarbageCollector" ) end
+timer.Create( "Suburb_GarbageCollector", 30, 0, function()
+	collect()
+end)
+
+end
+
+
+-- Precache system
+
+local sndtabs = {
+	"Sound_Blast",
+	"Sound_Mech",
+	"Sound_TailEXT",
+	"Sound_TailINT",
+	"Sound_TailEXT_Supp",
+	"Sound_TailINT_Supp",
+}
+
+local function DataCheck( w )
+
+
+
+	if IsValid(w) and w.Suburb then
+		print( "Suburb DataCheck: Testing " .. tostring(w) .. "..." )
+		local bag = {}
+
+		table.insert( bag, w.ViewModel )
+		table.insert( bag, w.WorldModel )
+
+		for i, liist in ipairs( sndtabs ) do
+			if w[liist] then
+				for index, event in ipairs( w[liist] ) do
+					print( event.s )
+				end
+			end
+		end
+
+	end
+end
+
+if SERVER then
+	concommand.Add("uc_test_datacheck_sv", function( ply ) DataCheck( ply ) end)
+else
+	concommand.Add("uc_test_datacheck_cl", function( ply ) DataCheck( ply ) end)
+end
