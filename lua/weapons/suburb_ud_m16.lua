@@ -538,7 +538,7 @@ SWEP.Attachments = {
 		ActivateElements = {"flattop"},
 
 		Bone = "m16_parent",
-		Pos = Vector(-1.652, 3, 1.5),
+		Pos = Vector(0, 1.5, 4),
 		Ang = Angle(90, -90, 0),
 
 		Pos0 = Vector(-1.652, 0, 0),
