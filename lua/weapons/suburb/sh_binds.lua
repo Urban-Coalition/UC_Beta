@@ -100,7 +100,7 @@ if CLIENT then
 		local scroller = vgui.Create( "DScrollPanel", ST_Slot )
 		scroller:Dock( FILL )
 
-		for i, v in SortedPairsByMemberValue( wep.Attachments, "SortOrder", false ) do
+		for i, slot in SortedPairsByMemberValue( wep.Attachments, "SortOrder", false ) do
 			if i == "BaseClass" then continue end
 
 			local butt = scroller:Add( "DButton" )
@@ -112,7 +112,7 @@ if CLIENT then
 				surface.SetDrawColor( CCP_BUTTON )
 				surface.DrawRect( 0, 0, w, h )
 
-				if butt:IsHovered() then
+				if self:IsHovered() then
 					surface.SetDrawColor( CCP_BUTTONHOVER )
 					surface.DrawOutlinedRect( 0, 0, w, h, ss(2) )
 				end
@@ -121,11 +121,11 @@ if CLIENT then
 
 				surface.SetFont( "ccpanel_tb_8" )
 				surface.SetTextPos( ss(4), ss(4) )
-				surface.DrawText( v.Name )
+				surface.DrawText( slot.Name )
 
-				local lookup = Suburb.AttTable[v._Installed]
+				local lookup = Suburb.AttTable[slot._Installed]
 				local attname = "---"
-				if v._Installed then
+				if slot._Installed then
 					assert(lookup, "Suburb: That attachment doesn't exist!")
 					attname = lookup.ShortName or lookup.Name
 				end
@@ -136,10 +136,12 @@ if CLIENT then
 			end
 
 			function butt:DoClick()
-				return CCPanel_AttsList( ST_Slot, i, v )
+				return CCPanel_AttsList( ST_Slot, i, slot )
 			end
 			function butt:DoRightClick()
-				wep:CL_Att_Attach( i, "" )
+				if slot._Installed then
+					wep:CL_Att_Attach( i, "" )
+				end
 			end
 
 			scroller:Add( butt )
@@ -204,7 +206,9 @@ if CLIENT then
 				surface.SetDrawColor( CCP_BUTTON )
 				surface.DrawRect( 0, 0, w, h )
 				
-				if self.SlideAmount and self:IsHovered() or self:IsDown() then
+				local inst = wepsl._Installed == i
+				local slidable = wepsl.Pos0 and wepsl.Pos1
+				if inst and slidable and (self:IsHovered() or self:IsDown()) then
 					surface.SetDrawColor( 255, 255, 255, 63 )
 					surface.DrawRect( 0, 0, w * self.SlideAmount, h )
 
@@ -217,7 +221,6 @@ if CLIENT then
 					end
 				end
 
-				local inst = wepsl._Installed == i
 				if inst or butt:IsHovered() then
 					surface.SetDrawColor( CCP_BUTTONHOVER )
 					surface.DrawOutlinedRect( 0, 0, w, h, ss(inst and 3 or 2) )
@@ -261,7 +264,8 @@ if CLIENT then
 			function butt:Think()
 				local ref = ST_Stat
 				local hov = butt:IsHovered()
-				if hov then
+				local slidable = wepsl.Pos0 and wepsl.Pos1
+				if slidable and hov then
 					local segments = 8
 					self.SlideAmount = math.Round( math.Remap( input.GetCursorPos(), butt:LocalToScreen(0), butt:LocalToScreen(butt:GetWide()), 0, 1 )*segments, 0 )/segments
 					if butt:IsDown() then
