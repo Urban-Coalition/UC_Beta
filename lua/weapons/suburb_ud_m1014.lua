@@ -233,7 +233,7 @@ SWEP.Attachments = {
 		Slot = QT("optic_short", "optic_medium", "optic_hybrid", "optic_long"),
 
 		Bone = "1014_parent",
-		Pos = Vector(-1.392, 0, 2.0),
+		Pos = Vector(0, 2.0, 1.392),
 		Ang = Angle(90, -90, 0),
 	},
 	{
