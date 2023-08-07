@@ -131,5 +131,5 @@ att.ShortNameSubtitle = "OPTICAL 8x"
 att.Slot = "optic_short"
 
 att.Model = "models/weapons/arccw/atts/uc_trijicon_tars.mdl"
-att.ModelOffset = Vector(0, 0, 0.5)
+att.ModelOffset = Vector(0, 0.5, 0)
 Suburb_GenAtt(att, "uc_optic_tars")
