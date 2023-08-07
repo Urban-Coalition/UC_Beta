@@ -9,11 +9,11 @@ function Suburb_ReloadAtts()
 	Suburb_LoadAtts()
 
 	-- Tell all clients to regenerate their gun's stats
-	--[[ for i, ent in ipairs( ents.GetAll() ) do
+	for i, ent in ipairs( ents.GetAll() ) do
 		if ent.Suburb then
 			ent:RegenStats()
 		end
-	end ]]
+	end
 end
 
 local attpath = "suburb/attachments/"
