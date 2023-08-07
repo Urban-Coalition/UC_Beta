@@ -83,7 +83,8 @@ att.ShortName = "COLT"
 att.Slot = "ud_m16_rs"
 
 att.Model = "models/weapons/arccw/atts/colt_rs.mdl"
-att.ModelScale = Vector(0.67, 0.67, 0.67)
+att.ModelOffset = Vector(0, 0.2, -0.1)
+att.ModelScale = Vector(0.78, 0.74, 0.74)
 Suburb_GenAtt(att, "ud_m16_rs_colt")
 
 local att = {}
@@ -92,7 +93,7 @@ att.ShortName = "CARRY HANDLE"
 att.Slot = "ud_m16_rs"
 
 att.Model = "models/weapons/arccw/atts/colt_ch.mdl"
-att.ModelOffset = Vector(0.1, 0, 0.2)
+att.ModelOffset = Vector(0, 0.2, -0.1)
 att.ModelScale = Vector(0.78, 0.74, 0.74)
 Suburb_GenAtt(att, "ud_m16_rs_coltch")
 
