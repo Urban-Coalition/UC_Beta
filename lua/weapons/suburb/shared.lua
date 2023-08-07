@@ -802,8 +802,6 @@ function SWEP:Think_Shell()
 	end
 end
 
-local v1 = Vector(1, 1, 1)
-
 local rtmat, rtsurf, rttemp, scofov
 local ccvar_cheapscope
 if CLIENT then
@@ -891,7 +889,9 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 				if bm then
 					local pos, ang = bm:GetTranslation(), bm:GetAngles()
 					local md = data._Model
+
 					local attpos = data.Pos
+					if data.Pos0 and data.Pos1 then attpos = LerpVector( data._SlideAmount or 0.5, data.Pos0, data.Pos1 ) end
 					for elem, elemdata in pairs( self.Elements ) do
 						if elem == "BaseClass" then continue end
 						if self.ActivatedElements[elem] then
@@ -901,28 +901,27 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 						end
 					end
 
-					-- WIP: Add all those fancy checks for angle and scale.
-					ang:RotateAroundAxis( ang:Right(), data.Ang.p )
-					ang:RotateAroundAxis( ang:Forward(), data.Ang.y )
-					ang:RotateAroundAxis( ang:Up(), data.Ang.r )
+					local bpos, bang, bscale = Vector(), Angle(), Vector( 1, 1, 1 )
+					bpos:Add( attpos )
+					if AT.ModelOffset then bpos:Add( AT.ModelOffset ) end
+					if AT.ModelOffset0 and AT.ModelOffset1 then bpos:Add( LerpVector( data._SlideAmount, AT.ModelOffset0, AT.ModelOffset1 ) ) end
+					bang:Add( data.Ang )
+					if AT.ModelRotate then bang:Add( AT.ModelRotate ) end
+					if data.Scale then bscale:Mul( data.Scale ) end
+					if AT.ModelScale then bscale:Mul( AT.ModelScale ) end
+
+					ang:RotateAroundAxis( ang:Right(), bang.p )
+					ang:RotateAroundAxis( ang:Forward(), bang.y )
+					ang:RotateAroundAxis( ang:Up(), bang.r )
 					md:SetAngles( ang )
 
-					if attpos then
-						pos:Add( ang:Right() * attpos.x )
-						pos:Add( ang:Forward() * attpos.y )
-						pos:Add( ang:Up() * attpos.z )
-					end
-					if AT.ModelOffset then
-						pos:Add( ang:Right() * AT.ModelOffset.x )
-						pos:Add( ang:Forward() * AT.ModelOffset.y )
-						pos:Add( ang:Up() * AT.ModelOffset.z )
-					end
+					pos:Add( ang:Right() * bpos.x )
+					pos:Add( ang:Forward() * bpos.y )
+					pos:Add( ang:Up() * bpos.z )
 					md:SetPos( pos )
 
 					local may = Matrix()
-					may:SetScale( v1 )
-					if data.Scale then may:Scale( data.Scale ) end
-					if AT.ModelScale then may:Scale( AT.ModelScale ) end
+					may:SetScale( bscale )
 					md:EnableMatrix( "RenderMultiply", may )
 
 					if CLIENT then

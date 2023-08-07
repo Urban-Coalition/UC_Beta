@@ -198,9 +198,24 @@ if CLIENT then
 			butt:DockMargin( 0, 0, 0, ss(4) )
 			butt.AttName = i
 
+			butt.SlideAmount = 0.5
+
 			function butt:Paint( w, h )
 				surface.SetDrawColor( CCP_BUTTON )
 				surface.DrawRect( 0, 0, w, h )
+				
+				if self.SlideAmount and self:IsHovered() or self:IsDown() then
+					surface.SetDrawColor( 255, 255, 255, 63 )
+					surface.DrawRect( 0, 0, w * self.SlideAmount, h )
+
+					if self:IsDown() then
+						local segments = 8
+						for i=1, segments-1 do
+							surface.SetDrawColor( 255, 255, 255, 200 )
+							surface.DrawRect( (w*(i/segments))-ss(1/2), (h/2)-ss(8/2), ss(1), ss(8) )
+						end
+					end
+				end
 
 				local inst = wepsl._Installed == i
 				if inst or butt:IsHovered() then
@@ -218,8 +233,7 @@ if CLIENT then
 				surface.SetTextPos( ss(4), ss(10) )
 				surface.DrawText( v.ShortName )
 
-				local siz = 0
-
+				-- local siz = 0
 				-- if v.ShortName then
 				-- 	surface.SetFont( "ccpanel_tb_8" )
 				-- 	siz = surface.GetTextSize( v.Name )
@@ -237,7 +251,9 @@ if CLIENT then
 			end
 
 			function butt:DoClick()
-				wep:CL_Att_Attach( index, i )
+				if wepsl._Installed != i then
+					wep:CL_Att_Attach( index, i )
+				end
 			end
 			function butt:DoRightClick()
 				wep:CL_Att_Attach( index, "" )
@@ -246,6 +262,14 @@ if CLIENT then
 				local ref = ST_Stat
 				local hov = butt:IsHovered()
 				if hov then
+					local segments = 8
+					self.SlideAmount = math.Round( math.Remap( input.GetCursorPos(), butt:LocalToScreen(0), butt:LocalToScreen(butt:GetWide()), 0, 1 )*segments, 0 )/segments
+					if butt:IsDown() then
+						if wepsl._SlideAmount != self.SlideAmount then
+							wep:EmitSound( "weapons/arccw/fiveseven/fiveseven_slideback.wav", 50, Lerp( self.SlideAmount, 85, 115 ), 0.75, CHAN_STATIC )
+						end
+						wepsl._SlideAmount = self.SlideAmount
+					end
 					if IsValid(ref) then
 						ref.AttName = i
 					else

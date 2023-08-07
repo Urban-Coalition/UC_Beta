@@ -74,6 +74,9 @@ att.Slot = "optic_medium"
 att.Model = "models/weapons/arccw/atts/ud_acog.mdl"
 att.ModelScale = Vector(1.15, 1.15, 1.15)
 
+att.ModelOffset0 = Vector( 0, 1, 0 )
+att.ModelOffset1 = Vector( 0, -2, 0 )
+
 att.Sights = {
 	{
 		RTScope = true,
