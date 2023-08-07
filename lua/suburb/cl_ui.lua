@@ -116,6 +116,7 @@ end
 
 local C_SOLAR = GetConVar("solar")
 local C_SOLARALL = GetConVar("solar_all")
+local cvar_drawhud
 
 local function SolarEnabled()
 	local p = LocalPlayer()
@@ -123,6 +124,8 @@ local function SolarEnabled()
 	if IsValid(p) and IsValid(p:GetActiveWeapon()) and p:GetActiveWeapon().Suburb then
 		s_wep = true
 	end
+	cvar_drawhud = cvar_drawhud or GetConVar("cl_drawhud")
+	if !cvar_drawhud:GetBool() then return false end
 	return (s_wep and true or C_SOLARALL:GetBool()) and C_SOLAR:GetBool()
 end
 
