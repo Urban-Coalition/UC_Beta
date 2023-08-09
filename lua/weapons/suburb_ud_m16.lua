@@ -202,6 +202,7 @@ SWEP.Animations				= {
 		Source = "fix",
 		Time = 1,
 		ShellEjectTime = 0.3,
+		CycleDelayTime = 0.75,
 		Events = {
 			{ t = 0.05,			s = p1 .. "chback.ogg" },
 			{ t = 0.2,			s = p0 .. "cloth_4.ogg" },
@@ -541,8 +542,8 @@ SWEP.Attachments = {
 		Pos = Vector(0, 1.5, 4),
 		Ang = Angle(90, -90, 0),
 
-		Pos0 = Vector(-1.652, 0, 0),
-		Pos1 = Vector(-1.652, 0, 5.5),
+		--Pos0 = Vector(-1.652, 0, 0),
+		--Pos1 = Vector(-1.652, 0, 5.5),
 	},
 }
 
@@ -604,9 +605,9 @@ SWEP.Elements = {
 	["ud_m16_ur_classic"] = {
 		Bodygroups = { [1] = 3 },
 		AttPos = {
-			[1] = { Pos = Vector( -3.45, 0, 1.25 ), Ang = Angle( -90, 90, 0 ) },
-			[2] = { Pos = Vector( -3.45, 0, 2 ), Ang = Angle( -90, 90, 0 ) },
-			[3] = { Pos = Vector( -3.45, 0, 5.8 ), Ang = Angle( -90, 90, 0 ) },
+			[1] = { Pos = Vector( 0, 1.25, 3.45 ), Ang = Angle( -90, 90, 0 ) },
+			[2] = { Pos = Vector( 0, 2, 3.45 ), Ang = Angle( -90, 90, 0 ) },
+			[3] = { Pos = Vector( 0, 5.8, 3.45 ), Ang = Angle( -90, 90, 0 ) },
 		}
 	},
 	["ud_m16_mag_20"] = {

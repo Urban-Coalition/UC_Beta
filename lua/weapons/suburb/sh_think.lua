@@ -61,7 +61,7 @@ function SWEP:Think()
 			p:GetViewModel():SetPoseParameter( "sights", self:GetAim() )
 		end
 		if CLIENT then
-			self.superaimedin = math.Approach( self.superaimedin or 0, (self:GetReloadingTime() > CurTime()) and 1 or 0, FrameTime() / 0.5 )
+			self.superaimedin = math.Approach( self.superaimedin or 0, ((self:GetReloadingTime() - 0.5) > CurTime()) and 1 or 0, FrameTime() / 0.5 )
 		end
 
 		local pred = (game.SinglePlayer() and SERVER) or (!game.SinglePlayer())
@@ -262,7 +262,10 @@ function SWEP:RegenStats()
 	self.Primary.ClipSize = self:GetCapacity()
 
 	self:Unload( self:Clip1()-(self:GetCapacity()+self:GetStat("ChamberSize")) )
-	-- self:SetFiremode( 1 )
+	self:SetActiveSight( 1 )
+	self.SightTransition = 1
+	self.SightTransition_From = 1
+	self.SightTransition_To = 1
 end
 
 function SWEP:GetStat( name, default )

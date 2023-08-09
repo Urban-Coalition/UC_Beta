@@ -30,6 +30,10 @@ end
 
 function SWEP:GetFiremodeTable(cust)
 	local ft = self:GetStat("Firemodes")
+	if #ft < self:GetFiremode() then
+		SDeP( "Suburb GetFiremodeTable: Firemode setting was higher than what we have, so it was set to 1." )
+		self:SetFiremode( 1 )
+	end
 	if cust then
 		assert( isnumber(cust), "Suburb GetFiremodeTable: Var #1 is NOT a number!")
 		assert( cust<=#ft, "Suburb GetFiremodeTable: Var #1 is over firemode table count!")

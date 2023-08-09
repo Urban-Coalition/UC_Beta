@@ -130,6 +130,7 @@ SWEP.Secondary.Ammo			= "none"
 SWEP.Secondary.ClipMax		= -1
 
 SWEP.ActivatedElements = {}
+SWEP.SightList = {}
 SWEP.BGTable = {}
 
 AddCSLuaFile("sh_holdtypes.lua")
@@ -162,6 +163,7 @@ local yep = {
 		"CycleCount",
 		"TotalShotCount",
 		"LoadAmount",
+		"ActiveSight",
 	},
 	["Float"] = {
 		"NextFire",
@@ -213,6 +215,7 @@ function SWEP:SetupDataTables()
 	end
 	self.Primary.DefaultClip = self.Primary.ClipSize * 1
 	self:SetFiremode(1)
+	self:SetActiveSight(1)
 	self:SetLoadAmount(math.huge)
 end
 
@@ -515,10 +518,36 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local b_pos, b_ang = Vector(), Angle()
 		local si = self:GetAim()
 		local ss_si = math.ease.InOutSine( si )
-		local ipose = self:GetCurrentSight()
 
-		b_pos:Add( ipose.Pos )
-		b_ang:Add( ipose.Ang )
+
+		local wpos, wang = Vector(), Angle()
+		local wpos_m, wang_m = Vector(), Angle()
+
+		if self.SightList and self.SightList[self.SightTransition_From] and self.SightList[self.SightTransition_To] then
+			local si_prev = self.SightList[self.SightTransition_From].SightData
+			local si_next = self.SightList[self.SightTransition_To].SightData
+
+			local si_tra = math.TimeFraction( (self.SightTransition or 0), (self.SightTransition or 0) + 0.5, CurTime() )
+			si_tra = math.Clamp( si_tra, 0, 1 )
+
+			wpos:Set( LerpVector( si_tra, si_prev.Pos, si_next.Pos ) )
+			wang:Set( LerpAngle( si_tra, si_prev.Ang, si_next.Ang ) )
+
+			local blah = math.sin( si_tra * math.pi )
+			blah = math.Round( blah, 10 )
+			wpos:Add( Vector( 0, 5, 0 ) * blah )
+
+			wpos_m:Set( LerpVector( si_tra, si_prev.MidPos, si_next.MidPos ) )
+			wang_m:Set( LerpAngle( si_tra, si_prev.MidAng, si_next.MidAng ) )
+		else
+			local ipose = self:GetStat("IronsightPose")
+			wpos, wang, wpos_m, wang_m = ipose.Pos, ipose.Ang, ipose.MidPos, ipose.MidAng
+		end
+
+		--si_tra = math.ease.InOutSine( si_tra )
+
+		b_pos:Add( wpos )
+		b_ang:Add( wang )
 		b_pos:Mul( ss_si )
 		b_ang:Mul( ss_si )
 		opos:Add( b_pos )
@@ -528,8 +557,8 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local xi = ss_si
 		xi = math.sin( math.rad( 90 * xi * 2 ) )
 
-		b_pos:Add( ipose.MidPos or vector_origin )
-		b_ang:Add( ipose.MidAng or angle_zero )
+		b_pos:Add( wpos_m or vector_origin )
+		b_ang:Add( wang_m or angle_zero )
 		b_pos:Mul( xi )
 		b_ang:Mul( xi )
 
@@ -829,6 +858,7 @@ if CLIENT then
 		ccvar_cheapscope = ccvar_cheapscope or GetConVar("uc_cl_cheapscopes")
 		if IsValid(wpn) and wpn.Suburb and !ccvar_cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then -- and w:GetUserSight() then
 			-- print("Suburb: Dual-render scope is being done.")
+			render.ClearRenderTarget( rtmat, color_white )
 			render.PushRenderTarget(rtmat)
 			cam.Start2D()
 				render.Clear( 0, 0, 0, 255 )
@@ -856,6 +886,7 @@ if CLIENT then
 			render.UpdateFullScreenDepthTexture()
 			local screen = render.GetScreenEffectTexture()
 
+			render.ClearRenderTarget( rtmat, color_white )
 			render.PushRenderTarget(rtmat)
 				render.Clear( 0, 0, 0, 255 )
 				local wtf = -((w*rat)-w)*0.5
@@ -904,7 +935,7 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 					local bpos, bang, bscale = Vector(), Angle(), Vector( 1, 1, 1 )
 					bpos:Add( attpos )
 					if AT.ModelOffset then bpos:Add( AT.ModelOffset ) end
-					if AT.ModelOffset0 and AT.ModelOffset1 then bpos:Add( LerpVector( data._SlideAmount, AT.ModelOffset0, AT.ModelOffset1 ) ) end
+					if AT.ModelOffset0 and AT.ModelOffset1 then bpos:Add( LerpVector( data._SlideAmount or 0.5, AT.ModelOffset0, AT.ModelOffset1 ) ) end
 					bang:Add( data.Ang )
 					if AT.ModelRotate then bang:Add( AT.ModelRotate ) end
 					if data.Scale then bscale:Mul( data.Scale ) end
@@ -924,40 +955,46 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 					may:SetScale( bscale )
 					md:EnableMatrix( "RenderMultiply", may )
 
-					if CLIENT then
-						local SIGHT = self:GetCurrentSight()
-						if (SIGHT._Att == data._Installed) and SIGHT.RTScope then
+					for i, SIGHT in ipairs( self.SightList ) do
+						md:SetSubMaterial( SIGHT.SightData.RTScopeMat )
+						if index != SIGHT.AttIndex then continue end
+						if i != self:GetActiveSight() then continue end
+						local SIGHT = SIGHT.SightData
+						if SIGHT.RTScope then
 							rtsurf:SetTexture("$basetexture", rtmat)
 
 							local a1, a2 = md:GetAttachment( SIGHT.RTScopeAtt_Center ), md:GetAttachment( SIGHT.RTScopeAtt_Bottom )
 							local y1, y2, h = a1.Pos:ToScreen(), a2.Pos:ToScreen(), ScrH()/2
 							y1, y2 = y1.y, y2.y
 							scofov = (y2-y1)/h
-							scomag = SIGHT.RTScopeMagnification
+							scomag = Lerp( SIGHT.SightZoom or 0, SIGHT.RTScopeMagnification, SIGHT.RTScopeMagnificationMax or SIGHT.RTScopeMagnification )
 							-- scofov = math.min( 1, scofov )
 						
-							if self:GetAim() != 0 then
-								if SIGHT.RTScopeOverlay then
-									render.PushRenderTarget( rtmat )
-									cam.Start2D()
-									-- render.Clear( 255, 0, 255, 255 )
+							if SIGHT.RTScopeOverlay and self:GetAim() != 0 then
+								render.PushRenderTarget( rtmat )
+								cam.Start2D()
 									render.ClearDepth()
-										surface.SetDrawColor( 255, 0, 0, 255 )
-										surface.SetMaterial( SIGHT.RTScopeOverlay )
-										surface.DrawTexturedRect( 0, 0, 512, 512 )
-										surface.SetDrawColor( 0, 0, 0, 255*math.Remap(self:GetAim(), 1, 0.5, 0, 1) )
-										surface.DrawRect( 0, 0, 512, 512 )
-									cam.End2D()
-									render.PopRenderTarget()
-								end
-								md:SetSubMaterial( SIGHT.RTScopeMat, "suburb/rt" )
-							else
-								md:SetSubMaterial( SIGHT.RTScopeMat )
+									if self:GetAim() != 1 then
+										local mag = self:GetAim()
+										render.BlurRenderTarget( rtmat, 4 * mag, 4 * mag, 2 )
+									end
+									
+									surface.SetDrawColor( 0, 0, 0, 255*math.Remap(self:GetAim(), 1, 0.5, 0, 1) )
+									surface.DrawRect( 0, 0, 512, 512 )
+								cam.End2D()
+								render.PopRenderTarget()
 							end
 						end
 					end
-
-					data._Model:DrawModel()
+					
+					for i, SIGHT in ipairs( self.SightList ) do
+						if index != SIGHT.AttIndex then continue end
+						if i != self:GetActiveSight() then continue end
+						if self:GetAim() != 0 then
+							md:SetSubMaterial( SIGHT.SightData.RTScopeMat, "suburb/rt" )
+						end
+					end
+					md:DrawModel()
 				end
 			end
 		end
@@ -980,8 +1017,112 @@ hook.Add("HUDPaint", "Suburb_Test_HUDPaint", function()
 	end
 end)
 
+local thingy = Material( "pp/motionblur" )
 function SWEP:PostDrawViewModel( vm, weapon, ply )
 	cam.End3D()
+
+	if self:GetAim() > 0 then
+	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
+	local ipose = self:GetCurrentSight()
+	cam.Start3D(nil, nil, Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, silly or ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 10000 )
+	cam.IgnoreZ(false)
+	for index, data in pairs( self.Attachments ) do
+		if data._Model then
+			local AT = Suburb.AttTable[data._Installed]
+			assert(AT, "Suburb Think: That attachment doesn't exist!!", index, data._Installed)
+			local md = data._Model
+			
+			for i, SIGHT in ipairs( self.SightList ) do
+				if index != SIGHT.AttIndex then continue end
+				if i != self:GetActiveSight() then continue end
+				local SIGHT = SIGHT.SightData
+
+				-- stencil shit
+				local ref = 56
+				render.UpdateScreenEffectTexture()
+				render.ClearStencil()
+				render.SetStencilEnable(true)
+				render.SetStencilCompareFunction(STENCIL_ALWAYS)
+				render.SetStencilPassOperation(STENCIL_REPLACE)
+				render.SetStencilFailOperation(STENCIL_KEEP)
+				render.SetStencilZFailOperation(STENCIL_REPLACE)
+				render.SetStencilWriteMask(255)
+				render.SetStencilTestMask(255)
+				
+				render.SetBlend( 0 )
+				render.SetStencilReferenceValue(ref)
+
+				md:SetBodyGroups( SIGHT.StencilTest or "" )
+				md:DrawModel()
+
+				render.SetBlend( 1 )
+
+				render.SetStencilPassOperation(STENCIL_KEEP)
+				render.SetStencilCompareFunction(STENCIL_EQUAL)
+
+				local p = LocalPlayer()
+				local ea = EyeAngles()
+				ea = ea - p:GetViewPunchAngles()
+				local tr = {
+					start = EyePos(),
+					endpos = EyePos() + ea:Forward() * 8000,
+					filter = LocalPlayer(),
+					mask = 0,
+				}
+				tr = util.TraceLine( tr )
+				tr = tr.HitPos:ToScreen()
+
+				cam.Start2D()
+					local colorable = Color( 255, 0, 0, 255 )
+					if SIGHT.RTScope then
+						local size = ScrH() * scofov
+
+						surface.SetDrawColor( 255, 0, 0, 255 )
+						surface.SetMaterial( SIGHT.RTScopeOverlay )
+						local x, y, w, h = tr.x - (size/2), tr.y - (size/2), size, size
+						x, y, w, h = math.ceil( x ), math.ceil( y ), math.ceil( w ), math.ceil( h )
+						surface.DrawTexturedRect( x, y, w, h )
+						surface.SetDrawColor( 0, 0, 0, 255 )
+
+						surface.DrawRect( x, 0, w, y ) -- top
+						surface.DrawRect( x, h+y, w, h ) -- bottom
+
+						surface.DrawRect( 0, 0, x, ScrH() ) -- left
+						surface.DrawRect( x+w, 0, x, ScrH() ) -- right
+					elseif SIGHT.Reflex then
+						
+						if istable( SIGHT.ReflexOverlay ) then
+							for i, DATA in ipairs( SIGHT.ReflexOverlay ) do
+								local size = DATA.ReflexSize * ( ScrH() / 720 )
+								surface.SetMaterial( DATA.ReflexOverlay )
+
+								local x, y, w, h = tr.x - (size/2), tr.y - (size/2), size, size
+								x, y, w, h = math.Round( x ), math.Round( y ), math.Round( w ), math.Round( h )
+								surface.SetDrawColor( DATA.ReflexColor == "colorable" and colorable or DATA.ReflexColor or Color( 255, 0, 0, 255 ) )
+								surface.DrawTexturedRect( x, y, w, h )
+							end
+						else
+							local size = DATA.ReflexSize * ( ScrH() / 720 )
+							surface.SetMaterial( DATA.ReflexOverlay )
+
+							local x, y, w, h = tr.x - (size/2), tr.y - (size/2), size, size
+							x, y, w, h = math.Round( x ), math.Round( y ), math.Round( w ), math.Round( h )
+							surface.SetDrawColor( DATA.ReflexColor == "colorable" and colorable or DATA.ReflexColor or Color( 255, 0, 0, 255 ) )
+							surface.DrawTexturedRect( x, y, w, h )
+						end
+					end
+				cam.End2D()
+
+				render.DepthRange(0, 1)
+				render.SetStencilEnable(false)
+				-- stencil shit end
+
+				md:SetBodyGroups( "0000" )
+			end
+		end
+	end
+	cam.End3D()
+	end
 end
 
 function SWEP:GetAimAlt()
@@ -993,33 +1134,25 @@ function SWEP:BuildSightList()
 	ccvar_disablecache = ccvar_disablecache or GetConVar("uc_dev_disablecache")
 	if self.SightList and !ccvar_disablecache:GetBool() then return self.SightList end
 	self.SightList = {}
-	local silist = self.SightList
-	for i, slot in ipairs( self.Attachments ) do
+
+	for slotindex, slot in ipairs( self.Attachments ) do
 		if !slot._Installed then continue end
 		local att = Suburb.AttTable[slot._Installed]
 		if !att.Sights then continue end
-		-- print(i .. " : " .. (att.Name or "elem") .. " count: " .. #att.Sights )
-		for k, sit in ipairs( att.Sights ) do
-			local thing = table.Copy( sit )
-			thing._Att = att.Class
 
-			if CLIENT then
-				local r1, r2 = self:GenerateSightPosition( slot.Pos, slot.Ang, slot.Bone, sit.Pos, sit.Ang )
-				thing.Pos = r1
-				local x,y,z = r1.x,r1.y,r1.z
-				r1.y = -x
-				r1.z = -z
-				r1.x = y
-				thing.Ang = r2
-				r2.x = -r2.x
-				r2.y = -r2.y
-				r2.z = -r2.z
-			end
-			table.insert( silist, thing )
+		slot._SightData = {}
+		for sightindex, sight in ipairs( att.Sights ) do
+			local copy = table.Copy( sight )
+			copy.SightZoom = 0
+			copy.AttIndex = i
+
+			copy.Pos, copy.Ang = self:GenerateSightPosition( slot.Pos, slot.Ang, slot.Bone, sight.Pos, sight.Ang )
+			table.insert( slot._SightData, copy )
+			table.insert( self.SightList, { AttIndex = slotindex, SightIndex = sightindex, SightData = copy } )
 		end
 	end
 
-	return silist
+	return self.SightList
 end
 
 local col_bone = Color( 155, 0, 0 )
@@ -1066,27 +1199,44 @@ function SWEP:GenerateSightPosition( pos, ang, bone, upos, uang )
 		t_pos:Add( t_ang:Up() *					upos.z )
 		t_pos:Add( t_ang:Right() *				upos.x )
 
+		
+		-- cleanup
+		do
+			local x,y,z = t_pos.x,t_pos.y,t_pos.z
+			t_pos.y = -x
+			t_pos.z = -z
+			t_pos.x = y
+
+			t_ang.x = -t_ang.x
+			t_ang.y = -t_ang.y
+			t_ang.z = -t_ang.z
+		end
+
 		-- debugoverlay.Axis( t_pos, t_ang, 16, 0, true )
 
 		return t_pos, t_ang
 	else
-		print( "Suburb GenerateSightPosition: Why are you, as the server, calling this?" )
+		--print( "Suburb GenerateSightPosition: Why are you, as the server, calling this?" )
 	end
 end
 
 function SWEP:GetCurrentSight()
-	return self:BuildSightList()[1] or self:GetStat("IronsightPose")
+	local sightlist = self:BuildSightList()
+	if sightlist[self:GetActiveSight()] then
+		return sightlist[self:GetActiveSight()].SightData
+	end
+	return self:GetStat("IronsightPose")
 end
 
 function SWEP:TranslateFOV(fov)
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
-	local ipose = self:GetCurrentSight()
-	if ipose and ipose.Magnification then
-		mag = ipose.Magnification
+	local SIGHT = self:GetCurrentSight()
+	if SIGHT and SIGHT.Magnification then
+		mag = SIGHT.Magnification
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if ipose.RTScopeMagnification and CLIENT and cheapscope:GetBool() then
-			mag = mag*ipose.RTScopeMagnification
+		if SIGHT.RTScopeMagnification and CLIENT and cheapscope:GetBool() then
+			mag = mag*Lerp( SIGHT.SightZoom, SIGHT.RTScopeMagnification, SIGHT.RTScopeMagnificationMax or SIGHT.RTScopeMagnification )
 		end
 	end
 	return Lerp( self:GetAim(), fov, 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
@@ -1095,11 +1245,11 @@ end
 function SWEP:AdjustMouseSensitivity()
 	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
 	local mag = 1.1
-	local ipose = self:GetCurrentSight()
-	if ipose and ipose.Magnification then
-		mag = ipose.Magnification
-		if ipose.RTScopeMagnification then
-			mag = mag*ipose.RTScopeMagnification
+	local SIGHT = self:GetCurrentSight()
+	if SIGHT and SIGHT.Magnification then
+		mag = SIGHT.Magnification
+		if SIGHT.RTScopeMagnification then
+			mag = mag*Lerp( SIGHT.SightZoom, SIGHT.RTScopeMagnification, SIGHT.RTScopeMagnificationMax or SIGHT.RTScopeMagnification )
 		end
 	end
 	local dfov = GetConVar("fov_desired"):GetInt()

@@ -1,5 +1,6 @@
 
 local fmdebounce = false
+local sidebounce = CurTime()
 
 hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 	if ply and IsValid(ply) then
@@ -9,6 +10,17 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 				if IsValid(wep:GetHolster_Entity()) then
 					cmd:SelectWeapon(wep:GetHolster_Entity())
 				end
+			end
+			
+			if wep:GetUserSight() and cmd:GetMouseWheel() != 0 and sidebounce<=CurTime() then
+				if cmd:KeyDown(IN_USE) then
+					wep:ToggleSight( cmd:GetMouseWheel() < 0 )
+					wep:EmitSound( "weapons/awp/awp_bolt.wav", 50, 100, 0.5, CHAN_STATIC )
+				else
+					wep:SightZoom( cmd:GetMouseWheel() < 0 )
+					wep:EmitSound( "weapons/smg1/switch_single.wav", 50, Lerp( wep:GetCurrentSight().SightZoom, 85, 115 ), 0.5, CHAN_STATIC )
+				end
+				sidebounce = CurTime() + FrameTime()+0.01
 			end
 
 			if !cmd:KeyDown(IN_USE) then
@@ -36,22 +48,30 @@ hook.Add( "StartCommand", "Suburb_StartCommand", function( ply, cmd )
 				if cmd:GetImpulse() == 152 then
 					wep:ToggleRadio()
 				end
+
+				if cmd:GetImpulse() == 153 then
+					--wep:ToggleSight()
+				end
 			end
 			if SERVER and ply:FlashlightIsOn() then ply:Flashlight() end
 		end
 	end
 end)
 
-hook.Add( "PlayerBindPress", "Suburb_PlayerBindPress", function( ply, bind, pressed, code )
-	if ply and IsValid(ply) then
+if CLIENT then
+	hook.Add( "PlayerBindPress", "Suburb_PlayerBindPress", function( ply, bind, pressed, code )
 		if IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon().Suburb then
 			local wep = ply:GetActiveWeapon()
-			if bind == "pooper" then
-				return true
+			if wep:GetUserSight() then
+				if bind == "invnext" then
+					return true
+				elseif bind == "invprev" then
+					return true
+				end
 			end
 		end
-	end
-end)
+	end)
+end
 
 hook.Add("OnContextMenuOpen", "Suburb_OnContextMenuOpen", function()
 	local ply = LocalPlayer()
@@ -263,16 +283,18 @@ if CLIENT then
 			end
 			function butt:Think()
 				local ref = ST_Stat
-				local hov = butt:IsHovered()
 				local slidable = wepsl.Pos0 and wepsl.Pos1
-				if slidable and hov then
-					local segments = 8
-					self.SlideAmount = math.Round( math.Remap( input.GetCursorPos(), butt:LocalToScreen(0), butt:LocalToScreen(butt:GetWide()), 0, 1 )*segments, 0 )/segments
-					if butt:IsDown() then
-						if wepsl._SlideAmount != self.SlideAmount then
-							wep:EmitSound( "weapons/arccw/fiveseven/fiveseven_slideback.wav", 50, Lerp( self.SlideAmount, 85, 115 ), 0.75, CHAN_STATIC )
+				local uinst = wepsl._Installed == i
+				if self:IsHovered() then
+					if uinst and slidable then
+						local segments = 8
+						self.SlideAmount = math.Round( math.Remap( input.GetCursorPos(), butt:LocalToScreen(0), butt:LocalToScreen(butt:GetWide()), 0, 1 )*segments, 0 )/segments
+						if self:IsDown() then
+							if wepsl._SlideAmount != self.SlideAmount then
+								wep:EmitSound( "weapons/arccw/fiveseven/fiveseven_slideback.wav", 50, Lerp( self.SlideAmount, 85, 115 ), 0.75, CHAN_STATIC )
+							end
+							wepsl._SlideAmount = self.SlideAmount
 						end
-						wepsl._SlideAmount = self.SlideAmount
 					end
 					if IsValid(ref) then
 						ref.AttName = i
@@ -587,6 +609,26 @@ function Quickcheck( wepslot, attslot )
 		end
 
 	end
+end
+
+function SWEP:ToggleSight( back )
+	local curr = self:GetActiveSight()
+	local nextfm = self:GetActiveSight() + (back and -1 or 1) * 1
+	local sl = self:BuildSightList()
+	if #sl < nextfm then
+		nextfm = 1
+	elseif nextfm <= 0 then
+		nextfm = #sl
+	end
+	self:SetActiveSight( nextfm )
+	self.SightTransition = CurTime()
+	self.SightTransition_From = curr
+	self.SightTransition_To = nextfm
+end
+
+function SWEP:SightZoom( back )
+	cs = self:GetCurrentSight()
+	cs.SightZoom = math.Clamp( cs.SightZoom + (( back and -1 or 1 ) * 0.1), 0, 1 )
 end
 
 
