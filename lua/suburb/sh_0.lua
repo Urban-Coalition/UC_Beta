@@ -5,6 +5,52 @@
 Suburb.debug = function() return GetConVar("uc_dev_debug"):GetBool() end
 Suburb.HUToM = 0.0254
 
+Suburb.Handmods_L = {
+    "ValveBiped.Bip01_L_UpperArm",
+    "ValveBiped.Bip01_L_Forearm",
+    "ValveBiped.Bip01_L_Wrist",
+    "ValveBiped.Bip01_L_Ulna",
+    "ValveBiped.Bip01_L_Hand",
+    "ValveBiped.Bip01_L_Finger4",
+    "ValveBiped.Bip01_L_Finger41",
+    "ValveBiped.Bip01_L_Finger42",
+    "ValveBiped.Bip01_L_Finger3",
+    "ValveBiped.Bip01_L_Finger31",
+    "ValveBiped.Bip01_L_Finger32",
+    "ValveBiped.Bip01_L_Finger2",
+    "ValveBiped.Bip01_L_Finger21",
+    "ValveBiped.Bip01_L_Finger22",
+    "ValveBiped.Bip01_L_Finger1",
+    "ValveBiped.Bip01_L_Finger11",
+    "ValveBiped.Bip01_L_Finger12",
+    "ValveBiped.Bip01_L_Finger0",
+    "ValveBiped.Bip01_L_Finger01",
+    "ValveBiped.Bip01_L_Finger02"
+}
+
+Suburb.Handmods_R = {
+    "ValveBiped.Bip01_R_UpperArm",
+    "ValveBiped.Bip01_R_Forearm",
+    "ValveBiped.Bip01_R_Wrist",
+    "ValveBiped.Bip01_R_Ulna",
+    "ValveBiped.Bip01_R_Hand",
+    "ValveBiped.Bip01_R_Finger4",
+    "ValveBiped.Bip01_R_Finger41",
+    "ValveBiped.Bip01_R_Finger42",
+    "ValveBiped.Bip01_R_Finger3",
+    "ValveBiped.Bip01_R_Finger31",
+    "ValveBiped.Bip01_R_Finger32",
+    "ValveBiped.Bip01_R_Finger2",
+    "ValveBiped.Bip01_R_Finger21",
+    "ValveBiped.Bip01_R_Finger22",
+    "ValveBiped.Bip01_R_Finger1",
+    "ValveBiped.Bip01_R_Finger11",
+    "ValveBiped.Bip01_R_Finger12",
+    "ValveBiped.Bip01_R_Finger0",
+    "ValveBiped.Bip01_R_Finger01",
+    "ValveBiped.Bip01_R_Finger02"
+}
+
 function SDe()
 	return GetConVar("uc_dev_debug"):GetInt()
 end

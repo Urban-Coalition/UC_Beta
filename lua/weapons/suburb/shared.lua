@@ -994,7 +994,38 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 							md:SetSubMaterial( SIGHT.SightData.RTScopeMat, "suburb/rt" )
 						end
 					end
+					md:SetupBones()
 					md:DrawModel()
+
+					-- Handmod
+					if index == 12 and !(CurTime() < self:GetReloadingTime()) then
+						for _, bone in pairs(Suburb.Handmods_L) do
+							local bone_viewmodel = vm:LookupBone(bone)
+							local bone_handmod = md:LookupBone(bone)
+
+							if !bone_viewmodel then SDeP(bone, " viewmodel bone missing") continue end
+							if !bone_handmod then SDeP(bone, " handmod bone missing") continue end
+
+							local matrix_viewmodel = vm:GetBoneMatrix(bone_viewmodel)
+							local matrix_handmod = md:GetBoneMatrix(bone_handmod)
+					
+							if !matrix_viewmodel then SDeP(bone, " viewmodel matrix missing") continue end
+							if !matrix_handmod then SDeP(bone, " handmod matrix missing") continue end
+
+							local pos_viewmodel = matrix_viewmodel:GetTranslation()
+							local ang_viewmodel = matrix_viewmodel:GetAngles()
+							local pos_handmod = matrix_handmod:GetTranslation()
+							local ang_handmod = matrix_handmod:GetAngles()
+
+							local newtransform = Matrix()
+					
+							newtransform:SetTranslation(LerpVector(1, pos_viewmodel, pos_handmod))
+							newtransform:SetAngles(LerpAngle(1, ang_viewmodel, ang_handmod))
+
+							vm:SetBoneMatrix(bone_viewmodel, newtransform)
+						end
+					end
+					-- Handmod end
 				end
 			end
 		end

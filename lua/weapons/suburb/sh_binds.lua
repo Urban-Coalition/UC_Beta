@@ -103,12 +103,13 @@ if CLIENT then
 	function CCPanel()
 		local ply = LocalPlayer()
 		local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon()
+		local sw, sh = ScrW(), ScrH()
 
 		if ST_Slot then ST_Slot:Remove() end
 		ST_Slot = vgui.Create("DFrame")
 		ST_Slot:SetTitle("Test cust frame")
 		ST_Slot:SetPos( ss(10), ss(10) )
-		ST_Slot:SetSize( ss(160), ss(240) )
+		ST_Slot:SetSize( ss(160), sh-ss(20) )
 		ST_Slot:MakePopup()
 		ST_Slot:SetKeyboardInputEnabled( false )
 		
@@ -171,6 +172,7 @@ if CLIENT then
 	function CCPanel_AttsList( god, index, data )
 		local ply = LocalPlayer()
 		local wep = IsValid(ply:GetActiveWeapon()) and ply:GetActiveWeapon()
+		local sw, sh = ScrW(), ScrH()
 
 		if ST_Atts then ST_Atts:Remove() end
 		ST_Atts = vgui.Create("DFrame")
@@ -179,7 +181,7 @@ if CLIENT then
 			local x, y, w, h = god:GetBounds()
 			ST_Atts:SetPos( x + w + ss(5), y )
 		end
-		ST_Atts:SetSize( ss(180), ss(200) )
+		ST_Atts:SetSize( ss(180), sh-ss(20) )
 		ST_Atts:MakePopup()
 		ST_Atts:SetKeyboardInputEnabled( false )
 
@@ -363,20 +365,62 @@ if CLIENT then
 				surface.DrawText( att.ShortName )
 			end
 
+			local std = { [1] = {}, [2] = {}, [3] = {} }
 			local boost = 32
 			for item, ass in SortedPairsByMemberValue( AutoStats, 3, true ) do
 				if !att[item] then continue end
 				if att.HideAutoStats and att.HideAutoStats[item] then continue end
-
-				local orig = self:GetTable()[i] or -math.huge
-				surface.SetFont( "ccpanel_tb_10" )
-				surface.SetTextColor( ass[2]( att[item], self ) and CCP_S_1 or CCP_S_2 )
+				local positive = ass[2]( att[item], self )
 				local tex = ass[1]( att[item] )
-				local tw = surface.GetTextSize( tex )
-				surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
-				surface.DrawText( tex )
-				boost = boost + 12
+
+				-- surface.SetFont( "ccpanel_tb_10" )
+				-- surface.SetTextColor( positive and CCP_S_1 or CCP_S_2 )
+				-- 
+				-- local tw = surface.GetTextSize( tex )
+				-- surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
+				-- surface.DrawText( tex )
+				table.insert( std[positive and 1 or 2], tex )
 			end
+
+			surface.SetFont( "ccpanel_tb_8" )
+			surface.SetTextColor( CCP_S_1 )
+			local tex = "PROS:"
+			local tw = surface.GetTextSize( tex )
+			surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
+			surface.DrawText( tex )
+			boost = boost + 8
+
+			for _, item in ipairs( std[1] ) do
+				surface.SetFont( "ccpanel_tb_10" )
+				surface.SetTextColor( CCP_S_1 )
+
+				local tw = surface.GetTextSize( item )
+				surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
+				surface.DrawText( item )
+
+				boost = boost + 10
+			end
+			boost = boost + 6
+
+			surface.SetFont( "ccpanel_tb_8" )
+			surface.SetTextColor( CCP_S_2 )
+			local tex = "CONS:"
+			local tw = surface.GetTextSize( tex )
+			surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
+			surface.DrawText( tex )
+			boost = boost + 8
+
+			for _, item in ipairs( std[2] ) do
+				surface.SetFont( "ccpanel_tb_10" )
+				surface.SetTextColor( CCP_S_2 )
+
+				local tw = surface.GetTextSize( item )
+				surface.SetTextPos( ss(180/2) - (tw/2), ss(boost) )
+				surface.DrawText( item )
+
+				boost = boost + 10
+			end
+			boost = boost + 6
 		end
 
 		scroller:Add( butt )
@@ -423,6 +467,11 @@ AutoStats = {
 		function( data ) return data<=1 end,
 		798,
 	},
+	["Add_SightTime"] = {
+		function( data ) return string.format( "%+Gms sight time", math.Round(data*1000) ) end,
+		function( data ) return data<=0 end,
+		798,
+	},
 	["Mult_SprintTime"] = {
 		function( data ) return string.format( "%+G%% sight time", math.Round((data-1)*100) ) end,
 		function( data ) return data<=1 end,
@@ -443,7 +492,7 @@ AutoStats = {
 
 	-- 400
 	["Mult_Accuracy"] = {
-		function( data ) return string.format( "%+G%% precision", math.Round((data-1)*100) ) end,
+		function( data ) return string.format( "%+G%% imprecision", math.Round((data-1)*100) ) end,
 		function( data ) return data<1 end,
 		499,
 	},

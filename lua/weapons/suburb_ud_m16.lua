@@ -527,7 +527,12 @@ SWEP.Attachments = {
 		Name = "Underbarrel",
 		SortOrder = 3.2,
 		Icon = Material("entities/att/acwatt_uc_grip_kacvfg.png", "mips smooth"),
-		Slot = "underbarrel"
+		Slot = "underbarrel",
+
+		Bone = "m16_parent",
+		Pos0 = Vector(0, 6.5, -0.9),
+		Pos1 = Vector(0, 13, -0.9),
+		Ang = Angle(90, -90, 0),
 	},
 
 	-- testing

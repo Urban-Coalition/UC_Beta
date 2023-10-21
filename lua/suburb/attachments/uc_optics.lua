@@ -11,6 +11,8 @@ att.Slot = "optic_short"
 
 att.Model = "models/weapons/arccw/atts/uc_sureshot.mdl"
 att.ModelScale = Vector(0.9, 0.9, 0.9)
+
+att.Add_SightTime = (0.5/60)
 Suburb_GenAtt(att, "uc_optic_sureshot")
 
 local att = {}
@@ -26,6 +28,8 @@ att.ModelScale = Vector(1.5, 1.5, 1.5)
 
 att.ModelOffset0 = Vector( 0, 0, 0 )
 att.ModelOffset1 = Vector( 0, -2, 0 )
+
+att.Add_SightTime = (0.5/60)
 Suburb_GenAtt(att, "uc_optic_holosun")
 
 -- Hybrid
@@ -68,6 +72,8 @@ att.Sights = {
 		Magnification = 1.3,
 	},
 }
+
+att.Add_SightTime = (1/60)
 Suburb_GenAtt(att, "uc_optic_eotech553")
 
 local att = {}
@@ -110,6 +116,8 @@ att.Sights = {
 		Magnification = 1.3,
 	},
 }
+
+att.Add_SightTime = (0.5/60)
 Suburb_GenAtt(att, "uc_optic_eotech552")
 
 -- Medium
@@ -144,6 +152,8 @@ att.Sights = {
 		Magnification = 1.3,
 	},
 }
+
+att.Add_SightTime = (2/60)
 Suburb_GenAtt(att, "uc_optic_acog")
 
 local att = {}
@@ -176,6 +186,8 @@ att.Sights = {
 		Magnification = 1.3,
 	},
 }
+
+att.Add_SightTime = (2/60)
 Suburb_GenAtt(att, "uc_optic_elcan")
 
 local att = {}
@@ -223,6 +235,8 @@ att.Sights = {
 		Magnification = 1.3,
 	},
 }
+
+att.Add_SightTime = (2/60)
 Suburb_GenAtt(att, "uc_optic_hamr")
 
 -- Long
@@ -258,4 +272,6 @@ att.Sights = {
 		Magnification = 1.3,
 	},
 }
+
+att.Add_SightTime = (4/60)
 Suburb_GenAtt(att, "uc_optic_tars")

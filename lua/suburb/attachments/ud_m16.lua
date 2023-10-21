@@ -117,7 +117,7 @@ att.HideAutoStats = QT("Mult_PostBurstDelay")
 
 att.Mult_Delay = 0.9
 att.Mult_PostBurstDelay = 0.9
-att.Mult_SightTime = 0.9
+att.Add_SightTime = -(1/60)
 att.Mult_Range = 0.75
 att.Mult_Accuracy = 1.5
 att.Mult_Dispersion_Move = 0.85
@@ -132,7 +132,7 @@ att.HideAutoStats = QT("Mult_PostBurstDelay")
 
 att.Mult_Delay = 0.9
 att.Mult_PostBurstDelay = 0.9
-att.Mult_SightTime = 0.8
+att.Add_SightTime = -(2/60)
 att.Mult_Range = 0.5
 att.Mult_Accuracy = 2
 att.Mult_Dispersion_Move = 0.75
@@ -145,30 +145,40 @@ local att = {}
 att.Name = "M16 Carbine Stock"
 att.ShortName = "Carbine Stock"
 att.Slot = "ud_m16_stock"
+
+att.Add_SightTime = -(1/60)
 Suburb_GenAtt(att, "ud_m16_stock_carbine")
 
 local att = {}
 att.Name = "M16 M231 FPW Wire Stock"
 att.ShortName = "M231 Wire Stock"
 att.Slot = "ud_m16_stock"
+
+att.Add_SightTime = -(2/60)
 Suburb_GenAtt(att, "ud_m16_stock_wire")
 
 local att = {}
 att.Name = "M16 M607 Slide Stock"
 att.ShortName = "M607 Slide Stock"
 att.Slot = "ud_m16_stock"
+
+att.Add_SightTime = -(1/60)
 Suburb_GenAtt(att, "ud_m16_stock_slide")
 
 local att = {}
 att.Name = "M16 M608 Cap Stock"
 att.ShortName = "M608 Cap Stock"
 att.Slot = "ud_m16_stock"
+
+att.Add_SightTime = -(2/60)
 Suburb_GenAtt(att, "ud_m16_stock_cap")
 
 local att = {}
 att.Name = "M16 Wooden Stock"
 att.ShortName = "Wooden Stock"
 att.Slot = "ud_m16_stock"
+
+att.Add_SightTime = (4/60)
 Suburb_GenAtt(att, "ud_m16_stock_wood")
 
 -- Handguards
@@ -189,6 +199,8 @@ local att = {}
 att.Name = "M16 Wooden Handguard"
 att.ShortName = "Wooden Handguard"
 att.Slot = "ud_m16_hg"
+
+att.Add_SightTime = (2/60)
 Suburb_GenAtt(att, "ud_m16_hg_wood")
 
 -- Magazines
@@ -201,7 +213,7 @@ att.ShortNameSubtitle = "100 RND"
 att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 100 / 30 )
-att.Mult_SightTime = 2
+att.Add_SightTime = (14/60)
 att.Mult_ReloadTime = 1+(2/3)
 Suburb_GenAtt(att, "ud_m16_mag_100")
 
@@ -213,7 +225,7 @@ att.ShortNameSubtitle = "60 RND"
 att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 60 / 30 )
-att.Mult_SightTime = 1.5
+att.Add_SightTime = (8/60)
 att.Mult_ReloadTime = 1+(1/3)
 Suburb_GenAtt(att, "ud_m16_mag_60")
 
@@ -225,7 +237,7 @@ att.ShortNameSubtitle = "40 RND"
 att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 40 / 30 )
-att.Mult_SightTime = 1.15
+att.Add_SightTime = (4/60)
 att.Mult_ReloadTime = 1.15
 Suburb_GenAtt(att, "ud_m16_mag_40")
 
@@ -237,7 +249,7 @@ att.ShortNameSubtitle = "20 RND"
 att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 20 / 30 )
-att.Mult_SightTime = 0.85
+att.Add_SightTime = -(1/60)
 att.Mult_ReloadTime = 0.85
 Suburb_GenAtt(att, "ud_m16_mag_20")
 
