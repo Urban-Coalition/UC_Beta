@@ -48,7 +48,7 @@ att.ShortNameSubtitle = "UNDERSLUNG"
 att.Slot = "underbarrel"
 
 att.Model = "models/weapons/arccw/atts/uc_ubgl_m203.mdl"
-att.ModelOffset = Vector( 0, 0, 1.3 )
+att.ModelOffset = Vector( 0, 0.7, 1.3 )
 
 att.Add_SightTime = (3/60)
 Suburb_GenAtt(att, "uc_ub_w_m203")
@@ -61,6 +61,7 @@ att.ShortNameSubtitle = "UNDERSLUNG"
 att.Slot = "underbarrel"
 
 att.Model = "models/weapons/arccw/atts/uc_ubgl_masterkey.mdl"
+att.ModelOffset = Vector( 0, 1.6, -0.4 )
 
 att.Add_SightTime = (3/60)
 Suburb_GenAtt(att, "uc_ub_w_masterkey")
