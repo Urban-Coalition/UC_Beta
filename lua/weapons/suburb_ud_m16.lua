@@ -35,8 +35,8 @@ SWEP.CrouchPose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.81, -6, 1.32 ),
 	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -1.15, 2, -0.4 ),
-	MidAng = Angle( -0.5, 0, -6 ),
+	MidPos = Vector( -1.2, -1, -0.0 ),
+	MidAng = Angle( -1.7, -1.5, 2 ),
 	ViewModelFOV = 65,
 	Magnification = 1.3,
 }
@@ -172,23 +172,23 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
-		ReloadingTime = 0.3,
-		StopSightTime = 0.1,
+		ReloadingTime = 0.4,
+		StopSightTime = 0.3,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
-		ReloadingTime = 0.3,
-		StopSightTime = 0.1,
+		ReloadingTime = 0.4,
+		StopSightTime = 0.3,
 	},
 	["holster"]	= {
 		Source = "holster",
-		Time = 0.5,
-		HolsterTime = 0.2,
+		Time = 0.6,
+		HolsterTime = 0.3,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
-		Time = 0.5,
-		HolsterTime = 0.2,
+		Time = 0.6,
+		HolsterTime = 0.3,
 	},
 	["fire"]	= {
 		Source = "fire",

@@ -31,8 +31,8 @@ SWEP.CrouchPose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.73, -4, 1.1 ),
 	Ang = Angle( 0.25, 0, 0 ),
-	MidPos = Vector( -0.65, 1, -0 ),
-	MidAng = Angle( -0.5, 0, -6 ),
+	MidPos = Vector( -0.5, 0.5, 0.5 ),
+	MidAng = Angle( -0.5, 1, 3 ),
 	ViewModelFOV = 65,
 	Magnification = 1.3,
 }
@@ -160,24 +160,26 @@ SWEP.Animations				= {
 	["draw"]	= {
 		Source = "draw",
 		Time = 0.8,
-		ReloadingTime = 0.3,
-		StopSightTime = 0.1,
+		ReloadingTime = 0.4,
+		StopSightTime = 0.3,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
 		Time = 0.8,
-		ReloadingTime = 0.3,
-		StopSightTime = 0.1,
+		ReloadingTime = 0.4,
+		StopSightTime = 0.3,
 	},
 	["holster"]	= {
 		Source = "holster",
 		Time = 0.4,
-		HolsterTime = 0.2,
+		ReloadingTime = 0.4,
+		HolsterTime = 0.3,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
 		Time = 0.4,
-		HolsterTime = 0.2,
+		ReloadingTime = 0.4,
+		HolsterTime = 0.3,
 	},
 	["fire"]	= {
 		Source = "fire",
@@ -201,21 +203,21 @@ SWEP.Animations				= {
 	},
 	["sgreload_start"] = {
 		Source = "sgreload_start",
-		Time = 0.4,
+		Time = 0.6,
 		Events = {
 		},
-		ShotgunReloadingTime = 0.3,
+		ShotgunReloadingTime = 0.45,
 	},
 	["sgreload_insert"] = {
 		Source = "sgreload_insert",
-		Time = 0.6,
+		Time = 0.75,
 		Events = {
 			{s = shellin, t = 0},
 			{s = Ssnd.rottle, t = 0.05},
 		},
 		LoadIn = 0.3,
 		AmountToLoad = 1,
-		ShotgunReloadingTime = 0.5,
+		ShotgunReloadingTime = 0.75,
 	},
 	["sgreload_finish"] = {
 		Source = "sgreload_finish",

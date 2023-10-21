@@ -28,8 +28,8 @@ SWEP.ActivePose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.865, -7, 1.95 ),
 	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -1.1, 3, -0.8 ),
-	MidAng = Angle( 0, 0, -6 ),
+	MidPos = Vector( -0.15, 0, 0.2 ),
+	MidAng = Angle( 0.5, 1.5, 1.5 ),
 	ViewModelFOV = 65,
 	Magnification = 1.2,
 }
@@ -106,8 +106,8 @@ SWEP.Dispersion_Move		= 0.8
 SWEP.Dispersion_Crouch		= 0.75
 SWEP.Dispersion_Sights		= 0
 
-SWEP.SightTime				= 0.35
-SWEP.SprintTime				= 0.35
+SWEP.SightTime				= 0.28
+SWEP.SprintTime				= 0.28
 
 --
 -- Recoil
@@ -138,25 +138,25 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
-		Time = 0.4,
-		ReloadingTime = 0.3,
+		Time = 0.6,
+		ReloadingTime = 0.35,
 		StopSightTime = 0.1,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
-		Time = 0.4,
-		ReloadingTime = 0.3,
+		Time = 0.6,
+		ReloadingTime = 0.35,
 		StopSightTime = 0.1,
 	},
 	["holster"]	= {
 		Source = "holster",
-		Time = 0.3,
-		HolsterTime = 0.15,
+		Time = 0.6,
+		HolsterTime = 0.25,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
-		Time = 0.3,
-		HolsterTime = 0.15,
+		Time = 0.6,
+		HolsterTime = 0.25,
 	},
 	["fire"]	= {
 		Source = "fire",

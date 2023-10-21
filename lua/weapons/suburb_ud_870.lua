@@ -32,7 +32,7 @@ SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 1"
 SWEP.DefaultSkin = 1
 
 SWEP.ActivePose = {
-	Pos = Vector( -0.6, -4, 0.25 ),
+	Pos = Vector( -0.6, -4, 0.5 ),
 	Ang = Angle( 0, 0, 0 )
 }
 SWEP.CrouchPose = {
@@ -44,8 +44,8 @@ SWEP.CrouchPose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -3.677, -6, 2.2 ),
 	Ang = Angle( -0.65, -0.0, 2.0 ),
-	MidPos = Vector( -0.75, 1, 0 ),
-	MidAng = Angle( -0.5, 0, -6 ),
+	MidPos = Vector( -0.6, 0.5, 0.5 ),
+	MidAng = Angle( 0.75, 1.5, 3 ),
 	ViewModelFOV = 65,
 	Magnification = 1.1,
 }
@@ -104,7 +104,7 @@ SWEP.CameraCorrection					= Angle( 0, -90, -90 )
 -- Functionality
 --
 SWEP.Primary.Ammo			= "buckshot"
-SWEP.Primary.ClipSize		= 6
+SWEP.Primary.ClipSize		= 2
 SWEP.ChamberSize			= 1
 SWEP.Delay					= ( 60 / 120 )
 
@@ -126,8 +126,8 @@ SWEP.Dispersion_Move		= 2.4
 SWEP.Dispersion_Crouch		= 0.75
 SWEP.Dispersion_Sights		= 0
 
-SWEP.SightTime				= 0.4
-SWEP.SprintTime				= 0.4
+SWEP.SightTime				= 0.35
+SWEP.SprintTime				= 0.33
 
 --
 -- Recoil
@@ -173,61 +173,62 @@ SWEP.Animations				= {
 	},
 	["draw"]	= {
 		Source = "draw",
-		ReloadingTime = 0.3,
-		StopSightTime = 0.1,
+		ReloadingTime = 0.4,
+		StopSightTime = 0.3,
 	},
 	["draw_empty"]	= {
 		Source = "draw_empty",
-		ReloadingTime = 0.3,
-		StopSightTime = 0.1,
+		ReloadingTime = 0.4,
+		StopSightTime = 0.3,
 	},
 	["holster"]	= {
 		Source = "holster",
-		Time = 0.4,
-		HolsterTime = 0.2,
+		Time = 0.6,
+		HolsterTime = 0.3,
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
-		Time = 0.4,
-		HolsterTime = 0.2,
+		Time = 0.6,
+		HolsterTime = 0.3,
 	},
 	["cycle"]	= {
 		Source = "cycle",
-		Time = 0.8,
+		Time = 0.85,
 		Events = {
 			{s = Ssnd.rottle, t = 0},
 			{s = p1 .. "rack_1.ogg",  t = 0},
 			{s = p1 .. "eject.ogg",  t = 0.1},
-			{s = p1 .. "rack_2.ogg",  t = 0.11},
+			{s = p1 .. "rack_2.ogg",  t = 0.16},
 		},
 		ShellEjectTime = 0.1,
 		CycleDelayTime = 0.3,
 	},
 	["fire"]	= {
 		Source = "fire",
-		CycleDelayTime = 0.3,
+		Time = 0.5,
+		CycleDelayTime = 0.4,
 	},
 	["sgreload_start"] = {
 		Source = "sgreload_start",
-		Time = 0.5,
+		Time = 0.6,
 		Events = {
 		},
-		ShotgunReloadingTime = 0.25,
+		ShotgunReloadingTime = 0.4,
 	},
 	["sgreload_insert"] = {
 		Source = "sgreload_insert",
-		Time = 0.6,
+		Time = 0.7,
 		Events = {
 			{s = Ssnd.rottle, t = 0},
-			{s = shellin, t = 0.05},
+			{s = shellin, t = 0.09},
 		},
-		LoadIn = 0.2,
+		LoadIn = 0.3,
 		AmountToLoad = 1,
-		ShotgunReloadingTime = 0.5,
+		ShotgunReloadingTime = 0.6,
 	},
 	["sgreload_finish"] = {
 		Source = "sgreload_finish",
-		Time = 0.5,
+		Time = 0.7,
 		Events = {
 			{s = Ssnd.rottle, t = 0},
 			{s = p0 .. "shoulder.ogg",  t = 0.27},
@@ -236,12 +237,12 @@ SWEP.Animations				= {
 	},
 	["sgreload_finish_empty"] = {
 		Source = "sgreload_finish_empty",
-		Time = 1.1,
+		Time = 1.2,
 		Events = {
 			{s = Ssnd.rottle, t = 0.5},
 			{s = p1 .. "rack_1.ogg",  t = 0.3},
 			{s = p1 .. "eject.ogg",  t = 0.4},
-			{s = p1 .. "rack_2.ogg",  t = 0.425},
+			{s = p1 .. "rack_2.ogg",  t = 0.47},
 			{s = p0 .. "shoulder.ogg",  t = 0.8},
 		},
 		ReloadingTime = 0,

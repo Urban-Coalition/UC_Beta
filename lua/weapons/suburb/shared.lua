@@ -519,9 +519,9 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local si = self:GetAim()
 		local ss_si = math.ease.InOutSine( si )
 
-
+		local ipose = self:GetStat("IronsightPose")
 		local wpos, wang = Vector(), Angle()
-		local wpos_m, wang_m = Vector(), Angle()
+		local wpos_m, wang_m = ipose.MidPos, ipose.MidAng
 
 		if self.SightList and self.SightList[self.SightTransition_From] and self.SightList[self.SightTransition_To] then
 			local si_prev = self.SightList[self.SightTransition_From].SightData
@@ -533,19 +533,13 @@ function SWEP:GetViewModelPosition(pos, ang)
 			wpos:Set( LerpVector( si_tra, si_prev.Pos, si_next.Pos ) )
 			wang:Set( LerpAngle( si_tra, si_prev.Ang, si_next.Ang ) )
 
-			-- TODO: Clean this the hell up!
+			-- TODO: Clean this the hell up!! This should be different!!
 			local blah = math.sin( si_tra * math.pi )
 			blah = math.Round( blah, 10 )
-			wpos:Add( Vector( 0, 2, 0 ) * blah )
-
-			wpos_m:Set( LerpVector( si_tra, si_prev.MidPos, si_next.MidPos ) )
-			wang_m:Set( LerpAngle( si_tra, si_prev.MidAng, si_next.MidAng ) )
+			wpos.y = wpos.y + ( 2 * blah )
 		else
-			local ipose = self:GetStat("IronsightPose")
-			wpos, wang, wpos_m, wang_m = ipose.Pos, ipose.Ang, ipose.MidPos, ipose.MidAng
+			wpos, wang = ipose.Pos, ipose.Ang
 		end
-
-		--si_tra = math.ease.InOutSine( si_tra )
 
 		b_pos:Add( wpos )
 		b_ang:Add( wang )
@@ -904,11 +898,11 @@ end
 function SWEP:PreDrawViewModel( vm, weapon, ply )
 	self:UseBGTable( vm )
 
-	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
+	local device = self:GetReloadingAimAlt()
 	
 	local ipose = self:GetCurrentSight()
 	local silly -- = Lerp( math.abs( math.sin( CurTime() * math.pi * 0.5 ) ), 10, 90 )
-	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, silly or ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
+	cam.Start3D(EyePos(), EyeAngles(), Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InSine( self:GetAimAlt() * device ), self.ViewModelFOV, silly or ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 1000 )
 	cam.IgnoreZ(true)
 
 	for index, data in pairs( self.Attachments ) do
@@ -977,11 +971,11 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 									render.ClearDepth()
 									if self:GetAim() != 1 then
 										local mag = self:GetAim()
-										render.BlurRenderTarget( rtmat, 4 * mag, 4 * mag, 2 )
+										-- render.BlurRenderTarget( rtmat, 4 * mag, 4 * mag, 2 )
 									end
 									
-									surface.SetDrawColor( 0, 0, 0, 255*math.Remap(self:GetAim(), 1, 0.5, 0, 1) )
-									surface.DrawRect( 0, 0, 512, 512 )
+									-- surface.SetDrawColor( 0, 0, 0, 255*math.Remap(self:GetAim(), 1, 0.5, 0, 1) )
+									-- surface.DrawRect( 0, 0, 512, 512 )
 								cam.End2D()
 								render.PopRenderTarget()
 							end
@@ -1054,9 +1048,9 @@ function SWEP:PostDrawViewModel( vm, weapon, ply )
 	cam.End3D()
 
 	if self:GetAim() > 0 then
-	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
+	local device = self:GetReloadingAimAlt()
 	local ipose = self:GetCurrentSight()
-	cam.Start3D(nil, nil, Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InQuad( self:GetAim() * device ), self.ViewModelFOV, silly or ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 10000 )
+	cam.Start3D(nil, nil, Suburb.FOVix( GetConVar("uc_dev_benchgun"):GetBool() and LocalPlayer():GetFOV() or Lerp( math.ease.InSine( self:GetAimAlt() * device ), self.ViewModelFOV, silly or ipose.ViewModelFOV ) ), nil, nil, nil, nil, 1, 10000 )
 	cam.IgnoreZ(false)
 	for index, data in pairs( self.Attachments ) do
 		if data._Model then
@@ -1158,7 +1152,11 @@ function SWEP:PostDrawViewModel( vm, weapon, ply )
 end
 
 function SWEP:GetAimAlt()
-	return math.Clamp( math.TimeFraction( 0.5, 1, self:GetAim() ), 0, 1 )
+	return math.ease.InSine( math.ease.OutCirc( math.Clamp( math.TimeFraction( 0.33, 0.95, self:GetAim() ), 0, 1 ) ) )
+end
+
+function SWEP:GetReloadingAimAlt()
+	return (1-math.ease.InOutSine(self.superaimedin or 0)*0.5)
 end
 
 local ccvar_disablecache
@@ -1261,7 +1259,7 @@ function SWEP:GetCurrentSight()
 end
 
 function SWEP:TranslateFOV(fov)
-	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
+	local device = self:GetReloadingAimAlt()
 	local mag = 1.1
 	local SIGHT = self:GetCurrentSight()
 	if SIGHT and SIGHT.Magnification then
@@ -1271,11 +1269,11 @@ function SWEP:TranslateFOV(fov)
 			mag = mag*Lerp( SIGHT.SightZoom, SIGHT.RTScopeMagnification, SIGHT.RTScopeMagnificationMax or SIGHT.RTScopeMagnification )
 		end
 	end
-	return Lerp( self:GetAim(), fov, 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
+	return Lerp( self:GetAimAlt(), fov, 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
 end
 
 function SWEP:AdjustMouseSensitivity()
-	local device = (1-math.ease.InOutQuad(self.superaimedin or 0)*0.5)
+	local device = self:GetReloadingAimAlt()
 	local mag = 1.1
 	local SIGHT = self:GetCurrentSight()
 	if SIGHT and SIGHT.Magnification then
@@ -1285,8 +1283,8 @@ function SWEP:AdjustMouseSensitivity()
 		end
 	end
 	local dfov = GetConVar("fov_desired"):GetInt()
-	local normalfov = Lerp( self:GetAim(), dfov, 90 ) / dfov
-	return (normalfov or 1) / Lerp( math.ease.InQuad( self:GetAim() * device ), 1, mag )
+	local normalfov = Lerp( self:GetAimAlt(), dfov, 90 ) / dfov
+	return (normalfov or 1) / Lerp( math.ease.InSine( self:GetAimAlt() * device ), 1, mag )
 end
 
 function SWEP:CalcView( ply, pos, ang, fov )

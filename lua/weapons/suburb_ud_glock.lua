@@ -37,10 +37,10 @@ SWEP.CrouchPose = {
 	Ang = Angle(0, 0, -20),
 }
 SWEP.IronsightPose = {
-	Pos = Vector( -1.73, -3, 2.35 ),
+	Pos = Vector( -1.73, -1, 2.35 ),
 	Ang = Angle( 0.7, 0, 0 ),
-	MidPos = Vector( -0.5, -1, -0.3 ),
-	MidAng = Angle( 0, 0, 0 ),
+	MidPos = Vector( 0.25, -0.5, -0.15 ),
+	MidAng = Angle( 2, 2, 4 ),
 	ViewModelFOV = 65,
 	Magnification = 1.05,
 }
@@ -118,8 +118,8 @@ SWEP.Dispersion_Move		= 1.5
 SWEP.Dispersion_Crouch		= 0.5
 SWEP.Dispersion_Sights		= 0
 
-SWEP.SightTime				= 0.3
-SWEP.SprintTime				= 0.3
+SWEP.SightTime				= 0.22
+SWEP.SprintTime				= 0.22
 
 --
 -- Recoil
