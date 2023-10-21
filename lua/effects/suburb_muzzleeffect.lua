@@ -4,7 +4,7 @@ function EFFECT:Init(data)
 
 	if !IsValid(wpn) then return end
 
-	local muzzle = wpn.MuzzleEffect
+	local muzzle = wpn:GetStat("MuzzleEffect")
 
 	local att = data:GetAttachment() or 1
 
