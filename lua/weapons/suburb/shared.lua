@@ -527,15 +527,16 @@ function SWEP:GetViewModelPosition(pos, ang)
 			local si_prev = self.SightList[self.SightTransition_From].SightData
 			local si_next = self.SightList[self.SightTransition_To].SightData
 
-			local si_tra = math.TimeFraction( (self.SightTransition or 0), (self.SightTransition or 0) + 0.5, CurTime() )
+			local si_tra = math.TimeFraction( (self.SightTransition or 0), (self.SightTransition or 0) + 0.2, CurTime() )
 			si_tra = math.Clamp( si_tra, 0, 1 )
 
 			wpos:Set( LerpVector( si_tra, si_prev.Pos, si_next.Pos ) )
 			wang:Set( LerpAngle( si_tra, si_prev.Ang, si_next.Ang ) )
 
+			-- TODO: Clean this the hell up!
 			local blah = math.sin( si_tra * math.pi )
 			blah = math.Round( blah, 10 )
-			wpos:Add( Vector( 0, 5, 0 ) * blah )
+			wpos:Add( Vector( 0, 2, 0 ) * blah )
 
 			wpos_m:Set( LerpVector( si_tra, si_prev.MidPos, si_next.MidPos ) )
 			wang_m:Set( LerpAngle( si_tra, si_prev.MidAng, si_next.MidAng ) )

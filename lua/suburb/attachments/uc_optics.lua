@@ -151,6 +151,14 @@ att.Sights = {
 		ViewModelFOV = 30,
 		Magnification = 1.3,
 	},
+	{
+		Pos = Vector( 0, -8, 2.38 ),
+		Ang = Angle( -0.9, 0, 0 ),
+		MidPos = Vector( -1.15, 2, -0.4 ), -- See if I can inherit this from the weapon.
+		MidAng = Angle( -0.5, 0, -6 ),
+		ViewModelFOV = 60,
+		Magnification = 1.3,
+	},
 }
 
 att.Add_SightTime = (2/60)
@@ -183,6 +191,14 @@ att.Sights = {
 		MidPos = Vector( -1.15, 2, -0.4 ),
 		MidAng = Angle( -0.5, 0, -6 ),
 		ViewModelFOV = 30,
+		Magnification = 1.3,
+	},
+	{
+		Pos = Vector( 0, -8, 2.63 ),
+		Ang = Angle( 0, 0, 0 ),
+		MidPos = Vector( -1.15, 2, -0.4 ),
+		MidAng = Angle( -0.5, 0, -6 ),
+		ViewModelFOV = 60,
 		Magnification = 1.3,
 	},
 }
@@ -222,9 +238,18 @@ att.Sights = {
 	},
 	{
 		Reflex = true,
-		ReflexSize = 64, -- at 720p
-		ReflexSizeFlare = 32, -- at 720p
-		ReflexOverlay = Material("hud/reticles/uc_reddot.png", "ignorez mips smooth"),
+		ReflexOverlay = {
+			{
+				ReflexSize = 64, -- at 720p
+				ReflexOverlay = Material("hud/reticles/uc_reddot.png", "ignorez mips smooth"),
+				ReflexColor = "colorable"
+			},
+			{
+				ReflexSize = 32, -- at 720p
+				ReflexOverlay = Material("hud/reticles/uc_reddot.png", "ignorez mips smooth"),
+				ReflexColor = color_white
+			}
+		},
 		StencilTest = "1101",
 
 		Pos = Vector( 0, -12, 2.887 ),

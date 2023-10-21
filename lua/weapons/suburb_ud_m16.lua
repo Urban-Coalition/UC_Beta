@@ -92,7 +92,7 @@ SWEP.Sound_Blast_Supp = {
 SWEP.Sound_TailEXT_Supp = UC.sounds.supptailext
 SWEP.Sound_TailINT_Supp = UC.sounds.supptailint
 
-SWEP.MuzzleEffect						= "muzzleflash_1"
+SWEP.MuzzleEffect						= "muzzleflash_5"
 SWEP.QCA_Muzzle							= 1
 
 SWEP.ShellModel							= "models/weapons/arccw/uc_shells/556x45.mdl"
