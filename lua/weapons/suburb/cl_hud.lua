@@ -409,13 +409,29 @@ function SWEP:DrawHUD()
 		surface.DrawText("CycleDelayTime")
 		surface.DrawRect( xa, (64+(48*7)), ( self:GetCycleDelayTime() - CurTime() ) * 100, 8 )
 
-		for i, v in pairs(self.Attachments) do
-			if i == "BaseClass" then continue end
-			local x, y = ScrW()*0.8, (64+(48*(i-1)))
-			surface.SetTextPos( x, y )
-			surface.DrawText( i .. ": " .. v.Name )
-			surface.SetTextPos( x + 16, y + 16 )
-			surface.DrawText( "- " .. (v.Installed or "none") )
+		do
+			if self.CurrAnim and self.Animations[self.CurrAnim] and self.Animations[self.CurrAnim].Handmods_L then
+				local horse = self.Animations[self.CurrAnim].Handmods_L
+				local x1, x2, y = 128+0, 128+1024, 900*.6
+				local y1, y2 = y-8, y+8
+				surface.SetDrawColor( color_white )
+				surface.DrawLine( x1, y, x2, y )
+
+				for k, v in ipairs( horse ) do
+					local pos = Lerp( v, x1, x2 )
+					surface.DrawLine( pos, y1, pos, y2 )
+				end
+				do
+					local per = math.TimeFraction( self.CurrAnimStart, self.CurrAnimEnd, CurTime() )
+					local pos = Lerp( per, x1, x2 )
+
+					local tex = math.Round( per*100 ) .. "%"
+					surface.SetTextPos( pos-surface.GetTextSize(tex)/2, y2 )
+					surface.DrawText( tex )
+
+					surface.DrawLine( pos, y1, pos, y2 )
+				end
+			end
 		end
 	end
 

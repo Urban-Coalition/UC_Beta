@@ -184,6 +184,12 @@ SWEP.Animations				= {
 		Source = "holster",
 		Time = 0.6,
 		HolsterTime = 0.3,
+		Handmods_L = {
+			0.0,
+			0.1,
+			0.15,
+			1e+10
+		},
 	},
 	["holster_empty"]	= {
 		Source = "holster_empty",
@@ -227,6 +233,12 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
+		Handmods_L = {
+			0.0,
+			0.05,
+			0.70,
+			0.75
+		},
 		ReloadingTime = 2.1,
 		LoadIn = 1.5,
 	},
@@ -239,8 +251,8 @@ SWEP.Animations				= {
 			{ t = 0.95,			s = p1.."struggle.ogg" },
 			{ t = 0.95,			s = p1.."magin.ogg" },
 			{ t = 1.7,			s = p1.."boltdrop.ogg" },
-			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
-			{ t = 2.3,			s = p0.."shoulder.ogg" },
+			{ t = 2.1,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.2,			s = p0.."shoulder.ogg" },
 
 			{ t = 0.0,			s = Ssnd.rottle },
 			{ t = 0.25,			s = Ssnd.rattle },
@@ -248,6 +260,12 @@ SWEP.Animations				= {
 			{ t = 1.1,			s = Ssnd.rattle },
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		Handmods_L = {
+			0.0,
+			0.02,
+			0.70,
+			0.75
 		},
 		ReloadingTime = 2.5,
 		LoadIn = 2.0,
@@ -271,6 +289,12 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
+		Handmods_L = {
+			0.0,
+			0.05,
+			0.70,
+			0.75
+		},
 		ReloadingTime = 2.1,
 		LoadIn = 1.5,
 	},
@@ -292,6 +316,12 @@ SWEP.Animations				= {
 			{ t = 1.1,			s = Ssnd.rattle },
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		Handmods_L = {
+			0.0,
+			0.02,
+			0.70,
+			0.75
 		},
 		ReloadingTime = 2.5,
 		LoadIn = 2.0,
@@ -315,6 +345,12 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
+		Handmods_L = {
+			0.0,
+			0.05,
+			0.75,
+			0.80
+		},
 		ReloadingTime = 2.1,
 		LoadIn = 1.5,
 	},
@@ -337,6 +373,12 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 		},
+		Handmods_L = {
+			0.0,
+			0.02,
+			0.75,
+			0.80
+		},
 		ReloadingTime = 2.5,
 		LoadIn = 2.0,
 	},
@@ -348,9 +390,9 @@ SWEP.Animations				= {
 			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
 			{ t = 0.2,			s = p1.."magout_empty.ogg" },
 			{ t = 1.0,			s = p1.."struggle.ogg" },
-			{ t = 0.95,			s = p1.."magin.ogg" },
-			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
-			{ t = 1.8,			s = p0.."shoulder.ogg" },
+			{ t = 1.1,			s = p1.."magin.ogg" },
+			{ t = 1.8,			s = p0.."grab-polymer.ogg" },
+			{ t = 1.9,			s = p0.."shoulder.ogg" },
 
 			{ t = 0.0,			s = Ssnd.rottle },
 			{ t = 0.25,			s = Ssnd.rattle },
@@ -358,6 +400,12 @@ SWEP.Animations				= {
 			{ t = 1.1,			s = Ssnd.rattle },
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		Handmods_L = {
+			0.0,
+			0.05,
+			0.70,
+			0.80
 		},
 		ReloadingTime = 2.1,
 		LoadIn = 1.5,
@@ -368,9 +416,9 @@ SWEP.Animations				= {
 		Events = {
 			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
 			{ t = 0.2,			s = p1.."magout_empty.ogg" },
-			{ t = 0.95,			s = p1.."struggle.ogg" },
-			{ t = 0.95,			s = p1.."magin.ogg" },
-			{ t = 1.7,			s = p1.."boltdrop.ogg" },
+			{ t = 1.0,			s = p1.."struggle.ogg" },
+			{ t = 1.1,			s = p1.."magin.ogg" },
+			{ t = 1.8,			s = p1.."boltdrop.ogg" },
 			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
 			{ t = 2.3,			s = p0.."shoulder.ogg" },
 
@@ -380,6 +428,12 @@ SWEP.Animations				= {
 			{ t = 1.1,			s = Ssnd.rattle },
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
+		},
+		Handmods_L = {
+			0.0,
+			0.02,
+			0.72,
+			0.78
 		},
 		ReloadingTime = 2.5,
 		LoadIn = 2.0,
@@ -403,6 +457,12 @@ SWEP.Animations				= {
 			{ t = 1.1,			s = Ssnd.rattle },
 			{ t = 1.79,			s = Ssnd.rottle },
 			{ t = 2.1,			s = Ssnd.rattle },
+		},
+		Handmods_L = {
+			0.0,
+			0.05,
+			0.70,
+			0.75
 		},
 		ReloadingTime = 2.2,
 		LoadIn = 1.7,
@@ -428,6 +488,12 @@ SWEP.Animations				= {
 			{ t = 1.39,			s = Ssnd.rottle },
 			{ t = 1.9,			s = Ssnd.rattle },
 			{ t = 2.1,			s = Ssnd.rattle },
+		},
+		Handmods_L = {
+			0.0,
+			0.02,
+			0.70,
+			0.75
 		},
 		ReloadingTime = 2.7,
 		LoadIn = 2.3,

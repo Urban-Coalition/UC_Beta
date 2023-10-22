@@ -815,6 +815,12 @@ function SWEP:SendAnim( act, hold, imult )
 	end
 	self:SetCurrentAnim(act)
 
+	if CLIENT then
+		self.CurrAnim = act
+		self.CurrAnimStart = CurTime()
+		self.CurrAnimEnd = CurTime() + seqdur
+	end
+
 	return seqdur
 end
 
@@ -993,19 +999,19 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 					md:DrawModel()
 
 					-- Handmod
-					if index == 12 and !(CurTime() < self:GetReloadingTime()) then
+					if index == 12 then
 						for _, bone in pairs(Suburb.Handmods_L) do
 							local bone_viewmodel = vm:LookupBone(bone)
 							local bone_handmod = md:LookupBone(bone)
 
-							if !bone_viewmodel then SDeP(bone, " viewmodel bone missing") continue end
-							if !bone_handmod then SDeP(bone, " handmod bone missing") continue end
+							if !bone_viewmodel then continue end
+							if !bone_handmod then continue end
 
 							local matrix_viewmodel = vm:GetBoneMatrix(bone_viewmodel)
 							local matrix_handmod = md:GetBoneMatrix(bone_handmod)
 					
-							if !matrix_viewmodel then SDeP(bone, " viewmodel matrix missing") continue end
-							if !matrix_handmod then SDeP(bone, " handmod matrix missing") continue end
+							if !matrix_viewmodel then continue end
+							if !matrix_handmod then continue end
 
 							local pos_viewmodel = matrix_viewmodel:GetTranslation()
 							local ang_viewmodel = matrix_viewmodel:GetAngles()
@@ -1013,9 +1019,16 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 							local ang_handmod = matrix_handmod:GetAngles()
 
 							local newtransform = Matrix()
-					
-							newtransform:SetTranslation(LerpVector(1, pos_viewmodel, pos_handmod))
-							newtransform:SetAngles(LerpAngle(1, ang_viewmodel, ang_handmod))
+
+							local pomper = self.CurrAnim
+							if pomper and self.Animations[pomper] and self.Animations[pomper].Handmods_L then
+								local hmblend = self:HandmodCalc( self.Animations[pomper].Handmods_L, math.TimeFraction( self.CurrAnimStart, self.CurrAnimEnd, CurTime() ), false )
+								newtransform:SetTranslation(LerpVector(hmblend, pos_viewmodel, pos_handmod))
+								newtransform:SetAngles(LerpAngle(hmblend, ang_viewmodel, ang_handmod))
+							else	
+								newtransform:SetTranslation(pos_handmod)
+								newtransform:SetAngles(ang_handmod)
+							end
 
 							vm:SetBoneMatrix(bone_viewmodel, newtransform)
 						end
@@ -1311,6 +1324,37 @@ function SWEP:CalcView( ply, pos, ang, fov )
 		ang:Add( addy )
 	end
 	return pos, ang, fov
+end
+
+-- Handmod calculator
+function SWEP:HandmodCalc( inp, per, r )
+	local val = 1
+
+	local blend_out		= math.TimeFraction( inp[1], inp[2], per )
+	local stationary	= math.TimeFraction( inp[2], inp[3], per )
+	local blend_in		= math.TimeFraction( inp[3], inp[4], per )
+
+	if blend_out > 1 or blend_out < 0 then
+		blend_out = 0
+	end
+
+	if stationary > 1 or stationary < 0 then
+		stationary = 0
+	else
+		stationary = 1
+	end
+
+	if blend_in > 1 or blend_in < 0 then
+		blend_in = 0
+	else
+		blend_in = 1-blend_in
+	end
+
+	val = val - blend_out
+	val = val - stationary
+	val = val - blend_in
+
+	return val
 end
 
 -- Worldmodel
