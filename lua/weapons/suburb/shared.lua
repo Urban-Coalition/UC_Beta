@@ -857,7 +857,7 @@ if CLIENT then
 		local wpn = p:GetActiveWeapon()
 		local diff = ((4/3)/(ScrW()/ScrH()))
 		ccvar_cheapscope = ccvar_cheapscope or GetConVar("uc_cl_cheapscopes")
-		if IsValid(wpn) and wpn.Suburb and !ccvar_cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then -- and w:GetUserSight() then
+		if IsValid(wpn) and wpn.Suburb and !ccvar_cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().OpticRT then -- and w:GetUserSight() then
 			-- print("Suburb: Dual-render scope is being done.")
 			render.ClearRenderTarget( rtmat, color_white )
 			render.PushRenderTarget(rtmat)
@@ -876,7 +876,7 @@ if CLIENT then
 		local p = LocalPlayer()
 		local wpn = p:GetActiveWeapon()
 		ccvar_cheapscope = ccvar_cheapscope or GetConVar("uc_cl_cheapscopes")
-		if IsValid(wpn) and wpn.Suburb and ccvar_cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().RTScope then
+		if IsValid(wpn) and wpn.Suburb and ccvar_cheapscope:GetBool() and wpn:GetAim() != 0 and wpn:GetCurrentSight().OpticRT then
 			-- print("Suburb: Cheap scope is being done.")
 			local w, h = ScrW(), ScrH()
 			local rat = w/h
@@ -957,21 +957,21 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 					md:EnableMatrix( "RenderMultiply", may )
 
 					for i, SIGHT in ipairs( self.SightList ) do
-						md:SetSubMaterial( SIGHT.SightData.RTScopeMat )
+						md:SetSubMaterial( SIGHT.SightData.OpticRTMaterialIndex )
 						if index != SIGHT.AttIndex then continue end
 						if i != self:GetActiveSight() then continue end
 						local SIGHT = SIGHT.SightData
-						if SIGHT.RTScope then
+						if SIGHT.OpticRT then
 							rtsurf:SetTexture("$basetexture", rtmat)
 
-							local a1, a2 = md:GetAttachment( SIGHT.RTScopeAtt_Center ), md:GetAttachment( SIGHT.RTScopeAtt_Bottom )
+							local a1, a2 = md:GetAttachment( SIGHT.OpticAtt_Center ), md:GetAttachment( SIGHT.OpticAtt_Bottom )
 							local y1, y2, h = a1.Pos:ToScreen(), a2.Pos:ToScreen(), ScrH()/2
 							y1, y2 = y1.y, y2.y
 							scofov = (y2-y1)/h
-							scomag = Lerp( SIGHT.SightZoom or 0, SIGHT.RTScopeMagnification, SIGHT.RTScopeMagnificationMax or SIGHT.RTScopeMagnification )
+							scomag = Lerp( SIGHT.SightZoom or 0, SIGHT.OpticRTMagnification, SIGHT.OpticRTMagnificationMax or SIGHT.OpticRTMagnification )
 							-- scofov = math.min( 1, scofov )
 						
-							if SIGHT.RTScopeOverlay and self:GetAim() != 0 then
+							if SIGHT.OpticRTOverlay and self:GetAim() != 0 then
 								render.PushRenderTarget( rtmat )
 								cam.Start2D()
 									render.ClearDepth()
@@ -992,7 +992,7 @@ function SWEP:PreDrawViewModel( vm, weapon, ply )
 						if index != SIGHT.AttIndex then continue end
 						if i != self:GetActiveSight() then continue end
 						if self:GetAim() != 0 then
-							md:SetSubMaterial( SIGHT.SightData.RTScopeMat, "suburb/rt" )
+							md:SetSubMaterial( SIGHT.SightData.OpticRTMaterialIndex, "suburb/rt" )
 						end
 					end
 					md:SetupBones()
@@ -1102,9 +1102,19 @@ function SWEP:PostDrawViewModel( vm, weapon, ply )
 				local p = LocalPlayer()
 				local ea = EyeAngles()
 				ea = ea - p:GetViewPunchAngles()
+				local attd = md:GetAttachment(SIGHT.OpticAtt_Center)
+				local meow = attd.Ang
+				if SIGHT.OpticAtt_Rotate then
+					meow = Angle( attd.Ang )
+					meow:RotateAroundAxis( meow:Right(), SIGHT.OpticAtt_Rotate.p )
+					meow:RotateAroundAxis( meow:Up(), SIGHT.OpticAtt_Rotate.y )
+					meow:RotateAroundAxis( meow:Forward(), SIGHT.OpticAtt_Rotate.r )
+				end
+				local meowe = meow:Forward()
+				meowe:Mul( 8192 )
 				local tr = {
-					start = EyePos(),
-					endpos = EyePos() + ea:Forward() * 8000,
+					start = attd.Pos,
+					endpos = attd.Pos + meowe,
 					filter = LocalPlayer(),
 					mask = 0,
 				}
@@ -1113,11 +1123,11 @@ function SWEP:PostDrawViewModel( vm, weapon, ply )
 
 				cam.Start2D()
 					local colorable = Color( 255, 0, 0, 255 )
-					if SIGHT.RTScope then
+					if SIGHT.OpticRT then
 						local size = ScrH() * scofov
 
 						surface.SetDrawColor( 255, 0, 0, 255 )
-						surface.SetMaterial( SIGHT.RTScopeOverlay )
+						surface.SetMaterial( SIGHT.OpticRTOverlay )
 						local x, y, w, h = tr.x - (size/2), tr.y - (size/2), size, size
 						x, y, w, h = math.ceil( x ), math.ceil( y ), math.ceil( w ), math.ceil( h )
 						surface.DrawTexturedRect( x, y, w, h )
@@ -1278,8 +1288,8 @@ function SWEP:TranslateFOV(fov)
 	if SIGHT and SIGHT.Magnification then
 		mag = SIGHT.Magnification
 		cheapscope = cheapscope or GetConVar("uc_cl_cheapscopes")
-		if SIGHT.RTScopeMagnification and CLIENT and cheapscope:GetBool() then
-			mag = mag*Lerp( SIGHT.SightZoom, SIGHT.RTScopeMagnification, SIGHT.RTScopeMagnificationMax or SIGHT.RTScopeMagnification )
+		if SIGHT.OpticRTMagnification and CLIENT and cheapscope:GetBool() then
+			mag = mag*Lerp( SIGHT.SightZoom, SIGHT.OpticRTMagnification, SIGHT.OpticRTMagnificationMax or SIGHT.OpticRTMagnification )
 		end
 	end
 	return Lerp( self:GetAimAlt(), fov, 90 ) / Lerp( math.ease.InQuad( self:GetAimAlt() * device ), 1, mag )
@@ -1291,8 +1301,8 @@ function SWEP:AdjustMouseSensitivity()
 	local SIGHT = self:GetCurrentSight()
 	if SIGHT and SIGHT.Magnification then
 		mag = SIGHT.Magnification
-		if SIGHT.RTScopeMagnification then
-			mag = mag*Lerp( SIGHT.SightZoom, SIGHT.RTScopeMagnification, SIGHT.RTScopeMagnificationMax or SIGHT.RTScopeMagnification )
+		if SIGHT.OpticRTMagnification then
+			mag = mag*Lerp( SIGHT.SightZoom, SIGHT.OpticRTMagnification, SIGHT.OpticRTMagnificationMax or SIGHT.OpticRTMagnification )
 		end
 	end
 	local dfov = GetConVar("fov_desired"):GetInt()

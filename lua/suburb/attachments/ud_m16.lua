@@ -268,7 +268,7 @@ att.Name = "M16A3 Automatic Lower Receiver"
 att.ShortName = "Automatic Lower"
 att.Slot = "ud_m16_lr"
 
-att.Mult_Delay = 1.15
+att.Mult_Delay = 1.2
 att.Override_Firemodes = {
 	{
 		Mode = math.huge,

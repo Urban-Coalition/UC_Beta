@@ -18,6 +18,13 @@ concommand.Add( "uc_dev_reloadatts", function()
 end)
 
 -- Debug & developer
+
+Suburb.ConVars = {}
+
+local function qcm( name, def, min, max, flags )
+	-- Suburb.ConVars[ "uc_" .. name ]
+end
+
 CreateConVar("uc_dev_aimcorrect", 0, FCVAR_REPLICATED, "Sway the gun around to get SWEP.SwayCorrection correct yourself")
 CreateConVar("uc_dev_debug", 0, FCVAR_REPLICATED, "Spit debug information")
 CreateConVar("uc_dev_benchgun", 0, FCVAR_REPLICATED, "Place gun at world origin")
