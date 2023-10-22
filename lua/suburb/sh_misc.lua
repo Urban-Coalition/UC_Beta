@@ -82,35 +82,35 @@ if CLIENT then
 suburb_garbagelist = suburb_garbagelist or {}
 function Suburb_GC( item )
 	table.insert( suburb_garbagelist, item )
-	print( "Added #" .. #suburb_garbagelist .. (item.Garbage_Name and (", " .. item.Garbage_Name) or "") .. " to the garbage list." )
+	SDeP( "Added #" .. #suburb_garbagelist .. (item.Garbage_Name and (", " .. item.Garbage_Name) or "") .. " to the garbage list." )
 end
 local function collect()
 	local ti = string.FormattedTime( CurTime() )
-	print( string.format( "[%02i:%02i:%02i] ", ti.h, ti.m, ti.s ) .. "Suburb is garbage collecting... " )
+	SDeP( string.format( "[%02i:%02i:%02i] ", ti.h, ti.m, ti.s ) .. "Suburb is garbage collecting... " )
 	local destroyed = 0
 	for index, item in pairs( suburb_garbagelist ) do
 		if !IsValid( item ) then
-			print( "#" .. index .. ": This item isn't valid, removing from list." )
+			SDeP( "#" .. index .. ": This item isn't valid, removing from list." )
 			suburb_garbagelist[index] = nil
 			continue
 		end
-		print( "#" .. index .. (item.Garbage_Name and (", " .. item.Garbage_Name) or "") )
+		SDeP( "#" .. index .. (item.Garbage_Name and (", " .. item.Garbage_Name) or "") )
 		if item.Garbage_Owner and !IsValid( item.Garbage_Owner ) then
-			print( "\tInvalid owner." )
+			SDeP( "\tInvalid owner." )
 		elseif item.Garbage_PlayerOwner and !IsValid( item.Garbage_PlayerOwner ) then
-			print( "\tInvalid player owner." )
+			SDeP( "\tInvalid player owner." )
 		elseif item.Garbage_PlayerOwner and item.Garbage_Owner:GetOwner() != item.Garbage_PlayerOwner then
-			print( "\tOwner doesn't own this anymore." )
+			SDeP( "\tOwner doesn't own this anymore." )
 		else
-			print( "\tThis item is safe." )
+			SDeP( "\tThis item is safe." )
 			continue
 		end
-		print( "\tRemoved!" )
+		SDeP( "\tRemoved!" )
 		suburb_garbagelist[index] = nil
 		item:Remove()
 		destroyed = destroyed + 1
 	end
-	print( "Suburb found " .. destroyed .. " objects to destroy." )
+	SDeP( "Suburb found " .. destroyed .. " objects to destroy." )
 end
 
 if timer.Exists( "Suburb_GarbageCollector" ) then timer.Remove( "Suburb_GarbageCollector" ) end
@@ -133,9 +133,6 @@ local sndtabs = {
 }
 
 local function DataCheck( w )
-
-
-
 	if IsValid(w) and w.Suburb then
 		print( "Suburb DataCheck: Testing " .. tostring(w) .. "..." )
 		local bag = {}

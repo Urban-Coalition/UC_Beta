@@ -18,13 +18,13 @@ end
 
 local attpath = "suburb/attachments/"
 function Suburb_LoadAtts()
-	print( "Suburb is generating attachments..." )
+	SDeP( "Suburb is generating attachments..." )
 	local r_files, r_dirs = file.Find( attpath .. "*", "LUA" )
 	for _, item in ipairs( r_files ) do
 		AddCSLuaFile( attpath .. item )
 		include( attpath .. item )
 	end
-	print( "Suburb finished generating attachments." )
+	SDeP( "Suburb finished generating attachments." )
 end
 
 function Suburb_GenAtt( tabl, name )
@@ -32,7 +32,7 @@ function Suburb_GenAtt( tabl, name )
 	assert( isstring(name), "Name given is not a string!" )
 	assert( tabl, "Table is nil!" )
 	assert( istable(tabl), "Table given is not a table!" )
-	print( " - " .. name .. " -- " .. tabl.Name or "[no nice name]" )
+	SDeP( " - " .. name .. " -- " .. tabl.Name or "[no nice name]" )
 
 	-- Occassionally problematic.
 	-- if Suburb.AttTable[name] then
