@@ -13,7 +13,7 @@ att.Model = "models/weapons/arccw/atts/uc_kacvfg1.mdl"
 att.ModelOffset0 = Vector( 0, 1, 0 )
 att.ModelOffset1 = Vector( 0, -1, 0 )
 
-att.Add_SightTime = (3/60)
+att.Add_SightTime = (2/60)
 Suburb_GenAtt(att, "uc_ub_kacvfg")
 
 local att = {}
@@ -50,7 +50,7 @@ att.Slot = "underbarrel"
 att.Model = "models/weapons/arccw/atts/uc_ubgl_m203.mdl"
 att.ModelOffset = Vector( 0, 0.7, 1.3 )
 
-att.Add_SightTime = (3/60)
+att.Add_SightTime = (2/60)
 Suburb_GenAtt(att, "uc_ub_w_m203")
 
 local att = {}
@@ -63,5 +63,5 @@ att.Slot = "underbarrel"
 att.Model = "models/weapons/arccw/atts/uc_ubgl_masterkey.mdl"
 att.ModelOffset = Vector( 0, 1.6, -0.4 )
 
-att.Add_SightTime = (3/60)
+att.Add_SightTime = (2/60)
 Suburb_GenAtt(att, "uc_ub_w_masterkey")
