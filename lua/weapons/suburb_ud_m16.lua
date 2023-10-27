@@ -23,7 +23,7 @@ SWEP.DefaultBodygroups = "0 0 0 0 0 0 0 0 0 0 0 1"
 SWEP.DefaultSkin = 0
 
 SWEP.ActivePose = {
-	Pos = Vector( 0.5, -2, 0.75 ),
+	Pos = Vector( 0.5, -2, 0.5 ),
 	Ang = Angle( 0, 0, -3 )
 }
 SWEP.CrouchPose = {
@@ -35,8 +35,8 @@ SWEP.CrouchPose = {
 SWEP.IronsightPose = {
 	Pos = Vector( -2.81, -6, 1.32 ),
 	Ang = Angle( 0, 0, 0 ),
-	MidPos = Vector( -1.2, -1, -0.0 ),
-	MidAng = Angle( -1.7, -1.5, 2 ),
+	MidPos = Vector( -0.9, -1, -0.3 ),
+	MidAng = Angle( -1, -0, 2 ),
 	ViewModelFOV = 65,
 	Magnification = 1.3,
 }
@@ -335,8 +335,8 @@ SWEP.Animations				= {
 			{ t = 0.2,			s = p1.."magout_empty.ogg" },
 			{ t = 1.0,			s = p1.."struggle.ogg" },
 			{ t = 0.95,			s = p1.."magin.ogg" },
-			{ t = 1.77,			s = p0.."grab-polymer.ogg" },
-			{ t = 1.8,			s = p0.."shoulder.ogg" },
+			{ t = 1.82,			s = p0.."grab-polymer.ogg" },
+			{ t = 1.9,			s = p0.."shoulder.ogg" },
 
 			{ t = 0.0,			s = Ssnd.rottle },
 			{ t = 0.25,			s = Ssnd.rattle },
@@ -361,10 +361,10 @@ SWEP.Animations				= {
 			{ t = 0.1,			s = p0.."magpouch_gear.ogg" },
 			{ t = 0.2,			s = p1.."magout_empty.ogg" },
 			{ t = 0.95,			s = p1.."struggle.ogg" },
-			{ t = 0.95,			s = p1.."magin.ogg" },
-			{ t = 1.7,			s = p1.."boltdrop.ogg" },
-			{ t = 2.2,			s = p0.."grab-polymer.ogg" },
-			{ t = 2.3,			s = p0.."shoulder.ogg" },
+			{ t = 1.0,			s = p1.."magin.ogg" },
+			{ t = 1.8,			s = p1.."boltdrop.ogg" },
+			{ t = 2.25,			s = p0.."grab-polymer.ogg" },
+			{ t = 2.35,			s = p0.."shoulder.ogg" },
 
 			{ t = 0.0,			s = Ssnd.rottle },
 			{ t = 0.25,			s = Ssnd.rattle },
@@ -461,8 +461,8 @@ SWEP.Animations				= {
 		Handmods_L = {
 			0.0,
 			0.05,
-			0.70,
-			0.75
+			0.8,
+			0.85
 		},
 		ReloadingTime = 2.2,
 		LoadIn = 1.7,
@@ -492,8 +492,8 @@ SWEP.Animations				= {
 		Handmods_L = {
 			0.0,
 			0.02,
-			0.70,
-			0.75
+			0.80,
+			0.85
 		},
 		ReloadingTime = 2.7,
 		LoadIn = 2.3,
