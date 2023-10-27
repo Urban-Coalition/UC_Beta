@@ -462,6 +462,18 @@ function SWEP:GetViewModelPosition(pos, ang)
 		opos:Add( b_pos )
 		oang:Add( b_ang )
 	end
+	do -- temporary movement bob
+		local b_pos, b_ang = Vector(), Angle()
+
+		local vel = math.Clamp( p:GetVelocity():Length2D()/320, 0, 1 )
+		local ads = 1 - self:GetAim()
+
+		b_pos:Add( Vector( 0, -1 * math.sin( CurTime() * 5 ) * vel * ads, -.5 * math.abs( math.sin( CurTime() * 5 ) ) * vel * ads ) )
+		b_ang:Add( Angle( 0, 0, -6 * math.sin( CurTime() * 5 ) ) * vel * ads )
+
+		opos:Add( b_pos )
+		oang:Add( b_ang )
+	end
 	do -- sway
 		local b_pos, b_ang = Vector(), Angle()
 		local EY = p:EyeAngles()
@@ -522,6 +534,9 @@ function SWEP:GetViewModelPosition(pos, ang)
 		local ipose = self:GetStat("IronsightPose")
 		local wpos, wang = Vector(), Angle()
 		local wpos_m, wang_m = ipose.MidPos, ipose.MidAng
+		if !self:GetUserSight() then
+			wpos_m, wang_m = vector_origin, angle_zero
+		end
 
 		if self.SightList and self.SightList[self.SightTransition_From] and self.SightList[self.SightTransition_To] then
 			local si_prev = self.SightList[self.SightTransition_From].SightData
