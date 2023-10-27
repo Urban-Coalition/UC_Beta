@@ -129,6 +129,41 @@ att.Add_SightTime = (1/60)
 Suburb_GenAtt(att, "uc_optic_eotech553")
 
 local att = {}
+att.Name = "EOTech G33"
+att.SortOrder = 2
+att.ShortName = "EOTech G33"
+att.ShortNameSubtitle = "HOLO / OPTICAL 2x"
+att.Slot = "optic_hybrid"
+
+att.Model = "models/weapons/arccw/atts/uc_eotechg33_10.mdl"
+att.ModelOffset = Vector(0, 0, 0)
+att.ModelAngle = Angle(0, 0, 0)
+att.ModelScale = Vector(1, 1, 1)	
+
+att.ModelOffset0 = Vector( 0, -1, 0 )
+att.ModelOffset1 = Vector( 0, -2, 0 )
+att.Sights = {
+	{
+		OpticRT = true,
+		OpticRTMaterialIndex = 1,
+		OpticRTMagnification = 2.2,
+		OpticRTOverlay = Material("hud/scopes/uc_acog_reticle.png", "ignorez smooth"),
+		OpticAtt_Center = 1,
+		OpticAtt_Rotate = Angle( 0.09, -180.08, 0 ), -- I don't fucking know why this happens.
+		OpticAtt_Bottom = 2,
+		StencilTest = "10",
+
+		Pos = Vector( 0.0, -12.5, 1.54048 ),
+		Ang = Angle( 0, 0, 0 ),
+		ViewModelFOV = 30,
+		Magnification = 1.3,
+	},
+}
+
+att.Add_SightTime = (1/60)
+Suburb_GenAtt(att, "uc_optic_eotechg33")
+
+local att = {}
 att.Name = "EOTech 552"
 att.SortOrder = 1
 att.ShortName = "EOTech 552"
