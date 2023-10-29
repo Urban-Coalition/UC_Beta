@@ -127,7 +127,7 @@ SWEP.SprintTime				= 0.22
 SWEP.RecoilUp				= 0.8
 SWEP.RecoilSide				= 2
 SWEP.RecoilPunch			= 0.2
-SWEP.RecoilSwing			= 1
+SWEP.RecoilSwing			= 0.5
 SWEP.RecoilDrift			= 0.7
 SWEP.RecoilDecay			= 9
 

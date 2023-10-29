@@ -135,7 +135,7 @@ att.ShortName = "EOTech G33"
 att.ShortNameSubtitle = "HOLO / OPTICAL 2x"
 att.Slot = "optic_hybrid"
 
-att.Model = "models/weapons/arccw/atts/uc_eotechg33_10.mdl"
+att.Model = "models/weapons/arccw/atts/uc_eotechg33.mdl"
 att.ModelOffset = Vector(0, 0, 0)
 att.ModelAngle = Angle(0, 0, 0)
 att.ModelScale = Vector(1, 1, 1)	

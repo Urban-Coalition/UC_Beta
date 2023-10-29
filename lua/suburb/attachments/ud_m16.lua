@@ -250,7 +250,7 @@ att.Slot = "ud_m16_mag"
 
 att.Mult_Capacity = ( 20 / 30 )
 att.Add_SightTime = -(1/60)
-att.Mult_ReloadTime = 0.85
+att.Mult_ReloadTime = 0.9
 Suburb_GenAtt(att, "ud_m16_mag_20")
 
 -- Upper receivers

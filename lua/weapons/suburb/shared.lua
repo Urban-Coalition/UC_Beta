@@ -1090,7 +1090,8 @@ function SWEP:PostDrawViewModel( vm, weapon, ply )
 				if index != SIGHT.AttIndex then continue end
 				if i != self:GetActiveSight() then continue end
 				local SIGHT = SIGHT.SightData
-
+				if !SIGHT.OpticRT and !SIGHT.Reflex then continue end
+				
 				-- stencil shit
 				local ref = 56
 				render.UpdateScreenEffectTexture()
